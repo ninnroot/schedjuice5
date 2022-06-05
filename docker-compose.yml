@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+  api:
+    tty: true
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 suconnect_1.wsgi:application
+
+    env_file:
+      - .env
+
+    depends_on:
+      - db
