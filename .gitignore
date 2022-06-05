@@ -372,4 +372,5 @@ fabric.properties
 # Additional ignores
 # the Docker volume
 data
+.idea
 
