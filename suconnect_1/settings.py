@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # my apps
     "app_auth",
+    "app_finance"
 ]
 
 
@@ -144,7 +145,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
-    )
+    ),
+    "DEFAULT_METADATA_CLASS": "suconnect_1.metadata.CustomMetadata"
 
 }
 
