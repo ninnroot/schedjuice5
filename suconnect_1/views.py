@@ -6,7 +6,6 @@ from suconnect_1.pagination import CustomPagination
 class BaseListView(APIView, CustomPagination):
     
     name = "Base list view"
-    description = "This is the base list view."
 
     authentication_classes = []
     permission_classes = []

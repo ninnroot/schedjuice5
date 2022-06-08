@@ -16,6 +16,6 @@ class CustomMetadata(BaseMetadata):
 
         return {
             "name": view.get_view_name(),
-            "description": view.get_view_description(),
+            "description": view.model.__doc__,
             "fields":fields
         }
