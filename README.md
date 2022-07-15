@@ -66,3 +66,6 @@ https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multi
 ### Using Black
 https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 
+
+### Using pre-commit
+https://pre-commit.com/

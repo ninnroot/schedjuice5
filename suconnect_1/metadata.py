@@ -4,6 +4,7 @@ from rest_framework.metadata import BaseMetadata
 
 class CustomMetadata(BaseMetadata):
     def determine_metadata(self, request, view):
+
         fields = [
             {
                 "name": i.name,

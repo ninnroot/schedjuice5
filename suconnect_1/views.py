@@ -4,6 +4,8 @@ from suconnect_1.pagination import CustomPagination
 from suconnect_1.renderer import CustomRenderer
 from rest_framework.renderers import BrowsableAPIRenderer
 
+from suconnect_1.utils import send_response
+
 
 class BaseView(APIView):
     name = "Base view (not cringe view)"
@@ -23,13 +25,15 @@ class BaseListView(BaseView, CustomPagination):
 
     related_fields = []
 
-    def _send_metadata(self, request):
+    def _send_metadata(self, request: Request):
 
         data = self.metadata_class().determine_metadata(request, self)
 
-        return Response({"isError": False, "message": "metadata", "data": data})
+        return send_response(False, "metadata", data, status=status.HTTP_200_OK)
 
     def get(self, request: Request):
+
+        self.description = self.model.__doc__
 
         # if meta query_param is present, return metadata of the current endpoint
         if request.GET.get("meta"):
@@ -48,7 +52,9 @@ class BaseListView(BaseView, CustomPagination):
         )
 
         # return the serialized queryset in a standardized manner
-        return self.get_paginated_response(
-            {"isError": False, "message": "success", "data": serialized_data.data},
+        return send_response(
+            False,
+            "success",
+            {**self.get_paginated_response(), "data": serialized_data.data},
             status=status.HTTP_200_OK,
         )
