@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class BaseUser(models.Model):
+    class Meta:
+        abstract = True

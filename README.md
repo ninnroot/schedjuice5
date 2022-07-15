@@ -1,6 +1,6 @@
 # SuConnect
 
-The financial module of the SuConnect platform written
+The financial module of the SuConnect platform -- written
 in [Django REST Framework](https://www.django-rest-framework.org/), and is named __Schedjuice5__.
 This would also be the successor of [Schedjuice4](https://github.com/Ninroot-Eater/schedjuice4).
 
@@ -32,12 +32,20 @@ docker-compose up api
 
 And, that's it. The server will be running on localhost:8000.
 
-Actually, for ease of development, run a Postgres container first and run the Django app with a traditional `python manage.py runserver`.
+# Setting up the development environment
+For ease of development, run a Postgres container first and run the Django app with a traditional `python manage.py runserver`.
+
+```bash
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=psql_pass -e POSTGRES_DB=psql_db -e POSTGRES_USER=psql_user postgres
+```
+```
+python manage.py runserver
+```
 
 
 # Authentication
 
-Authentication is with Json Web Tokens, and is stateless. The login endpoint is `https://api.teachersucenter.com/api/v1/signin`. See [here](https://github.com/Ninroot-Eater/schedjuice4#authentication) for the full documentation on obtaining a token.
+Authentication is with JSON Web Tokens and is stateless. The login endpoint is `https://api.teachersucenter.com/api/v1/signin`. See [here](https://github.com/Ninroot-Eater/schedjuice4#authentication) for the full documentation on obtaining a token.
 
 
 # References and additional resources
@@ -50,4 +58,11 @@ https://docs.docker.com/samples/django/
 ### Stateless JWT authentication
 https://django-rest-framework-simplejwt.readthedocs.io/en/latest/stateless_user_authentication.html
 
+
+### Multiple user types
+https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html
+
+
+### Using Black
+https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 

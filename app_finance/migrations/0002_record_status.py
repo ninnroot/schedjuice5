@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_finance', '0001_initial'),
+        ("app_finance", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='record',
-            name='status',
-            field=models.CharField(default='test', max_length=256),
+            model_name="record",
+            name="status",
+            field=models.CharField(default="test", max_length=256),
             preserve_default=False,
         ),
     ]
