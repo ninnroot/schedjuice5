@@ -164,3 +164,8 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": False,
     "SIGNING_KEY": config("JWT"),
 }
+
+
+# Authentication
+
+AUTH_USER_MODEL = "app_auth.Account"

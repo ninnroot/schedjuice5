@@ -58,3 +58,21 @@ class BaseListView(BaseView, CustomPagination):
             {**self.get_paginated_response(), "data": serialized_data.data},
             status=status.HTTP_200_OK,
         )
+
+    def post(self, request: Request):
+
+        serialized_data = self.serializer(
+            data=request.data,
+        )
+        if serialized_data.is_valid():
+            serialized_data.save()
+            return send_response(
+                False, "created", serialized_data.data, status=status.HTTP_201_CREATED
+            )
+
+        return send_response(
+            True,
+            "bad_request",
+            serialized_data.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )

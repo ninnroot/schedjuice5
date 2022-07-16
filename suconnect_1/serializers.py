@@ -1,7 +1,7 @@
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import ModelSerializer
 
 
-class BaseSerializer(Serializer):
+class BaseSerializer(ModelSerializer):
     def __init__(self, *args, **kwargs):
 
         fields = kwargs.pop("fields", None)
@@ -12,3 +12,6 @@ class BaseSerializer(Serializer):
             fields = fields.split(",")
 
         super(BaseSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        fields = "__all__"

@@ -1,2 +1,9 @@
-from rest_framework.views import APIView, Response
-from rest_framework.permissions import IsAuthenticated
+from suconnect_1.views import BaseListView
+from app_auth.models import Account
+from app_auth.serializers import AccountSerializer
+
+
+class AccountListView(BaseListView):
+    name = "Account list view"
+    model = Account
+    serializer = AccountSerializer

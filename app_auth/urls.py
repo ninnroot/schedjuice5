@@ -1,4 +1,4 @@
 from django.urls import path
 from app_auth import views
 
-urlpatterns = []
+urlpatterns = [path("accounts", views.AccountListView.as_view())]
