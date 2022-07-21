@@ -4,7 +4,6 @@ The school management system API written
 in [Django REST Framework](https://www.django-rest-framework.org/). This would also be the successor of [Schedjuice4](https://github.com/Ninroot-Eater/schedjuice4).
 
 
-
 # Technical specs
 
 Python version is 3.9 for compatibility reason with older packages (but, all seem good so far, 
