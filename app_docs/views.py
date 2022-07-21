@@ -1,7 +1,7 @@
 from rest_framework.schemas.generators import EndpointEnumerator
 from rest_framework.views import Response
-from suconnect_1.views import BaseView
-from suconnect_1.utils import send_response
+from schedjuice5.views import BaseView
+from schedjuice5.utils import send_response
 
 
 class DocView(BaseView):

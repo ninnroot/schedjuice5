@@ -1,8 +1,7 @@
-# SuConnect
+# Schedjuice5
 
-The financial module of the SuConnect platform -- written
-in [Django REST Framework](https://www.django-rest-framework.org/), and is named __Schedjuice5__.
-This would also be the successor of [Schedjuice4](https://github.com/Ninroot-Eater/schedjuice4).
+The school management system API written
+in [Django REST Framework](https://www.django-rest-framework.org/). This would also be the successor of [Schedjuice4](https://github.com/Ninroot-Eater/schedjuice4).
 
 
 # Technical specs
@@ -41,11 +40,6 @@ docker run -p 5432:5432 -e POSTGRES_PASSWORD=psql_pass -e POSTGRES_DB=psql_db -e
 ```
 python manage.py runserver
 ```
-
-
-# Authentication
-
-Authentication is with JSON Web Tokens and is stateless. The login endpoint is `https://api.teachersucenter.com/api/v1/signin`. See [here](https://github.com/Ninroot-Eater/schedjuice4#authentication) for the full documentation on obtaining a token.
 
 
 # References and additional resources

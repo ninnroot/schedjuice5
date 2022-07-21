@@ -1,4 +1,4 @@
-from suconnect_1.models import BaseModel
+from schedjuice5.models import BaseModel
 from django.db import models
 
 

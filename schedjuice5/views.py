@@ -1,10 +1,10 @@
 from rest_framework.views import APIView, Response, status, Request
-from suconnect_1.metadata import CustomMetadata
-from suconnect_1.pagination import CustomPagination
-from suconnect_1.renderer import CustomRenderer
+from schedjuice5.metadata import CustomMetadata
+from schedjuice5.pagination import CustomPagination
+from schedjuice5.renderer import CustomRenderer
 from rest_framework.renderers import BrowsableAPIRenderer
 
-from suconnect_1.utils import send_response
+from schedjuice5.utils import send_response
 
 
 class BaseView(APIView):

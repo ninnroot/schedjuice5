@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 suconnect_1.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 schedjuice5.wsgi:application
 
     env_file:
       - .env

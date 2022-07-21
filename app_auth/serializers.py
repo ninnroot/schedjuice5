@@ -1,4 +1,4 @@
-from suconnect_1.serializers import BaseSerializer
+from schedjuice5.serializers import BaseSerializer
 from app_auth.models import Account
 
 
