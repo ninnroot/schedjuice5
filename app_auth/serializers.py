@@ -12,7 +12,9 @@ class AccountSerializer(BaseModelSerializer):
 
         password = validated_data.pop("password")
         user = super().create(validated_data)
+        print(password)
         user.set_password(password)
+
         user.save()
 
         return user

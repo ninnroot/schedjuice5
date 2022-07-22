@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 100,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication",
+        "rest_framework_simplejwt.authentication.JWTTokenUserAuthentication",
     ),
     "DEFAULT_METADATA_CLASS": "schedjuice5.metadata.CustomMetadata",
     "DEFAULT_RENDERER_CLASSES": ("schedjuice5.renderer.CustomRenderer",),
@@ -164,10 +164,11 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
     "SIGNING_KEY": config("JWT"),
+    "USER_ID_FIELD": "email",
 }
 
 
 # Authentication
 
-AUTHENTICATION_BACKENDS = ["app_auth.backend.CustomBackend"]
+
 AUTH_USER_MODEL = "app_auth.Account"

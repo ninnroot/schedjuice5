@@ -1,10 +1,9 @@
 from schedjuice5.views import BaseListView, BaseView
 from app_auth.models import Account
-from app_auth.serializers import AccountSerializer, LoginSerializer
+from app_auth.serializers import AccountSerializer
 from rest_framework.views import Request, status
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from app_auth.authentication import CustomAuthentication
+from app_auth.authentication import get_token
 
 
 class AccountListView(BaseListView):
@@ -15,19 +14,10 @@ class AccountListView(BaseListView):
 
 class LoginView(BaseView):
     name = "The login endpoint"
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
     # permission_classes = [IsAuthenticated]
     def post(self, request: Request):
-        unauth_credentials = LoginSerializer(data=request.data)
-        if unauth_credentials.is_valid():
-            print(request.user)
-            # token_pair = RefreshToken.for_user()
-            print("ok")
-            return self.send_response(False, "haha", {})
+        if request.user.is_authenticated:
+            data = get_token(request.user)
 
-        return self.send_response(
-            True,
-            "bad_request",
-            unauth_credentials.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+            return self.send_response(False, "success", data, status=status.HTTP_200_OK)
