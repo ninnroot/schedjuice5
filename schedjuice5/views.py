@@ -4,8 +4,6 @@ from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 from rest_framework.renderers import BrowsableAPIRenderer
 
-from schedjuice5.utils import send_response
-
 
 class BaseView(APIView):
     name = "Base view (not cringe view)"
@@ -15,6 +13,12 @@ class BaseView(APIView):
 
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
+
+    @staticmethod
+    def send_response(is_error: bool, message: str, data, **kwargs) -> Response:
+        return Response(
+            {"isError": is_error, "message": message, "data": data}, **kwargs
+        )
 
 
 class BaseListView(BaseView, CustomPagination):
@@ -29,7 +33,7 @@ class BaseListView(BaseView, CustomPagination):
 
         data = self.metadata_class().determine_metadata(request, self)
 
-        return send_response(False, "metadata", data, status=status.HTTP_200_OK)
+        return self.send_response(False, "metadata", data, status=status.HTTP_200_OK)
 
     def get(self, request: Request):
 
@@ -52,7 +56,7 @@ class BaseListView(BaseView, CustomPagination):
         )
 
         # return the serialized queryset in a standardized manner
-        return send_response(
+        return self.send_response(
             False,
             "success",
             {**self.get_paginated_response(), "data": serialized_data.data},
@@ -66,11 +70,11 @@ class BaseListView(BaseView, CustomPagination):
         )
         if serialized_data.is_valid():
             serialized_data.save()
-            return send_response(
+            return self.send_response(
                 False, "created", serialized_data.data, status=status.HTTP_201_CREATED
             )
 
-        return send_response(
+        return self.send_response(
             True,
             "bad_request",
             serialized_data.errors,

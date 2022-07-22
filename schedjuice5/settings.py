@@ -147,6 +147,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_METADATA_CLASS": "schedjuice5.metadata.CustomMetadata",
     "DEFAULT_RENDERER_CLASSES": ("schedjuice5.renderer.CustomRenderer",),
+    "EXCEPTION_HANDLER": "schedjuice5.exception_handler.custom_handler",
 }
 
 
@@ -168,4 +169,5 @@ SIMPLE_JWT = {
 
 # Authentication
 
+AUTHENTICATION_BACKENDS = ["app_auth.backend.CustomBackend"]
 AUTH_USER_MODEL = "app_auth.Account"

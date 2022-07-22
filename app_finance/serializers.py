@@ -1,7 +1,7 @@
-from schedjuice5.serializers import BaseSerializer
+from schedjuice5.serializers import BaseModelSerializer
 from app_finance.models import Record
 
 
-class RecordSerializer(BaseSerializer):
+class RecordSerializer(BaseModelSerializer):
     class Meta:
         model = Record

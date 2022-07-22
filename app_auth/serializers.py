@@ -1,8 +1,9 @@
-from schedjuice5.serializers import BaseSerializer
+from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 from app_auth.models import Account
+from rest_framework import serializers
 
 
-class AccountSerializer(BaseSerializer):
+class AccountSerializer(BaseModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
@@ -15,3 +16,8 @@ class AccountSerializer(BaseSerializer):
         user.save()
 
         return user
+
+
+class LoginSerializer(BaseSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(max_length=256)

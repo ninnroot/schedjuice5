@@ -1,7 +1,7 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 
-class BaseSerializer(ModelSerializer):
+class BaseModelSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
 
         fields = kwargs.pop("fields", None)
@@ -11,7 +11,11 @@ class BaseSerializer(ModelSerializer):
         if fields:
             fields = fields.split(",")
 
-        super(BaseSerializer, self).__init__(*args, **kwargs)
+        super(BaseModelSerializer, self).__init__(*args, **kwargs)
 
     class Meta:
         fields = "__all__"
+
+
+class BaseSerializer(serializers.Serializer):
+    pass

@@ -8,12 +8,6 @@ class CustomRenderer(JSONRenderer):
         if "message" not in data.keys():
             data["message"] = ""
 
-        if "isError" not in data.keys():
-
-            data["isError"] = False
-            if "message" not in data.keys():
-                data["message"] = "Error not specified"
-
         return super(CustomRenderer, self).render(
             data, accepted_media_type, renderer_context
         )

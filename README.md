@@ -64,3 +64,7 @@ https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 
 ### Using pre-commit
 https://pre-commit.com/
+
+
+### Custom exception handling
+https://www.django-rest-framework.org/api-guide/exceptions/#custom-exception-handling
