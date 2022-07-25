@@ -70,3 +70,7 @@ https://pre-commit.com/
 
 ### Custom exception handling
 https://www.django-rest-framework.org/api-guide/exceptions/#custom-exception-handling
+
+
+### Field-level permission (I think)
+https://stackoverflow.com/questions/19128793/per-field-permission-in-django-rest-framework/32302088#32302088

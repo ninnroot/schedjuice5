@@ -20,20 +20,19 @@ class BaseView(APIView):
             {"isError": is_error, "message": message, "data": data}, **kwargs
         )
 
+    def _send_metadata(self, request: Request):
+        if not hasattr(self, "metadata_class"):
+            return self.get(request)
+        data = self.metadata_class().determine_metadata(request, self)
+
+        return self.send_response(False, "metadata", data, status=status.HTTP_200_OK)
+
 
 class BaseListView(BaseView, CustomPagination):
 
     name = "Base list view"
-
     metadata_class = CustomMetadata
-
     related_fields = []
-
-    def _send_metadata(self, request: Request):
-
-        data = self.metadata_class().determine_metadata(request, self)
-
-        return self.send_response(False, "metadata", data, status=status.HTTP_200_OK)
 
     def get(self, request: Request):
 
@@ -79,4 +78,52 @@ class BaseListView(BaseView, CustomPagination):
             "bad_request",
             serialized_data.errors,
             status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class BaseDetailsView(BaseView):
+    name = "Base details view"
+    metadata_class = CustomMetadata
+
+    def _get_object(self, obj_id: int):
+        obj = self.model.objects.filter(id=obj_id).all()
+        if len(obj) == 0:
+            return None
+        return obj
+
+    def _send_not_found(self, obj_id: int):
+        return self.send_response(
+            True,
+            "not_found",
+            {"details": f"{str(self.model)} with id {obj_id} does not exist."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    def get(self, request: Request, obj_id: int):
+        self.description = self.model.__doc__
+        obj = self._get_object(obj_id)
+        if obj is None:
+            return self._send_not_found(obj_id)
+        serialized_data = self.serializer(data=obj)
+        return self.send_response(
+            False, "success", serialized_data.data, status=status.HTTP_200_OK
+        )
+
+    def put(self, request: Request, obj_id: int):
+        obj = self._get_object(obj_id)
+        if obj is None:
+            return self._send_not_found(obj_id)
+        serialized_data = self.serializer(obj, data=request.data, partial=True)
+        return self.send_response(
+            False, "updated", serialized_data.data, status=status.HTTP_200_OK
+        )
+
+    def delete(self, request: Request, obj_id: int):
+        obj = self._get_object(obj_id)
+        if obj is None:
+            return self._send_not_found(obj_id)
+        serialized_data = self.serializer(obj)
+        obj.delete()
+        return self.send_response(
+            False, "deleted", serialized_data.data, status=status.HTTP_200_OK
         )
