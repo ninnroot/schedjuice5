@@ -4,7 +4,7 @@ The school management system API written
 in [Django REST Framework](https://www.django-rest-framework.org/). This would also be the successor of [Schedjuice4](https://github.com/Ninroot-Eater/schedjuice4).
 
 I am trying to make this modular and to be compatible with many educational organizations' systems. After completion, this will be released under the GNU License.
-:)
+
 
 
 # Technical specs
