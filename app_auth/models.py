@@ -13,5 +13,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
         help_text="The user's email address ending in the organisation's domain.",
     )
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
     objects = CustomUserManager()

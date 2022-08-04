@@ -86,9 +86,7 @@ class BaseDetailsView(BaseView):
     metadata_class = CustomMetadata
 
     def _get_object(self, obj_id: int):
-        obj = self.model.objects.filter(id=obj_id).all()
-        if len(obj) == 0:
-            return None
+        obj = self.model.objects.filter(id=obj_id).first()
         return obj
 
     def _send_not_found(self, obj_id: int):
@@ -104,7 +102,7 @@ class BaseDetailsView(BaseView):
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.serializer(data=obj)
+        serialized_data = self.serializer(obj)
         return self.send_response(
             False, "success", serialized_data.data, status=status.HTTP_200_OK
         )
@@ -114,6 +112,8 @@ class BaseDetailsView(BaseView):
         if obj is None:
             return self._send_not_found(obj_id)
         serialized_data = self.serializer(obj, data=request.data, partial=True)
+        serialized_data.is_valid(raise_exception=True)
+        serialized_data.save()
         return self.send_response(
             False, "updated", serialized_data.data, status=status.HTTP_200_OK
         )

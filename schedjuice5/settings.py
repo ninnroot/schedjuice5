@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     "corsheaders",
     # third-party apps
     "rest_framework",
+    "drf_yasg",
     # my apps
     "app_auth",
     "app_finance",
     "app_docs",
+    "app_users",
 ]
 
 
