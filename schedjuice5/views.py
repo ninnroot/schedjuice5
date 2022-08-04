@@ -5,9 +5,6 @@ from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 
-from drf_yasg.utils import swagger_auto_schema
-
-
 class BaseView(APIView):
     name = "Base view (not cringe view)"
 
@@ -16,6 +13,23 @@ class BaseView(APIView):
 
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
+
+    serailizer = None
+
+    def get_serializer(self, *args, **kwargs):
+        serializer = self.get_serializer_class()
+        kwargs.setdefault('context', self.get_serializer_context())
+        return serializer(*args, **kwargs)
+
+    def get_serializer_class(self):
+        return self.serializer
+
+    def get_serializer_context(self):
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        }
 
     @staticmethod
     def send_response(is_error: bool, message: str, data, **kwargs) -> Response:
@@ -37,17 +51,6 @@ class BaseListView(BaseView, CustomPagination):
     metadata_class = CustomMetadata
     related_fields = []
 
-    ## this method is used to get the self object to be used in @swagger_auto_schema, but didn't work
-    # def _set_swagger_auto_schema(func):
-    #     def wrapper(self, request: Request):
-    #         if request.method == "GET":
-    #             return func(self, request)
-
-    #         set_func = swagger_auto_schema(request_body=self.serializer)(func)
-    #         return set_func(self, request)
-        
-    #     return wrapper
-
     def get(self, request: Request):
 
         self.description = self.model.__doc__
@@ -63,7 +66,7 @@ class BaseListView(BaseView, CustomPagination):
         paginated_data = self.paginate_queryset(queryset, request)
 
         # serialize the paginated queryset
-        serialized_data = self.serializer(
+        serialized_data = self.get_serializer(
             paginated_data,
             many=True,
         )
@@ -78,7 +81,7 @@ class BaseListView(BaseView, CustomPagination):
 
     def post(self, request: Request):
 
-        serialized_data = self.serializer(
+        serialized_data = self.get_serializer(
             data=request.data,
         )
         if serialized_data.is_valid():
@@ -116,7 +119,7 @@ class BaseDetailsView(BaseView):
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.serializer(obj)
+        serialized_data = self.get_serializer(obj)
         return self.send_response(
             False, "success", serialized_data.data, status=status.HTTP_200_OK
         )
@@ -125,7 +128,7 @@ class BaseDetailsView(BaseView):
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.serializer(obj, data=request.data, partial=True)
+        serialized_data = self.get_serializer(obj, data=request.data, partial=True)
         serialized_data.is_valid(raise_exception=True)
         serialized_data.save()
         return self.send_response(
@@ -136,7 +139,7 @@ class BaseDetailsView(BaseView):
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.serializer(obj)
+        serialized_data = self.get_serializer(obj)
         obj.delete()
         return self.send_response(
             False, "deleted", serialized_data.data, status=status.HTTP_200_OK
