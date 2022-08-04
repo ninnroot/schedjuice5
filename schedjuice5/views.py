@@ -52,7 +52,7 @@ class BaseListView(BaseView, CustomPagination):
     related_fields = []
 
     def get(self, request: Request):
-        print(self.serializer)
+
         self.description = self.model.__doc__
 
         # if meta query_param is present, return metadata of the current endpoint
@@ -79,6 +79,7 @@ class BaseListView(BaseView, CustomPagination):
             status=status.HTTP_200_OK,
         )
 
+    def post(self, request: Request):
 
         serialized_data = self.get_serializer(
             data=request.data,
