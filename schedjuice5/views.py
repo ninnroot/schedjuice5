@@ -5,8 +5,6 @@ from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 
-from drf_yasg.utils import swagger_auto_schema
-
 
 class BaseView(APIView):
     name = "Base view (not cringe view)"
@@ -37,19 +35,8 @@ class BaseListView(BaseView, CustomPagination):
     metadata_class = CustomMetadata
     related_fields = []
 
-    ## this method is used to get the self object to be used in @swagger_auto_schema, but didn't work
-    # def _set_swagger_auto_schema(func):
-    #     def wrapper(self, request: Request):
-    #         if request.method == "GET":
-    #             return func(self, request)
-
-    #         set_func = swagger_auto_schema(request_body=self.serializer)(func)
-    #         return set_func(self, request)
-        
-    #     return wrapper
-
     def get(self, request: Request):
-
+        print(self.serializer)
         self.description = self.model.__doc__
 
         # if meta query_param is present, return metadata of the current endpoint
@@ -76,8 +63,8 @@ class BaseListView(BaseView, CustomPagination):
             status=status.HTTP_200_OK,
         )
 
-    def post(self, request: Request):
 
+    def post(self, request: Request):
         serialized_data = self.serializer(
             data=request.data,
         )

@@ -1,8 +1,9 @@
-from rest_framework import serializers
+from schedjuice5.serializers import BaseModelSerializer
 from .models import Staff
 
-class StaffSerializer(serializers.ModelSerializer):
+class StaffSerializer(BaseModelSerializer):
     class Meta:
         model = Staff
-        fields = '__all__'
+        fields = "__all__"
+    
         
