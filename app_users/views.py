@@ -3,7 +3,6 @@ from .serializers import StaffSerializer
 from .models import Staff
 
 
-# Create your views here.
 class StaffListView(BaseListView):
     name = "Staff list view"
     model = Staff
@@ -11,7 +10,6 @@ class StaffListView(BaseListView):
 
 
 class StaffDetailsView(BaseDetailsView):
-    name = "Staff details view" 
+    name = "Staff details view"
     model = Staff
     serializer = StaffSerializer
-
