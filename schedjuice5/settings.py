@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # third-party apps
     "rest_framework",
     "drf_yasg",
+    "debug_toolbar",
     # my apps
     "app_auth",
     "app_finance",
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -171,6 +173,10 @@ SIMPLE_JWT = {
 
 
 # Authentication
-
-
 AUTH_USER_MODEL = "app_auth.Account"
+
+
+# Django Debug Toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
