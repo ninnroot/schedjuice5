@@ -54,7 +54,7 @@ class Address(BaseModel):
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
     country = models.CharField(max_length=64)
-    postal_code = models.CharField(16, validators=[strictNumberValidation])
+    postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
 
 
 class Staff(BaseUser):
