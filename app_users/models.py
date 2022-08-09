@@ -2,6 +2,7 @@ from django.db import models
 from schedjuice5.models import BaseModel
 from app_auth.models import Account
 from schedjuice5.validators import *
+import schedjuice5.config as config
 
 
 class BaseUser(BaseModel):
@@ -22,10 +23,6 @@ class BaseUser(BaseModel):
     )
     secondary_phone_number = models.CharField(
         max_length=256, null=True, validators=[phoneNumberValidation]
-    )
-
-    avatar = models.ImageField(
-        default="system/default_staff_profile.jpg", upload_to="staff/avatars"
     )
 
     class Meta:
@@ -58,15 +55,20 @@ class Address(BaseModel):
 
 
 class Staff(BaseUser):
-
+    avatar = models.ImageField(
+        default=config.default_avatar, upload_to=config.staff_avatar
+    )
     formal_photo = models.ImageField(
-        default="system/default_staff_formal_photo.jpg", upload_to="staff/formal_photos"
+        default=config.default_formal, upload_to=config.staff_formal
     )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 
 class Guardian(BaseUser):
 
+    avatar = models.ImageField(
+        default=config.default_avatar, upload_to=config.guardian_avatar
+    )
     career = models.CharField(
         max_length=128, choices=(("teacher", "teacher"), ("engineer", "engineer"))
     )
@@ -74,10 +76,12 @@ class Guardian(BaseUser):
 
 
 class Student(BaseUser):
-
+    avatar = models.ImageField(
+        default=config.default_avatar, upload_to=config.student_avatar
+    )
     formal_photo = models.ImageField(
-        default="system/default_student_formal_photo.jpg",
-        upload_to="student/formal_photos",
+        default=config.default_formal,
+        upload_to=config.student_formal,
     )
     guardian_type = models.CharField(
         max_length=128,
