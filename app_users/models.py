@@ -103,6 +103,8 @@ class StaffBankAccount(BaseModel):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
 
+    chosen_one_fields = ["is_primary"]
+
     class Meta:
         unique_together = ("staff", "bank_account")
 
@@ -116,6 +118,8 @@ class StaffAddress(BaseModel):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
+    chosen_one_fields = ["is_primary"]
+
     class Meta:
         unique_together = ("staff", "address")
 
@@ -127,6 +131,8 @@ class StudentBankAccount(BaseModel):
     is_primary = models.BooleanField(default=False)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
+
+    chosen_one_fields = ["is_primary"]
 
     class Meta:
         unique_together = ("student", "bank_account")
@@ -140,6 +146,8 @@ class StudentAddress(BaseModel):
     address_type = models.CharField(max_length=128)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
+
+    chosen_one_fields = ["is_primary"]
 
     class Meta:
         unique_together = ("student", "address")
