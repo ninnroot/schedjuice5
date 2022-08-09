@@ -25,7 +25,7 @@ class BaseUser(BaseModel):
         max_length=256, null=True, validators=[phoneNumberValidation]
     )
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         abstract = True
 
 
@@ -33,10 +33,10 @@ class BankAccount(BaseModel):
 
     owner_name = models.CharField(max_length=256, validators=[nameValidation])
     number = models.CharField(max_length=256, validators=[bankAccountNumberValidation])
-    bank_type = models.CharField(
-        max_length=256,
-        choices=(("KBZ", "KBZ"), ("Kpay", "Kpay"), ("AYA", "AYA"), ("CB", "CB")),
-    )
+    bank_type = models.CharField(max_length=256, choices=config.bank_account_choices)
+
+    class Meta(BaseModel.Meta):
+        pass
 
 
 class Address(BaseModel):
@@ -53,6 +53,9 @@ class Address(BaseModel):
     country = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
 
+    class Meta(BaseModel.Meta):
+        pass
+
 
 class Staff(BaseUser):
     avatar = models.ImageField(
@@ -62,6 +65,9 @@ class Staff(BaseUser):
         default=config.default_formal, upload_to=config.staff_formal
     )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta(BaseUser.Meta):
+        pass
 
 
 class Guardian(BaseUser):
@@ -74,6 +80,9 @@ class Guardian(BaseUser):
     )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
+    class Meta(BaseUser.Meta):
+        pass
+
 
 class Student(BaseUser):
     avatar = models.ImageField(
@@ -85,14 +94,12 @@ class Student(BaseUser):
     )
     guardian_type = models.CharField(
         max_length=128,
-        choices=(
-            ("father", "father"),
-            ("mother", "mother"),
-            ("relative", "relative"),
-            ("other", "other"),
-        ),
+        choices=config.guardian_type_choices,
     )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta(BaseUser.Meta):
+        pass
 
 
 class StaffBankAccount(BaseModel):
@@ -105,7 +112,7 @@ class StaffBankAccount(BaseModel):
 
     chosen_one_fields = ["is_primary"]
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         unique_together = ("staff", "bank_account")
 
 
@@ -120,7 +127,7 @@ class StaffAddress(BaseModel):
 
     chosen_one_fields = ["is_primary"]
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         unique_together = ("staff", "address")
 
 
@@ -134,7 +141,7 @@ class StudentBankAccount(BaseModel):
 
     chosen_one_fields = ["is_primary"]
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         unique_together = ("student", "bank_account")
 
 
@@ -149,5 +156,5 @@ class StudentAddress(BaseModel):
 
     chosen_one_fields = ["is_primary"]
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         unique_together = ("student", "address")

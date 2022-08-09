@@ -16,3 +16,13 @@ student_formal = student_upload_folder + "formal_photos"
 
 guardian_upload_folder = "guardian/"
 guardian_avatar = guardian_upload_folder + "avatar"
+
+
+# CHOICES
+bank_account_choices = (("KBZ", "KBZ"), ("AYA", "AYA"), ("CB", "CB"), ("UAB", "UAB"))
+guardian_type_choices = (
+    ("father", "father"),
+    ("mother", "mother"),
+    ("relative", "relative"),
+    ("other", "other"),
+)
