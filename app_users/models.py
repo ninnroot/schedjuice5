@@ -1,19 +1,14 @@
 from django.db import models
 from schedjuice5.models import BaseModel
 from app_auth.models import Account
-from django.core.validators import RegexValidator
+from schedjuice5.validators import *
 
 
 class BaseUser(BaseModel):
     username = models.CharField(
         max_length=256,
         unique=True,
-        validators=[
-            RegexValidator(
-                regex=r"^[\w\d_]{8,32}$",
-                message="username must match this: '^[\\w\\d_]{8,32}$'",
-            )
-        ],
+        validators=[usernameValidation],
     )
     name = models.CharField(max_length=256)
     about = models.TextField(default="tell us something about yourself ...")
@@ -23,22 +18,10 @@ class BaseUser(BaseModel):
     secondary_email = models.EmailField(null=True)
     primary_phone_number = models.CharField(
         max_length=256,
-        validators=[
-            RegexValidator(
-                regex=r"^[\d+ ]{6,20}$",
-                message="phone number must match this: '^[\\d+ ]{6,20}$'",
-            )
-        ],
+        validators=[phoneNumberValidation],
     )
     secondary_phone_number = models.CharField(
-        max_length=256,
-        null=True,
-        validators=[
-            RegexValidator(
-                regex=r"^[\d+ ]{6,20}$",
-                message="phone number must match this: '^[\\d+ ]{6,20}$'",
-            )
-        ],
+        max_length=256, null=True, validators=[phoneNumberValidation]
     )
 
     avatar = models.ImageField(
@@ -47,6 +30,31 @@ class BaseUser(BaseModel):
 
     class Meta:
         abstract = True
+
+
+class BankAccount(BaseModel):
+
+    owner_name = models.CharField(max_length=256, validators=[nameValidation])
+    number = models.CharField(max_length=256, validators=[bankAccountNumberValidation])
+    bank_type = models.CharField(
+        max_length=256,
+        choices=(("KBZ", "KBZ"), ("Kpay", "Kpay"), ("AYA", "AYA"), ("CB", "CB")),
+    )
+
+
+class Address(BaseModel):
+
+    house_number = models.CharField(
+        max_length=16, validators=[englishAndSomeSpecialValidation]
+    )
+    block_number = models.CharField(
+        max_length=16, validators=[englishAndSomeSpecialValidation], null=True
+    )
+    street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
+    township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
+    city = models.CharField(max_length=64)
+    country = models.CharField(max_length=64)
+    postal_code = models.CharField(16, validators=[strictNumberValidation])
 
 
 class Staff(BaseUser):
@@ -81,3 +89,53 @@ class Student(BaseUser):
         ),
     )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+
+class StaffBankAccount(BaseModel):
+    save_name = models.CharField(
+        max_length=256, validators=[englishAndSomeSpecialValidation]
+    )
+    is_primary = models.BooleanField(default=False)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("staff", "bank_account")
+
+
+class StaffAddress(BaseModel):
+    save_name = models.CharField(
+        max_length=256, validators=[englishAndSomeSpecialValidation]
+    )
+    is_primary = models.BooleanField(default=False)
+    address_type = models.CharField(max_length=128)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("staff", "address")
+
+
+class StudentBankAccount(BaseModel):
+    save_name = models.CharField(
+        max_length=256, validators=[englishAndSomeSpecialValidation]
+    )
+    is_primary = models.BooleanField(default=False)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("student", "bank_account")
+
+
+class StudentAddress(BaseModel):
+    save_name = models.CharField(
+        max_length=256, validators=[englishAndSomeSpecialValidation]
+    )
+    is_primary = models.BooleanField(default=False)
+    address_type = models.CharField(max_length=128)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("student", "address")
