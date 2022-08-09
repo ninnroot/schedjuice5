@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "debug_toolbar",
+    "django_seed", # for seeding fake data
     # my apps
+    "schedjuice5",
     "app_auth",
     "app_finance",
     "app_docs",
