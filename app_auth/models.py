@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from app_auth.managers import CustomUserManager
+from schedjuice5.models import BaseModel
 
 
-class Account(AbstractBaseUser, PermissionsMixin):
+class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
     """
     The model each user must have to authenticate against with.
     """
@@ -14,5 +15,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+
+    groups = None
+    user_permissions = None
+
     USERNAME_FIELD = "email"
     objects = CustomUserManager()
+
+    def __str__(self):
+        return f"<User: {self.id} {self.email}>"

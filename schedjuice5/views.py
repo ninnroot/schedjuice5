@@ -1,7 +1,9 @@
+import binascii
 import json
 import base64
 
 from django.core.exceptions import BadRequest
+from django.db.models import Model
 
 from rest_framework.views import APIView, Response, status, Request
 from rest_framework.renderers import BrowsableAPIRenderer
@@ -9,6 +11,7 @@ from rest_framework.renderers import BrowsableAPIRenderer
 from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
+from schedjuice5.serializers import FilterParamSerializer
 
 
 class BaseView(APIView):
@@ -17,41 +20,58 @@ class BaseView(APIView):
 
     authentication_classes = []
     permission_classes = []
-    model = None
+    model: Model = None
     serializer = None
 
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
+
+    def validate_filter_params(self, to_be_validated):
+        validated_data = []
+        for i in to_be_validated:
+            x = FilterParamSerializer(data=i, context={"model": self.model})
+            if not x.is_valid(raise_exception=True):
+                raise BadRequest(x.errors)
+            validated_data.append(x.data)
+
+        return validated_data
+
+    def build_filter_params(self, filter_params):
+        filter_dict = {}
+        for i in filter_params:
+            filter_dict[i["field_name"] + "__" + i["operator"]] = i["value"]
+
+        return filter_dict
 
     def get_filter_params(self, request: Request):
         url_string = self.request.query_params.get("filter_params")
         if url_string is None:
             return {}
 
-        filter_params = json.loads(
-            base64.urlsafe_b64decode(url_string + "=" * (4 - len(url_string) % 4))
-        )
-        field_set = set([i.name for i in self.model._meta.get_fields()])
-        if set(filter_params.keys()).issubset(field_set):
-            # TODO: implement with serializer or smth
-            # for i in filter_params:
-            return filter_params
+        try:
+            filter_params = json.loads(
+                base64.urlsafe_b64decode(url_string + "=" * (4 - len(url_string) % 4))
+            )
+        except Exception as e:
+            raise BadRequest("Error decoding filter_params: " + str(e))
 
-        raise BadRequest(
-            f"{set(filter_params).difference(field_set)} are not present in {self.model.__name__}'s fields."
-        )
+        validated_data = self.validate_filter_params(filter_params)
+
+        return self.build_filter_params(validated_data)
 
     def _send_metadata(self, request: Request):
         if not hasattr(self, "metadata_class"):
             return self.get(request)
         data = self.metadata_class().determine_metadata(request, self)
 
-        return self.send_response(False, "metadata", data, status=status.HTTP_200_OK)
+        return self.send_response(
+            False, "metadata", {"data": data}, status=status.HTTP_200_OK
+        )
 
     def get_serializer(self, *args, **kwargs):
-        serializer = self.get_serializer_class()
+        serializer_class = self.get_serializer_class()
         kwargs.setdefault("context", self.get_serializer_context())
-        return serializer(*args, **kwargs)
+        return serializer_class(*args, **kwargs)
 
     def get_serializer_class(self):
         return self.serializer
@@ -60,10 +80,8 @@ class BaseView(APIView):
         return {"request": self.request, "format": self.format_kwarg, "view": self}
 
     @staticmethod
-    def send_response(is_error: bool, message: str, data, **kwargs) -> Response:
-        return Response(
-            {"isError": is_error, "message": message, "data": data}, **kwargs
-        )
+    def send_response(is_error: bool, message: str, payload, **kwargs) -> Response:
+        return Response({"isError": is_error, "message": message, **payload}, **kwargs)
 
 
 class BaseListView(BaseView, CustomPagination):
@@ -79,7 +97,9 @@ class BaseListView(BaseView, CustomPagination):
         try:
             filter_params = self.get_filter_params(request)
         except BadRequest as e:
-            return self.send_response(True, "bad_request", {"details": str(e)})
+            return self.send_response(
+                True, "bad_request", {"details": str(e)}, status=400
+            )
 
         # if meta query_param is present, return metadata of the current endpoint
         if request.GET.get("meta"):
@@ -117,13 +137,16 @@ class BaseListView(BaseView, CustomPagination):
         if serialized_data.is_valid():
             serialized_data.save()
             return self.send_response(
-                False, "created", serialized_data.data, status=status.HTTP_201_CREATED
+                False,
+                "created",
+                {"data": serialized_data.data},
+                status=status.HTTP_201_CREATED,
             )
 
         return self.send_response(
             True,
             "bad_request",
-            serialized_data.errors,
+            {"details": serialized_data.errors},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -152,7 +175,7 @@ class BaseDetailsView(BaseView):
             return self._send_not_found(obj_id)
         serialized_data = self.get_serializer(obj)
         return self.send_response(
-            False, "success", serialized_data.data, status=status.HTTP_200_OK
+            False, "success", {"data": serialized_data.data}, status=status.HTTP_200_OK
         )
 
     def put(self, request: Request, obj_id: int):
@@ -163,7 +186,7 @@ class BaseDetailsView(BaseView):
         serialized_data.is_valid(raise_exception=True)
         serialized_data.save()
         return self.send_response(
-            False, "updated", serialized_data.data, status=status.HTTP_200_OK
+            False, "updated", {"data": serialized_data.data}, status=status.HTTP_200_OK
         )
 
     def delete(self, request: Request, obj_id: int):
@@ -173,5 +196,5 @@ class BaseDetailsView(BaseView):
         serialized_data = self.get_serializer(obj)
         obj.delete()
         return self.send_response(
-            False, "deleted", serialized_data.data, status=status.HTTP_200_OK
+            False, "deleted", {"data": serialized_data.data}, status=status.HTTP_200_OK
         )

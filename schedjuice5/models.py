@@ -40,3 +40,10 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ["id"]
+
+    def get_filterable_fields(self):
+        return list(
+            set([i.name for i in self._meta.get_fields()]).difference(
+                set(RELATION_FIELDS)
+            )
+        )

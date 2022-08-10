@@ -1,9 +1,15 @@
 from rest_framework.views import exception_handler
+from rest_framework.views import Response
 
 
 def custom_handler(exc, ctx):
     response = exception_handler(exc, ctx)
-    if hasattr(exc, "status_code") and exc.status_code in [401, 403]:
-        response.data["isError"] = True
+    custom_response = {"isError": True}
+
+    if hasattr(exc, "status_code"):
+        custom_response["message"] = "bad_request"
+        custom_response["details"] = response.data
+
+        return Response(custom_response, status=exc.status_code)
 
     return response
