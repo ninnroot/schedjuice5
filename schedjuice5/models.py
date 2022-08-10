@@ -19,17 +19,17 @@ class BaseModel(models.Model):
     # other attributes
     chosen_one_fields = []
 
-    def save(self, *args, **kwargs):
-        for i in self.chosen_one_fields:
-            if getattr(self, i):
-                try:
-                    obj = self.__class__.objects.get(**{i: True})
-                    if obj != self:
-                        setattr(obj, i, False)
-                        obj.save()
-                except self.__class__.DoesNotExist:
-                    pass
-        super(self.__class__, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     for i in self.chosen_one_fields:
+    #         if getattr(self, i):
+    #             try:
+    #                 obj = self.__class__.objects.get(**{i: True})
+    #                 if obj != self:
+    #                     setattr(obj, i, False)
+    #                     obj.save()
+    #             except self.__class__.DoesNotExist:
+    #                 pass
+    #     super(self.__class__, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
