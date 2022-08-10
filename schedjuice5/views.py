@@ -5,37 +5,21 @@ from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 
+
 class BaseView(APIView):
     name = "Base view (not cringe view)"
+    description = ""
 
     authentication_classes = []
     permission_classes = []
+    model = None
+    serializer = None
 
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
 
-    serailizer = None
-
-    def get_serializer(self, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        kwargs.setdefault('context', self.get_serializer_context())
-        return serializer(*args, **kwargs)
-
-    def get_serializer_class(self):
-        return self.serializer
-
-    def get_serializer_context(self):
-        return {
-            'request': self.request,
-            'format': self.format_kwarg,
-            'view': self
-        }
-
-    @staticmethod
-    def send_response(is_error: bool, message: str, data, **kwargs) -> Response:
-        return Response(
-            {"isError": is_error, "message": message, "data": data}, **kwargs
-        )
+    def get(self, request: Request):
+        pass
 
     def _send_metadata(self, request: Request):
         if not hasattr(self, "metadata_class"):
@@ -43,6 +27,23 @@ class BaseView(APIView):
         data = self.metadata_class().determine_metadata(request, self)
 
         return self.send_response(False, "metadata", data, status=status.HTTP_200_OK)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        return serializer(*args, **kwargs)
+
+    def get_serializer_class(self):
+        return self.serializer
+
+    def get_serializer_context(self):
+        return {"request": self.request, "format": self.format_kwarg, "view": self}
+
+    @staticmethod
+    def send_response(is_error: bool, message: str, data, **kwargs) -> Response:
+        return Response(
+            {"isError": is_error, "message": message, "data": data}, **kwargs
+        )
 
 
 class BaseListView(BaseView, CustomPagination):

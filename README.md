@@ -9,7 +9,7 @@ I am trying to make this modular and to be compatible with many educational orga
 
 # Technical specs
 
-Python version is 3.9 for compatibility reason with older packages (but, all seem good so far, 
+Python version is 3.9 for compatibility reasons with older packages (but, all seem good so far, 
 so might update in the future).
 
 
@@ -74,3 +74,7 @@ https://www.django-rest-framework.org/api-guide/exceptions/#custom-exception-han
 
 ### Field-level permission (I think)
 https://stackoverflow.com/questions/19128793/per-field-permission-in-django-rest-framework/32302088#32302088
+
+### On group-within-group relationship
+https://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hierarchical-data-in-a-relational-database
+
