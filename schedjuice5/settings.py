@@ -46,12 +46,13 @@ INSTALLED_APPS = [
     "drf_yasg",
     "debug_toolbar",
     # my apps
+    "django_seed",
     "schedjuice5",
     "app_auth",
     "app_finance",
     "app_docs",
     "app_users",
-    "django_seed",
+    "app_utils",
 ]
 
 
