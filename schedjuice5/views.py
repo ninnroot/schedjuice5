@@ -1,3 +1,8 @@
+import json
+import base64
+
+from django.core.exceptions import BadRequest
+
 from rest_framework.views import APIView, Response, status, Request
 from rest_framework.renderers import BrowsableAPIRenderer
 
@@ -18,8 +23,23 @@ class BaseView(APIView):
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
 
-    def get(self, request: Request):
-        pass
+    def get_filter_params(self, request: Request):
+        url_string = self.request.query_params.get("filter_params")
+        if url_string is None:
+            return {}
+
+        filter_params = json.loads(
+            base64.urlsafe_b64decode(url_string + "=" * (4 - len(url_string) % 4))
+        )
+        field_set = set([i.name for i in self.model._meta.get_fields()])
+        if set(filter_params.keys()).issubset(field_set):
+            # TODO: implement with serializer or smth
+            # for i in filter_params:
+            return filter_params
+
+        raise BadRequest(
+            f"{set(filter_params).difference(field_set)} are not present in {self.model.__name__}'s fields."
+        )
 
     def _send_metadata(self, request: Request):
         if not hasattr(self, "metadata_class"):
@@ -53,15 +73,24 @@ class BaseListView(BaseView, CustomPagination):
     related_fields = []
 
     def get(self, request: Request):
-
         self.description = self.model.__doc__
+
+        filter_params = {}
+        try:
+            filter_params = self.get_filter_params(request)
+        except BadRequest as e:
+            return self.send_response(True, "bad_request", {"details": str(e)})
 
         # if meta query_param is present, return metadata of the current endpoint
         if request.GET.get("meta"):
             return self._send_metadata(request)
 
         # make a query from the database
-        queryset = self.model.objects.prefetch_related(*self.related_fields).all()
+        queryset = (
+            self.model.objects.filter(**filter_params)
+            .prefetch_related(*self.related_fields)
+            .all()
+        )
 
         # paginate the queryset
         paginated_data = self.paginate_queryset(queryset, request)
@@ -117,6 +146,7 @@ class BaseDetailsView(BaseView):
 
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
+
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)

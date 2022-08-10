@@ -1,7 +1,13 @@
 from django.db import models
 
 
+RELATION_FIELDS = ["ForeignKey", "OneToOneField"]
+
+
 class BaseModel(models.Model):
+
+    valid_operators = ["exact", "iexact", "in", "lt", "gt", "lte", "gte", "icontains"]
+
     def __init__(self, *args, **kwargs):
         chosen_set = set(self.chosen_one_fields)
         field_set = set([i.name for i in self._meta.get_fields()])
@@ -29,7 +35,7 @@ class BaseModel(models.Model):
                         obj.save()
                 except self.__class__.DoesNotExist:
                     pass
-        super(self.__class__, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
