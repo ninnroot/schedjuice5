@@ -4,6 +4,8 @@ from app_auth.models import Account
 from schedjuice5.validators import *
 import schedjuice5.config as config
 
+from app_utils.choices import careers, countries
+
 
 class BaseUser(BaseModel):
     username = models.CharField(
@@ -50,7 +52,7 @@ class Address(BaseModel):
     street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
-    country = models.CharField(max_length=64)
+    country = models.CharField(max_length=64, choices=countries)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
 
     class Meta(BaseModel.Meta):
@@ -75,9 +77,7 @@ class Guardian(BaseUser):
     avatar = models.ImageField(
         default=config.default_avatar, upload_to=config.guardian_avatar
     )
-    career = models.CharField(
-        max_length=128, choices=(("teacher", "teacher"), ("engineer", "engineer"))
-    )
+    career = models.CharField(max_length=512, choices=careers)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     class Meta(BaseUser.Meta):

@@ -1,11 +1,9 @@
 from django.db import models
 
-
 RELATION_FIELDS = ["ForeignKey", "OneToOneField"]
 
 
 class BaseModel(models.Model):
-
     valid_operators = ["exact", "iexact", "in", "lt", "gt", "lte", "gte", "icontains"]
 
     def __init__(self, *args, **kwargs):
@@ -35,15 +33,13 @@ class BaseModel(models.Model):
                         obj.save()
                 except self.__class__.DoesNotExist:
                     pass
-        super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
         ordering = ["id"]
 
     def get_filterable_fields(self):
-        return list(
-            set([i.name for i in self._meta.get_fields()]).difference(
-                set(RELATION_FIELDS)
-            )
+        return set([i.name for i in self._meta.get_fields()]).difference(
+            set(RELATION_FIELDS)
         )

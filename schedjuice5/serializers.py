@@ -6,14 +6,17 @@ class BaseModelSerializer(serializers.ModelSerializer):
         fields = kwargs.pop("fields", None)
         read_only_fields = kwargs.pop("read_only_fields", None)
         excluded_fields = kwargs.pop("excluded_fields", None)
-
-        if fields:
-            fields = fields.split(",")
-
         super(BaseModelSerializer, self).__init__(*args, **kwargs)
 
-    class Meta:
-        fields = "__all__"
+        if fields is not None:
+            fields_to_be_popped = set(
+                self.context["model"].get_filterable_fields(self.context["model"])
+            ).difference(fields)
+            for i in fields_to_be_popped:
+                try:
+                    self.fields.pop(i)
+                except KeyError:
+                    pass
 
 
 class BaseSerializer(serializers.Serializer):
@@ -35,7 +38,8 @@ class FilterParamSerializer(BaseSerializer):
 
         if data["operator"] not in self.context["model"].valid_operators:
             raise serializers.ValidationError(
-                f"{data['operator']} is not in valid operators of {self.context['model'].__name__}. Valid operators: {self.context['model'].valid_operators}"
+                f"{data['operator']} is not in valid operators of {self.context['model'].__name__}. "
+                f"Valid operators: {self.context['model'].valid_operators}"
             )
 
         return data

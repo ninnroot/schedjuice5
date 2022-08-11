@@ -47,4 +47,7 @@ urlpatterns = [
     path("api/v2/", include("app_finance.urls")),
     path("api/v2/", include("app_users.urls")),
     path("api/v2/", include("app_utils.urls")),
+    path("api/v2/", include("app_course.urls")),
+    path("api/v2/", include("app_campus.urls")),
+    path("api/v2/", include("app_management.urls")),
 ]

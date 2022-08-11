@@ -1,5 +1,5 @@
 from schedjuice5.views import BaseView
-from .choices import carrers, countries
+from .choices import careers, countries
 
 
 class CountryView(BaseView):
@@ -12,9 +12,9 @@ class CountryView(BaseView):
         )
 
 
-class CarrerView(BaseView):
-    name = "Carrer view"
-    choices = carrers
+class CareerView(BaseView):
+    name = "Career view"
+    choices = careers
 
     def get(self, request):
         return self.send_response(False, "success", {"data": {"careers": self.choices}})

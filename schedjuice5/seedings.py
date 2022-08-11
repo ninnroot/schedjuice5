@@ -45,16 +45,12 @@ def addEntity():
 
 def dyamicAddEntity(model, count, **kwargs):
     fields = [
-                (field.name, field.get_internal_type()) 
-                    for field in model._meta.get_fields() 
-                        if field.name not in ["id", "last_login"] and field.get_internal_type() not in ["ForeignKey", "ManyToManyField", "OneToOneField"]
-             ]
-
-    for field in fields:
-        print(field)
-
-    print(kwargs)
-
+        (field.name, field.get_internal_type())
+        for field in model._meta.get_fields()
+        if field.name not in ["id", "last_login"]
+        and field.get_internal_type()
+        not in ["ForeignKey", "ManyToManyField", "OneToOneField"]
+    ]
 
     def get_value(name, field_type):
         if name in kwargs:
@@ -86,10 +82,9 @@ def dyamicAddEntity(model, count, **kwargs):
                 raise Exception(f"{name} is not a valid field name for {model}")
 
     seeder.add_entity(
-        model, count, 
-        {
-            field[0]: lambda x: get_value(field[0], field[1]) for field in fields
-        }
+        model,
+        count,
+        {field[0]: lambda x: get_value(field[0], field[1]) for field in fields},
     )
 
     inserted_pks = seeder.execute()
