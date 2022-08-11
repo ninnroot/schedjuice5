@@ -9,7 +9,7 @@ class CustomPagination(PageNumberPagination):
 
     page_size_query_param = "size"
 
-    def get_paginated_response(self):
+    def get_paginated_response(self, *args, **kwargs):
 
         return {
             "links": {

@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     "app_docs",
     "app_users",
     "app_utils",
+    "app_course",
+    "app_campus",
+    "app_management",
 ]
 
 
@@ -189,4 +192,3 @@ AUTH_USER_MODEL = "app_auth.Account"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-

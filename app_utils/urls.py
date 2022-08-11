@@ -5,3 +5,4 @@ urlpatterns = [
     path('countries/', views.CountryView.as_view(), name='countries'),
     path('careers/', views.CarrerView.as_view(), name='carrers'),
 ]
+
