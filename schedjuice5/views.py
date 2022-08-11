@@ -40,9 +40,8 @@ class BaseView(APIView, CustomPagination):
         if filter_params is None:
             filter_params = {}
 
-        if fields is None:
-            fields = "__all__"
-
+        if fields is None or fields == []:
+            fields = None
         # query from the database
         queryset = (
             self.model.objects.filter(**filter_params)
