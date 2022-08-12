@@ -41,9 +41,9 @@ class NameGuesser(object):
         if name in ('first_name', 'firstname', 'first'): return lambda x: faker.first_name()
         if name in ('last_name', 'lastname', 'last'): return lambda x: faker.last_name()
 
-        if name in ('username', 'login', 'nickname', 'name'): return lambda x:faker.user_name()
+        if name in ('username', 'login', 'nickname', 'name', 'owner_name'): return lambda x:faker.user_name()
         if name in ('email', 'email_address', 'primary_email', 'secondary_email'): return lambda x:faker.email()
-        if name in ('phone_number', 'phonenumber', 'phone', 'primary_phone_number', 'secondary_phone_number'): return lambda x:faker.phone_number()
+        if name in ('number', 'phone_number', 'phonenumber', 'phone', 'primary_phone_number', 'secondary_phone_number'): return lambda x:faker.phone_number()
         if name == 'address': return lambda x:faker.address()
         if name == 'city': return lambda x: faker.city()
         if name == 'streetaddress': return lambda x: faker.street_address()

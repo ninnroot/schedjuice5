@@ -9,12 +9,15 @@ class CustomPagination(PageNumberPagination):
 
     page_size_query_param = "size"
 
-    def get_paginated_response(self, *args, **kwargs):
+    def get_count_per_page(self):
+        return len(list(self.page))
 
+    def get_paginated_response(self, *args, **kwargs):
         return {
             "links": {
                 "next": self.get_next_link(),
                 "previous": self.get_previous_link(),
             },
             "count": self.page.paginator.count,
+            "count_per_page": self.get_count_per_page()
         }
