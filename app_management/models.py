@@ -24,7 +24,7 @@ class Job(BaseModel):
 
     name = models.CharField(max_length=256, validators=[nameValidation])
     description = models.TextField()
-    credit_per_session = models.IntegerField()
+    credit_per_session = models.PositiveIntegerField()
 
 
 class Role(BaseModel):
@@ -34,7 +34,7 @@ class Role(BaseModel):
 
 class Permission(BaseModel):
 
-    code = models.CharField(max_length=256, validators=[nameWithNumberValidation])
+    code = models.CharField(max_length=256, validators=[usernameValidation])
 
 
 class StaffGroup(BaseModel):
@@ -48,7 +48,7 @@ class StaffDepartment(BaseModel):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.PROTECT)
-    is_under = models.BooleanField(default=False)
+    is_under = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)
 
 
 class StaffCourse(BaseModel):
@@ -58,7 +58,7 @@ class StaffCourse(BaseModel):
     job = models.ForeignKey(Job, on_delete=models.PROTECT)
 
 
-class StaffSession(BaseModel):
+class StaffEvent(BaseModel):
 
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     session = models.ForeignKey(Event, on_delete=models.CASCADE)
