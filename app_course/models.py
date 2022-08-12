@@ -9,23 +9,23 @@ from app_campus.models import Venue
 class Category(BaseModel):
 
     name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
     description = models.TextField()
 
 
 class EventClassification(BaseModel):
-    name = models.CharField(max_length=256, validators=[nameValidation])
+    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField()
 
 
 class Course(BaseModel):
 
     name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
     description = models.TextField()
-    code = models.CharField(max_length=64, validators=[usernameValidation])
+    code = models.CharField(max_length=64, validators=[usernameValidation], unique=True)
     start_date = models.DateField()
     end_date = models.DateField()
     monthly_fee = models.PositiveIntegerField()
@@ -33,9 +33,9 @@ class Course(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        if self.end_date >= self.start_date:
+        if self.start_date >= self.end_date:
             raise ValidationError(
-                "end_date cannot be greater than or equal to start_date."
+                "start_date cannot be greater than or equal to end_date."
             )
         return super().save(*args, **kwargs)
 
@@ -49,8 +49,8 @@ class Event(BaseModel):
     classification = models.ForeignKey(EventClassification, on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
-        if self.time_to >= self.time_from:
-            raise ValidationError("time_to cannot be greater than or equal to time_to.")
+        if self.time_to <= self.time_from:
+            raise ValidationError("time_to cannot be less than or equal to time_from.")
 
         return super().save(*args, **kwargs)
 
