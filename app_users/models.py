@@ -113,7 +113,7 @@ class StaffBankAccount(BaseModel):
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("staff", "bank_account")
+        unique_together = ("staff", "bank_account", "save_name")
 
 
 class StaffAddress(BaseModel):
@@ -128,7 +128,7 @@ class StaffAddress(BaseModel):
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("staff", "address")
+        unique_together = ("staff", "address", "save_name")
 
 
 class StudentBankAccount(BaseModel):
@@ -142,7 +142,7 @@ class StudentBankAccount(BaseModel):
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("student", "bank_account")
+        unique_together = ("student", "bank_account", "save_name")
 
 
 class StudentAddress(BaseModel):
@@ -157,4 +157,4 @@ class StudentAddress(BaseModel):
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("student", "address")
+        unique_together = ("student", "address", "save_name")
