@@ -43,5 +43,5 @@ class Venue(BaseModel):
         max_length=64, validators=[englishAndSomeSpecialValidation]
     )
 
-    classification = models.ForeignKey(VenueClassification, on_delete=models.PROTECT)
-    campus = models.ForeignKey(Campus, on_delete=models.CASCADE)
+    classification = models.ForeignKey(VenueClassification, on_delete=models.PROTECT, null=True)
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, null=True)
