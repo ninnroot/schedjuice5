@@ -8,28 +8,28 @@ from django.db import models
 
 class Group(BaseModel):
 
-    name = models.CharField(max_length=256, validators=[nameValidation])
+    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField()
     parent_id = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)
 
 
 class Department(BaseModel):
 
-    name = models.CharField(max_length=256, validators=[nameValidation])
+    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField()
     parent_id = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)
 
 
 class Job(BaseModel):
 
-    name = models.CharField(max_length=256, validators=[nameValidation])
+    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField()
     credit_per_session = models.PositiveIntegerField()
 
 
 class Role(BaseModel):
 
-    name = models.CharField(max_length=256, validators=[nameValidation])
+    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
 
 
 class Permission(BaseModel):

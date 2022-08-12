@@ -64,6 +64,6 @@ class EventVenue(BaseModel):
 class Calendar(BaseModel):
 
     name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
     config = models.JSONField()
