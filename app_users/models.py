@@ -66,7 +66,7 @@ class Staff(BaseUser):
     formal_photo = models.ImageField(
         default=config.default_formal, upload_to=config.staff_formal
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     class Meta(BaseUser.Meta):
         pass
@@ -78,7 +78,7 @@ class Guardian(BaseUser):
         default=config.default_avatar, upload_to=config.guardian_avatar
     )
     career = models.CharField(max_length=512, choices=careers)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     class Meta(BaseUser.Meta):
         pass
@@ -96,7 +96,7 @@ class Student(BaseUser):
         max_length=128,
         choices=config.guardian_type_choices,
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     class Meta(BaseUser.Meta):
         pass

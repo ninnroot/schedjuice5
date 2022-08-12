@@ -59,3 +59,11 @@ class EventVenue(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+
+
+class Calendar(BaseModel):
+
+    name = models.CharField(
+        max_length=256, validators=[englishAndSomeSpecialValidation]
+    )
+    config = models.JSONField()
