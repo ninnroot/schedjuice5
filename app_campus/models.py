@@ -13,9 +13,7 @@ class VenueClassification(BaseModel):
 
 class Campus(BaseModel):
 
-    name = models.CharField(
-        max_length=256, validators=[nameWithNumberValidation], unique=True
-    )
+    name = models.CharField(max_length=256, validators=[nameWithNumberValidation])
     opening_time = models.TimeField()
     closing_time = models.TimeField()
     house_number = models.CharField(
@@ -45,8 +43,10 @@ class Venue(BaseModel):
         max_length=64, validators=[englishAndSomeSpecialValidation]
     )
 
-    classification = models.ForeignKey(VenueClassification, on_delete=models.PROTECT)
-    campus = models.ForeignKey(Campus, on_delete=models.CASCADE)
+    classification = models.ForeignKey(
+        VenueClassification, on_delete=models.PROTECT, null=True
+    )
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, null=True)
 
     class Meta:
-        unique_together = ("campus", "code")
+        unique_together = ("code", "campus")

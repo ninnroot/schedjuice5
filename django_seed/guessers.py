@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 
 import random
 import re
+from datetime import datetime, timedelta
 
 from .providers import Provider
 
@@ -54,6 +55,10 @@ class NameGuesser(object):
         if name in ('body', 'summary', 'description'): return lambda x: faker.text()
         if name == 'password': return lambda x: make_password(faker.password())
         if name == 'gender': return lambda x: random.choice(["male", "female"])
+        if name == 'start_date': return lambda x: datetime.now().date()
+        if name == 'end_date': return lambda x: datetime.now().date() + timedelta(days=7)
+        if name in ('time_from', 'opening_time'): return lambda x: datetime.now().time()
+        if name in ('time_to', 'closing_time'): return lambda x: (datetime.now() + timedelta(hours=2)).time()
 
 
 class FieldTypeGuesser(object):
