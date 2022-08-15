@@ -36,7 +36,7 @@ class BaseView(APIView, CustomPagination):
         )
 
     # querying data
-    def get_queryset(self, request: Request, filter_params=None, fields=None):
+    def get_queryset(self, request: Request, filter_params=None, fields=None, sorts=None):
         if filter_params is None:
             filter_params = {}
 
@@ -47,6 +47,7 @@ class BaseView(APIView, CustomPagination):
             self.model.objects.filter(**filter_params)
             .prefetch_related(*self.related_fields)
             .all()
+            .order_by(*sorts)
         )
 
         # paginate the queryset
@@ -76,6 +77,17 @@ class BaseView(APIView, CustomPagination):
                 )
 
         return fields
+
+    # get the "sort" query param
+    def get_sort_filter(self, request: Request):
+        sorts = request.query_params.get("sort", []) # get base64 encoded string
+        if sorts:
+            sorts = self.decode_query_param(sorts, "sort") # decode base64 string
+            rmv_sign_sort = [sort.replace("-", "") for sort in sorts]
+            if not self.fields_are_valid(rmv_sign_sort):
+                raise BadRequest(f"{sorts} is not present in {self.model.__name__}'s sortable fields")
+
+        return sorts
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -117,14 +129,16 @@ class BaseListView(BaseView):
             return self.send_metadata(request)
 
         fields = []
+        sorts = []
         try:
             fields = self.get_field_filter(request)
+            sorts = self.get_sort_filter(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
-        serialized_data = self.get_queryset(request, fields=fields)
+        serialized_data = self.get_queryset(request, fields=fields, sorts=sorts)
 
         # return the serialized queryset in a standardized manner
         return self.send_response(

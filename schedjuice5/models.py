@@ -43,3 +43,4 @@ class BaseModel(models.Model):
         return set([i.name for i in self._meta.get_fields()]).difference(
             set(RELATION_FIELDS)
         )
+
