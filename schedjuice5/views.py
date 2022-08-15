@@ -51,7 +51,6 @@ class BaseView(APIView, CustomPagination):
 
         # paginate the queryset
         paginated_data = self.paginate_queryset(queryset, request)
-        print("Count", paginated_data)
 
         # serialize the paginated data
         serialized_data = self.get_serializer(

@@ -39,7 +39,5 @@ class BaseModel(models.Model):
         abstract = True
         ordering = ["id"]
 
-    def get_filterable_fields(self):
-        return set([i.name for i in self._meta.get_fields()]).difference(
-            set(RELATION_FIELDS)
-        )
+    def get_filterable_fields(self) -> set:
+        return set([i.name for i in self._meta.get_fields()])
