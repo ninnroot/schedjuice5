@@ -7,27 +7,43 @@ from app_campus.models import Venue
 
 
 class Category(BaseModel):
+    """
+    A Category is a collection of Courses. A Category can contain many Courses.
+    """
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
-    description = models.TextField()
+    description = models.TextField(default="...")
 
 
 class EventClassification(BaseModel):
+    """
+    Represents a type of Event.
+    """
+
     name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
-    description = models.TextField()
+    description = models.TextField(default="...")
 
 
 class Course(BaseModel):
+    """
+    One of the fundamental models in the API. Staff can be assigned and Students can be enrolled to a Course.
+    A Course may belong to one and only one Category, and a Course can contain many Events.
+    """
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
-    description = models.TextField()
-    code = models.CharField(max_length=64, validators=[usernameValidation], unique=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    description = models.TextField(default="...")
+    code = models.CharField(
+        max_length=64,
+        validators=[usernameValidation],
+        unique=True,
+        help_text="A short standardized code.",
+    )
+    start_date = models.DateField(help_text="The course starting date.")
+    end_date = models.DateField(help_text="The course ending date.")
     monthly_fee = models.PositiveIntegerField()
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -41,12 +57,21 @@ class Course(BaseModel):
 
 
 class Event(BaseModel):
+    """
+    An Event manifests in the real world, and it can consume finite resources such as
+    time and space, though the latter is optional. Once an Event is initialized, it consumes
+    the time and space resources that it has been assigned to.
+    """
 
-    date = models.DateField()
-    time_from = models.TimeField()
-    time_to = models.TimeField()
+    date = models.DateField(help_text="The date that the event falls onto.")
+    time_from = models.TimeField(help_text="Starting time of the event.")
+    time_to = models.TimeField(help_text="Ending time of the event.")
 
-    classification = models.ForeignKey(EventClassification, on_delete=models.PROTECT)
+    classification = models.ForeignKey(
+        EventClassification,
+        on_delete=models.PROTECT,
+        help_text="The type of the event.",
+    )
 
     def save(self, *args, **kwargs):
         if self.time_to <= self.time_from:
@@ -56,14 +81,21 @@ class Event(BaseModel):
 
 
 class EventVenue(BaseModel):
+    """
+    The bridge table for the Event and Venue models.
+    """
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
 
 class Calendar(BaseModel):
+    """
+    A Calendar stores ranges of dates which can be used to create many Events. Calendars can be used to save particular
+    configuration of Events.
+    """
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
     )
-    config = models.JSONField()
+    config = models.JSONField(help_text="Event configuration saved in the json format.")

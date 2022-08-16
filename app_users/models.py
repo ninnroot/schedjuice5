@@ -32,6 +32,10 @@ class BaseUser(BaseModel):
 
 
 class BankAccount(BaseModel):
+    """
+    A BankAccount of a user. A user may have many BankAccounts, however,
+    a BankAccount can belong to one and only one user.
+    """
 
     owner_name = models.CharField(max_length=256, validators=[nameValidation])
     number = models.CharField(max_length=256, validators=[bankAccountNumberValidation])
@@ -42,6 +46,9 @@ class BankAccount(BaseModel):
 
 
 class Address(BaseModel):
+    """
+    An Address of a user. A user may have many Addresses, but not vice versa.
+    """
 
     house_number = models.CharField(
         max_length=16, validators=[englishAndSomeSpecialValidation]
@@ -60,6 +67,10 @@ class Address(BaseModel):
 
 
 class Staff(BaseUser):
+    """
+    One of the most fundamental models in the API. Represents a Staff user in the system.
+    """
+
     avatar = models.ImageField(
         default=config.default_avatar, upload_to=config.staff_avatar
     )
@@ -73,6 +84,9 @@ class Staff(BaseUser):
 
 
 class Guardian(BaseUser):
+    """
+    Represents a parent or a legal guardian of a Student.
+    """
 
     avatar = models.ImageField(
         default=config.default_avatar, upload_to=config.guardian_avatar
@@ -85,6 +99,10 @@ class Guardian(BaseUser):
 
 
 class Student(BaseUser):
+    """
+    A Student user.
+    """
+
     avatar = models.ImageField(
         default=config.default_avatar, upload_to=config.student_avatar
     )
@@ -103,10 +121,19 @@ class Student(BaseUser):
 
 
 class StaffBankAccount(BaseModel):
+    """
+    A bridge table for Staff and BankAccount models.
+    """
+
     save_name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256,
+        validators=[englishAndSomeSpecialValidation],
+        help_text="The name to save the current BankAccount as.",
     )
-    is_primary = models.BooleanField(default=False)
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="A flag for whether current BankAccount is a primary one or not.",
+    )
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
 
@@ -117,10 +144,19 @@ class StaffBankAccount(BaseModel):
 
 
 class StaffAddress(BaseModel):
+    """
+    A bridge table for Staff and Address models.
+    """
+
     save_name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256,
+        validators=[englishAndSomeSpecialValidation],
+        help_text="The name to save the current Address as.",
     )
-    is_primary = models.BooleanField(default=False)
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="A flag for whether current Address is a primary one or not.",
+    )
     address_type = models.CharField(max_length=128)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
@@ -132,10 +168,19 @@ class StaffAddress(BaseModel):
 
 
 class StudentBankAccount(BaseModel):
+    """
+    A bridge table for Student and BankAccount models.
+    """
+
     save_name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256,
+        validators=[englishAndSomeSpecialValidation],
+        help_text="The name to save the current BankAccount as.",
     )
-    is_primary = models.BooleanField(default=False)
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="A flag for whether current BankAccount is a primary one or not.",
+    )
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
 
@@ -146,10 +191,19 @@ class StudentBankAccount(BaseModel):
 
 
 class StudentAddress(BaseModel):
+    """
+    A bridge table for Student and Address models.
+    """
+
     save_name = models.CharField(
-        max_length=256, validators=[englishAndSomeSpecialValidation]
+        max_length=256,
+        validators=[englishAndSomeSpecialValidation],
+        help_text="The name to save the current Address as.",
     )
-    is_primary = models.BooleanField(default=False)
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="A flag for whether current Address is a primary one or not.",
+    )
     address_type = models.CharField(max_length=128)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)

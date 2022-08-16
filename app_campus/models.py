@@ -7,11 +7,18 @@ from rest_framework.serializers import ValidationError
 
 
 class VenueClassification(BaseModel):
+    """
+    Represents a type of Venue.
+    """
+
     name = models.CharField(max_length=256, validators=[nameValidation])
-    description = models.TextField()
+    description = models.TextField(default="...")
 
 
 class Campus(BaseModel):
+    """
+    Represents a collection of Venues. A physical location. A Campus can contain many Venues.
+    """
 
     name = models.CharField(max_length=256, validators=[nameWithNumberValidation])
     opening_time = models.TimeField()
@@ -38,15 +45,33 @@ class Campus(BaseModel):
 
 
 class Venue(BaseModel):
-    code = models.CharField(max_length=64, validators=[usernameValidation])
+    """
+    A physical location where physical Events can take place. A Venue may belong to one and only one Campus.
+    """
+
+    code = models.CharField(
+        max_length=64,
+        validators=[usernameValidation],
+        help_text="A short standardized code.",
+    )
     location = models.CharField(
-        max_length=64, validators=[englishAndSomeSpecialValidation]
+        max_length=64,
+        validators=[englishAndSomeSpecialValidation],
+        help_text="The location of the Venue in a certain Campus. For example, room and floor number.",
     )
 
     classification = models.ForeignKey(
-        VenueClassification, on_delete=models.PROTECT, null=True
+        VenueClassification,
+        on_delete=models.PROTECT,
+        null=True,
+        help_text="Type of the Venue.",
     )
-    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, null=True)
+    campus = models.ForeignKey(
+        Campus,
+        on_delete=models.CASCADE,
+        null=True,
+        help_text="The Campus that the Venue is located within.",
+    )
 
     class Meta:
         unique_together = ("code", "campus")

@@ -67,20 +67,21 @@ class BaseView(APIView, CustomPagination):
         return set(fields).issubset(self.model.get_filterable_fields(self.model))
 
     # get the "field" query param
-    def get_field_filter(self, request: Request):
+    def get_field_filter_param(self, request: Request):
         fields = []
         x = request.query_params.get("fields")
         if x:
             fields = self.decode_query_param(x, "fields")
             if not self.fields_are_valid(fields):
                 raise BadRequest(
-                    f"{set(fields).difference(self.model.get_filterable_fields(self.model))} are not present in {self.model.__name__}'s field set"
+                    f"{set(fields).difference(self.model.get_filterable_fields(self.model))}"
+                    f" are not present in {self.model.__name__}'s field set"
                 )
 
         return fields
 
     # get the "sort" query param
-    def get_sort_filter(self, request: Request):
+    def get_sort_param(self, request: Request):
         sorts = request.query_params.get("sort", [])  # get base64 encoded string
         if sorts:
             sorts = self.decode_query_param(sorts, "sort")  # decode base64 string
@@ -134,8 +135,8 @@ class BaseListView(BaseView):
         fields = []
         sorts = []
         try:
-            fields = self.get_field_filter(request)
-            sorts = self.get_sort_filter(request)
+            fields = self.get_field_filter_param(request)
+            sorts = self.get_sort_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
@@ -256,7 +257,7 @@ class BaseSearchView(BaseView):
 
         filter_params = {}
         try:
-            fields = self.get_field_filter(request)
+            fields = self.get_field_filter_param(request)
             filter_params = self.get_filter_params(request)
         except BadRequest as e:
             return self.send_response(
