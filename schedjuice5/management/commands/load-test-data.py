@@ -27,7 +27,7 @@ class Command(BaseCommand):
     )
 
     def load_data(self, model, filename):
-        with open(f"schedjuice5/data/{filename}", 'r') as f:
+        with open(f"./fake_data/{filename}", 'r') as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
                 model.objects.create(**row)
