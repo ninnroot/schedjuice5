@@ -373,6 +373,7 @@ fabric.properties
 # the Docker volume
 data
 .idea
+.vscode
 
 
 test.py
