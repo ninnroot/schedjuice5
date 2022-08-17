@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "debug_toolbar",
+    "django_extensions",
     # my apps
     "django_seed",
     "schedjuice5",
@@ -192,3 +193,10 @@ AUTH_USER_MODEL = "app_auth.Account"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+# djagno_extensions
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
