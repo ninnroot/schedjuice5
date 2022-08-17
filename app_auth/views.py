@@ -1,13 +1,25 @@
-from schedjuice5.views import BaseListView, BaseView
+from schedjuice5.views import BaseListView, BaseView, BaseDetailsView, BaseSearchView
 from app_auth.models import Account
 from app_auth.serializers import AccountSerializer
 from rest_framework.views import Request, status
 from app_auth.authentication import CustomAuthentication
 from app_auth.authentication import get_token
 
-
+# ------------ Account Section ------------
 class AccountListView(BaseListView):
     name = "Account list view"
+    model = Account
+    serializer = AccountSerializer
+
+
+class AccountDetailsView(BaseDetailsView):
+    name = "Account details view"
+    model = Account
+    serializer = AccountSerializer
+
+
+class AccountSearchView(BaseSearchView):
+    name = "Account search view"
     model = Account
     serializer = AccountSerializer
 
