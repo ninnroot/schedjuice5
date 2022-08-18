@@ -15,6 +15,7 @@ class Command(BaseCommand):
     
     models = (
         (Account, 'accounts.csv'),
+        (PhoneNumber, 'phone_numbers.csv'),
         (Staff, 'staffs.csv'),
         (Guardian, 'guardians.csv'),
         (Student, 'students.csv'),

@@ -6,6 +6,10 @@ urlpatterns = [
     path('addresses/search', views.AddressSearchView.as_view(), name='address-search'),
     path('addresses/<int:obj_id>', views.AddressDetailsView.as_view(), name='address-details'),
 
+    path('phone_numbers/', views.PhoneNumberListView.as_view(), name='phone-number-list'),
+    path('phone_numbers/search', views.PhoneNumberSearchView.as_view(), name='phone-number-search'),
+    path('phone_numbers/<int:obj_id>', views.PhoneNumberDetailsView.as_view(), name='phone-number-details'),
+
     path('bankaccounts/', views.BankAccountListView.as_view(), name='bankaccount-list'),
     path('bankaccounts/search', views.BankAccountSearchView.as_view(), name='bankaccount-search'),
     path('bankaccounts/<int:obj_id>', views.BankAccountDetailsView.as_view(), name='bankaccount-details'),
