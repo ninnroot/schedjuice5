@@ -67,6 +67,7 @@ class Event(BaseModel):
     time_from = models.TimeField(help_text="Starting time of the event.")
     time_to = models.TimeField(help_text="Ending time of the event.")
 
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     classification = models.ForeignKey(
         EventClassification,
         on_delete=models.PROTECT,

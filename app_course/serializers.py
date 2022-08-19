@@ -1,6 +1,7 @@
 from schedjuice5.serializers import BaseModelSerializer
 from .models import *
 
+
 class CategorySerializer(BaseModelSerializer):
     class Meta:
         model = Category

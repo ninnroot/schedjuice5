@@ -13,7 +13,7 @@ class BaseUser(BaseModel):
         unique=True,
         validators=[usernameValidation],
     )
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, validators=[nameValidation])
     about = models.TextField(default="tell us something about yourself ...")
     dob = models.DateField()
     gender = models.CharField(max_length=128)
