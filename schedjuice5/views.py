@@ -259,12 +259,13 @@ class BaseSearchView(BaseView):
         try:
             fields = self.get_field_filter_param(request)
             filter_params = self.get_filter_params(request)
+            sorts = self.get_sort_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
-        serialized_data = self.get_queryset(request, filter_params, fields)
+        serialized_data = self.get_queryset(request, filter_params, fields, sorts)
 
         # return the serialized queryset in a standardized manner
         return self.send_response(

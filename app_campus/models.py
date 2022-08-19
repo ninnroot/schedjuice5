@@ -1,4 +1,4 @@
-from app_utils.choices import countries
+from app_utils.choices.country_codes import country_codes
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
@@ -32,7 +32,7 @@ class Campus(BaseModel):
     street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
-    country = models.CharField(max_length=64, choices=countries)
+    country = models.CharField(max_length=64, choices=country_codes)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
 
     def save(self, *args, **kwargs):

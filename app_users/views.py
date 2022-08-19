@@ -21,6 +21,25 @@ class AddressSearchView(BaseSearchView):
     serializer = AddressSerializer
 
 
+# ------------ PhoneNumber Section ------------
+class PhoneNumberListView(BaseListView):
+    name = "PhoneNumber list view"
+    model = PhoneNumber
+    serializer = PhoneNumberSerializer
+
+
+class PhoneNumberDetailsView(BaseDetailsView):
+    name = "PhoneNumber details view"
+    model = PhoneNumber
+    serializer = PhoneNumberSerializer
+
+
+class PhoneNumberSearchView(BaseSearchView):
+    name = "PhoneNumber search view"
+    model = PhoneNumber
+    serializer = PhoneNumberSerializer
+
+
 # ------------ BankAccount Section ------------
 class BankAccountListView(BaseListView):
     name = "BankAccount list view"

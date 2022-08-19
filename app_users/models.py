@@ -4,7 +4,18 @@ from app_auth.models import Account
 from schedjuice5.validators import *
 import schedjuice5.config as config
 
-from app_utils.choices import careers, countries
+from app_utils.choices.country_codes import country_codes
+from app_utils.choices.careers import careers
+from app_utils.choices.dial_codes import dial_codes
+
+
+class PhoneNumber(BaseModel):
+    dial_code = models.CharField(max_length=50, choices=dial_codes)
+    number = models.CharField(max_length=20)
+    is_primary = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("dial_code", "number")
 
 
 class BaseUser(BaseModel):
@@ -19,13 +30,7 @@ class BaseUser(BaseModel):
     gender = models.CharField(max_length=128)
 
     secondary_email = models.EmailField(null=True)
-    primary_phone_number = models.CharField(
-        max_length=256,
-        validators=[phoneNumberValidation],
-    )
-    secondary_phone_number = models.CharField(
-        max_length=256, null=True, validators=[phoneNumberValidation]
-    )
+    phone_number = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE)
 
     class Meta(BaseModel.Meta):
         abstract = True
@@ -59,7 +64,7 @@ class Address(BaseModel):
     street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
-    country = models.CharField(max_length=64, choices=countries)
+    country = models.CharField(max_length=64, choices=country_codes)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
 
     class Meta(BaseModel.Meta):

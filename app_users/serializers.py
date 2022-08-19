@@ -8,6 +8,12 @@ class AddressSerializer(BaseModelSerializer):
         fields = "__all__"
 
 
+class PhoneNumberSerializer(BaseModelSerializer):
+    class Meta:
+        model = PhoneNumber
+        fields = "__all__"
+
+
 class BankAccountSerializer(BaseModelSerializer):
     class Meta:
         model = BankAccount
