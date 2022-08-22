@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "app_course",
     "app_campus",
     "app_management",
+    "app_microsoft",
 ]
 
 
@@ -197,6 +198,6 @@ INTERNAL_IPS = [
 
 # djagno_extensions
 GRAPH_MODELS = {
-  'all_applications': True,
-  'group_models': True,
+    "all_applications": True,
+    "group_models": True,
 }
