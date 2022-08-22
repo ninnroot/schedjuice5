@@ -19,4 +19,5 @@ def get_token():
     if not x:
         res = x.aquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
 
-    return res
+        return res
+    return x
