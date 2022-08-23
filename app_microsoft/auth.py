@@ -16,8 +16,10 @@ def get_token():
     )
     # return app
     x = app.acquire_token_silent(scopes, account=None)
-    if x is None:
-        res = x.aquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
+    if not x:
+        res = app.acquire_token_for_client(
+            scopes=["https://graph.microsoft.com/.default"]
+        )
 
         return res
     return x
