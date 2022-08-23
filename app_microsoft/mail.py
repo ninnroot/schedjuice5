@@ -2,86 +2,84 @@ import requests
 import os
 import base64
 from .auth import get_token
+# from .scopes import my_access_token
 
 base_url = "https://graph.microsoft.com/v1.0/me/sendMail"
 
-def file_attachment(file_path, is_inline=False):
-    if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
+def file_attachment(attachment, is_inline):
+    try:
+        with open(attachment, "rb") as f:
             content = base64.b64encode(f.read())
         data_body = {
             "@odata.type": "#microsoft.graph.fileAttachment",
             "contentBytes": content.decode("utf-8"),
-            "name": os.path.basename(file_path),
+            "name": os.path.basename(attachment),
             "isInline": is_inline
         }
         return data_body
+    except FileNotFoundError:
+        raise Exception("File not Found")
 
-    return None
+    
+def getRecipients(recipients):
+    return [
+        {
+            "emailAddress": {
+                "address": recipient
+            }
+        }
+        for recipient in recipients
+    ]
 
-def item_attachment(body, subject, start, end, is_inline=False):
-    data_body = {
-        "@odata.type": "#microsoft.graph.itemAttachment",
-        "item": {
-            "@odata.type": "microsoft.graph.event",
+
+def getAttachments(attachments):
+    
+    return [
+        file_attachment(attachment[0], attachment[1])
+            for attachment in attachments 
+    ]
+
+
+def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {get_token()}"
+    }
+    data = {
+        "message": {
+            "subject": subject,
             "body": {
                 "contentType": "HTML",
                 "content": body
             },
-            "subject": subject,
-            "start": {
-                "dateTime": start,
-                "timeZone": "Pacific Standard Time"
-            },
-            "end": {
-                "dateTime": end,
-                "timeZone": "Pacific Standard Time"   
-            }
-        },
-        "isInline": is_inline
+            "toRecipients": getRecipients(to),
+        }
     }
-    return data_body
 
-def send_mail(subject, body, to, cc=None, bcc=None, attachments=None, start=None, end=None, item=None, item_subject=None):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer {0}".format(get_token())
-    }
-    data = {
-        "subject": subject,
-        "body": {
-            "contentType": "HTML",
-            "content": body
-        },
-        "toRecipients": [
-            {
-                "emailAddress": {
-                    "address": to
-                }
-            }
-        ],
-        "ccRecipients": [
-            {
-                "emailAddress": {
-                    "address": cc
-                }
-            }
-        ],
-        "bccRecipients": [
-            {
-                "emailAddress": {
-                    "address": bcc
-                }
-            }
-        ],
-        "attachments": [
-            file_attachment(attachments, is_inline=False),
-            item_attachment(item, item_subject, start, end, is_inline=True)
-        ],
-    }
+    if cc is not None:
+        data["message"]["ccRecipients"] = getRecipients(cc)
+
+    if bcc is not None:
+        data["message"]["bccRecipients"] = getRecipients(bcc)
+
+    if attachments is not None:
+        data["message"]["attachments"] = getAttachments(attachments)
+
+
     r = requests.post(base_url, headers=headers, json=data)
-    return r.status_code == requests.codes.ok
+    return (data, r)
 
 
-is_sent = send_mail("Test", "Test", "to.72.72.78.111@gmail.com")
-print(is_sent)
+"""
+    Parameters of send_mail()
+        subject: str
+        body: str(html or txt)
+        to: list => ["test@gmail.com", "admin@gmail.com"]
+        cc: list => ["test@gmail.com", "admin@gmail.com"]
+        bcc: list => ["test@gmail.com", "admin@gmail.com"]
+        attachments: list of tuples => [("file.txt", False), ("img.png", True)]
+
+    return format: (data, response)
+
+    to test function: send_mail("Test", "Test", ["to.72.72.78.111@gmail.com"], attachments=[("attachment.txt", False)])
+"""
