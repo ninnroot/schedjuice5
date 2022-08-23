@@ -1,1 +1,1 @@
-scopes = ["User.ReadWrite.All"]
+scopes = ["User.ReadWrite.All", "Mail.ReadWrite", "Mail.Send"]
