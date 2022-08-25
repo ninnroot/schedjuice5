@@ -378,5 +378,5 @@ test.py
 csv
 .DS_Store
 suconnect_key.pem
-attachment.txt
+# attachment.txt
 rose.jpg

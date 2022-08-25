@@ -1,10 +1,11 @@
 import requests
 import os
 import base64
+import decouple
 from .auth import get_token
-# from .scopes import my_access_token
 
-base_url = "https://graph.microsoft.com/v1.0/me/sendMail"
+USER_ID = decouple.config('USER_ID')
+ENDPOINT = f"https://graph.microsoft.com/v1.0/users/{USER_ID}/sendMail"
 
 def file_attachment(attachment, is_inline):
     try:
@@ -41,9 +42,10 @@ def getAttachments(attachments):
 
 
 def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
+    token = get_token()
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {get_token()}"
+        "Authorization": f"{token['token_type']} {token['access_token']}"
     }
     data = {
         "message": {
@@ -66,7 +68,7 @@ def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
         data["message"]["attachments"] = getAttachments(attachments)
 
 
-    r = requests.post(base_url, headers=headers, json=data)
+    r = requests.post(ENDPOINT, headers=headers, json=data)
     return (data, r)
 
 

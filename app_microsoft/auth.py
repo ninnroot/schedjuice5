@@ -1,11 +1,14 @@
 import decouple
 import msal
+import requests
+import urllib
 from .scopes import scopes
 
 TENANT = decouple.config("MS_AUTHORITY")
 CLIENT_ID = decouple.config("APP_ID")
 KEY = decouple.config("KEY")
 THUMBPRINT = decouple.config("THUMBPRINT")
+CLIENT_SECRET = decouple.config('CLIENT_SECRET')
 
 
 def get_token():
