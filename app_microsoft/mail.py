@@ -34,7 +34,6 @@ def getRecipients(recipients):
 
 
 def getAttachments(attachments):
-    
     return [
         file_attachment(attachment[0], attachment[1])
             for attachment in attachments 
@@ -72,6 +71,7 @@ def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
     return (data, r)
 
 
+# ----------- DOCUMENTATION -------------
 """
     Parameters of send_mail()
         subject: str
