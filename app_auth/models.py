@@ -24,3 +24,8 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
 
     def __str__(self):
         return f"<User: {self.id} {self.email}>"
+
+
+class TempEmail(BaseModel):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    email = models.EmailField(unique=True)
