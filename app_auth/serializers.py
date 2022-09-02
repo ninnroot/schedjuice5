@@ -22,3 +22,8 @@ class AccountSerializer(BaseModelSerializer):
 class LoginSerializer(BaseSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(max_length=256)
+
+
+class RequestUpdateEmailSerializer(BaseSerializer):
+    email = serializers.EmailField(required=True)
+
