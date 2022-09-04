@@ -14,6 +14,7 @@ from app_course.models import *
 class Command(BaseCommand):
     
     models = (
+        # app_users
         (Account, 'accounts.csv'),
         (PhoneNumber, 'phone_numbers.csv'),
         (Staff, 'staffs.csv'),
@@ -25,6 +26,36 @@ class Command(BaseCommand):
         (Address, 'addresses.csv'), # parent
         (StaffAddress, 'staff-addresses.csv'), # child of Address
         (StudentAddress, 'student-addresses.csv'), # child of Address
+
+        # app_campus
+        (VenueClassification, 'venue-classification.csv'),
+        (Campus, 'campus.csv'),
+        (Venue, 'venue.csv'),
+
+        # app_course
+        (Category, 'category.csv'),
+        (EventClassification, 'event-classification.csv'),
+        (Course, 'course.csv'),
+        (Event, 'event.csv'),
+        (EventVenue, 'event-venue.csv'),
+        (Calendar, 'calendar.csv'),
+
+        # app_finance
+        (Record, 'record.csv'),
+
+        # app_management
+        (Group, 'group.csv'),
+        (Department, 'department.csv'),
+        (Job, 'job.csv'),
+        (Role, 'role.csv'),
+        (Permission, 'permission.csv'),
+        (StaffGroup, 'staff-group.csv'),
+        (StaffDepartment, 'staff-department.csv'),
+        (StaffCourse, 'staff-course.csv'),
+        (StaffEvent, 'staff-event.csv'),
+        (StaffRole, 'staff-role.csv'),
+        (GroupRole, 'group-role.csv'),
+        (RolePermission, 'role-permission.csv'),
     )
 
     def load_data(self, model, filename):

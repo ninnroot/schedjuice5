@@ -68,6 +68,7 @@ def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
 
 
     r = requests.post(ENDPOINT, headers=headers, json=data)
+    print("Email Sent!!!")
     return (data, r)
 
 

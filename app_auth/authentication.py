@@ -28,3 +28,4 @@ def get_token(user):
     data = {"refresh": str(refresh), "access": str(refresh.access_token)}
 
     return data
+
