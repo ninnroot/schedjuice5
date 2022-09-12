@@ -27,7 +27,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", cast=str)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"] + config("ALLOWED_HOSTS", cast=str).split(",")
 
 
 # Application definition
@@ -159,7 +159,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # REST framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 100,
+    # "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTTokenUserAuthentication",
     ),

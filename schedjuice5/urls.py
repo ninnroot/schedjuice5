@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -40,7 +43,6 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
-    path("api/v2__debug__/", include("debug_toolbar.urls")),
     path("api/v2/admin/", admin.site.urls),
     path("api/v2/", include("app_docs.urls")),
     path("api/v2/", include("app_auth.urls")),
@@ -50,4 +52,12 @@ urlpatterns = [
     path("api/v2/", include("app_course.urls")),
     path("api/v2/", include("app_campus.urls")),
     path("api/v2/", include("app_management.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)
+
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+    except ImportError:
+        pass

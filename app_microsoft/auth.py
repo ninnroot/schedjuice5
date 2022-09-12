@@ -8,7 +8,7 @@ TENANT = decouple.config("MS_AUTHORITY")
 CLIENT_ID = decouple.config("APP_ID")
 KEY = decouple.config("KEY")
 THUMBPRINT = decouple.config("THUMBPRINT")
-CLIENT_SECRET = decouple.config('CLIENT_SECRET')
+CLIENT_SECRET = decouple.config("CLIENT_SECRET")
 
 
 def get_token():
@@ -17,7 +17,6 @@ def get_token():
         authority="https://login.microsoftonline.com/" + TENANT,
         client_credential={"thumbprint": THUMBPRINT, "private_key": open(KEY).read()},
     )
-    # return app
     x = app.acquire_token_silent(scopes, account=None)
     if not x:
         res = app.acquire_token_for_client(
