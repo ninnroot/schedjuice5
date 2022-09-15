@@ -21,6 +21,8 @@ class CustomPagination(PageNumberPagination):
         return len(list(self.page))
 
     def get_total_pages(self):
+        if self.get_count_per_page() == 0:
+            return 0
         return math.ceil(self.page.paginator.count / self.get_count_per_page())
 
     def get_paginated_response(self, *args, **kwargs):
