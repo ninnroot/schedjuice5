@@ -252,7 +252,7 @@ class BaseSearchView(BaseView):
     def build_filter_params(self, filter_params):
         filter_dict = {}
         for i in filter_params:
-            filter_dict[i["field_name"] + "__" + i["operator"]] = i["value"]
+            filter_dict[i["field_name"] + "__" + i["operator"]] = i["value"].split(",") if i["operator"] == "in" else i["value"]
 
         return filter_dict
 
