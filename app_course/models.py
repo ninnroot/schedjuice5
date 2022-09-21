@@ -45,6 +45,7 @@ class Course(BaseModel):
     start_date = models.DateField(help_text="The course starting date.")
     end_date = models.DateField(help_text="The course ending date.")
     monthly_fee = models.PositiveIntegerField()
+    color = models.CharField(max_length=50, default="#FA7070")
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
