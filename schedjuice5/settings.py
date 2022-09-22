@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "app_campus",
     "app_management",
     "app_microsoft",
+    "app_announcement",
 ]
 
 

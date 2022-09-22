@@ -80,6 +80,9 @@ class Event(BaseModel):
 
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f"{self.id}-{self.date}-{self.time_from}-{self.time_to}"
+
 
 class EventVenue(BaseModel):
     """
