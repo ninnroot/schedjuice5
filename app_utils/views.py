@@ -1,8 +1,9 @@
 from schedjuice5.views import BaseView
-from .choices.country_codes import country_codes
+
 from .choices.careers import careers
-from .choices.postal_codes import postal_codes
+from .choices.country_codes import country_codes
 from .choices.dial_codes import dial_codes
+from .choices.postal_codes import postal_codes
 
 
 class CountryView(BaseView):
@@ -28,7 +29,9 @@ class DialCodeView(BaseView):
     choices = dial_codes
 
     def get(self, request):
-        return self.send_response(False, "success", {"data": {"dial_codes": self.choices}})
+        return self.send_response(
+            False, "success", {"data": {"dial_codes": self.choices}}
+        )
 
 
 class PostalCodeView(BaseView):
@@ -48,9 +51,13 @@ class PostalCodeView(BaseView):
         if postal_code is not None:
             for row in self.choices:
                 if row[3] == postal_code:
-                    return self.send_response(False, "success", {"data": self.formatData(row)})
-            return self.send_response(True, "error", {"message": "Postal code not found"})
-        else: 
+                    return self.send_response(
+                        False, "success", {"data": self.formatData(row)}
+                    )
+            return self.send_response(
+                True, "error", {"message": "Postal code not found"}
+            )
+        else:
             return self.send_response(
                 False, "success", {"data": {"postal_codes": self.choices}}
             )

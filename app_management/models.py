@@ -1,9 +1,11 @@
+from django.db import models
+
+from app_course.models import Course, Event
+from app_users.models import Staff
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
+
 from .managers import *
-from app_users.models import Staff
-from app_course.models import Course, Event
-from django.db import models
 
 
 class Group(BaseModel):

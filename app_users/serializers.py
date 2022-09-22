@@ -1,4 +1,5 @@
 from schedjuice5.serializers import BaseModelSerializer
+
 from .models import *
 
 
@@ -24,7 +25,7 @@ class StaffSerializer(BaseModelSerializer):
     class Meta:
         model = Staff
         fields = "__all__"
-    
+
 
 class GuardianSerializer(BaseModelSerializer):
     class Meta:

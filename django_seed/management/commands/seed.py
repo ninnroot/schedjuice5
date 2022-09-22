@@ -1,9 +1,11 @@
+from collections import defaultdict
+from optparse import make_option
+
 from django.core.management.base import AppCommand
+from toposort import toposort_flatten
+
 from django_seed import Seed
 from django_seed.exceptions import SeederCommandError
-from toposort import toposort_flatten
-from optparse import make_option
-from collections import defaultdict
 
 
 class Command(AppCommand):

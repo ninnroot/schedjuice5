@@ -1,6 +1,7 @@
-from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
-from app_auth.models import Account
 from rest_framework import serializers
+
+from app_auth.models import Account
+from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 
 
 class AccountSerializer(BaseModelSerializer):
@@ -26,4 +27,3 @@ class LoginSerializer(BaseSerializer):
 
 class RequestUpdateEmailSerializer(BaseSerializer):
     email = serializers.EmailField(required=True)
-

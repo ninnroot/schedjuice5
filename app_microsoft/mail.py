@@ -1,11 +1,14 @@
-import requests
-import os
 import base64
+import os
+
 import decouple
+import requests
+
 from .auth import get_token
 
-USER_ID = decouple.config('USER_ID')
+USER_ID = decouple.config("USER_ID")
 ENDPOINT = f"https://graph.microsoft.com/v1.0/users/{USER_ID}/sendMail"
+
 
 def file_attachment(attachment, is_inline):
     try:
@@ -15,44 +18,31 @@ def file_attachment(attachment, is_inline):
             "@odata.type": "#microsoft.graph.fileAttachment",
             "contentBytes": content.decode("utf-8"),
             "name": os.path.basename(attachment),
-            "isInline": is_inline
+            "isInline": is_inline,
         }
         return data_body
     except FileNotFoundError:
         raise Exception("File not Found")
 
-    
+
 def getRecipients(recipients):
-    return [
-        {
-            "emailAddress": {
-                "address": recipient
-            }
-        }
-        for recipient in recipients
-    ]
+    return [{"emailAddress": {"address": recipient}} for recipient in recipients]
 
 
 def getAttachments(attachments):
-    return [
-        file_attachment(attachment[0], attachment[1])
-            for attachment in attachments 
-    ]
+    return [file_attachment(attachment[0], attachment[1]) for attachment in attachments]
 
 
 def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
     token = get_token()
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"{token['token_type']} {token['access_token']}"
+        "Authorization": f"{token['token_type']} {token['access_token']}",
     }
     data = {
         "message": {
             "subject": subject,
-            "body": {
-                "contentType": "HTML",
-                "content": body
-            },
+            "body": {"contentType": "HTML", "content": body},
             "toRecipients": getRecipients(to),
         }
     }
@@ -65,7 +55,6 @@ def send_mail(subject, body, to, cc=None, bcc=None, attachments=None):
 
     if attachments is not None:
         data["message"]["attachments"] = getAttachments(attachments)
-
 
     r = requests.post(ENDPOINT, headers=headers, json=data)
     print("Email Sent!!!")

@@ -1,14 +1,30 @@
-
-from datetime import timedelta
 import random
+import sys
 import time
 import uuid
-import sys
+from datetime import timedelta
 
-
-file_extensions = ("flac", "mp3", "wav", "bmp", "gif", "jpeg", "jpg", "png",
-                   "tiff", "css", "csv", "html", "js", "json", "txt", "mp4",
-                   "avi", "mov", "webm")
+file_extensions = (
+    "flac",
+    "mp3",
+    "wav",
+    "bmp",
+    "gif",
+    "jpeg",
+    "jpg",
+    "png",
+    "tiff",
+    "css",
+    "csv",
+    "html",
+    "js",
+    "json",
+    "txt",
+    "mp4",
+    "avi",
+    "mov",
+    "webm",
+)
 
 
 class Provider(object):
@@ -45,11 +61,11 @@ class Provider(object):
     def file_name(self):
         filename = self.faker.word()
         extension = random.choice(file_extensions)
-        return '{0}.{1}'.format(filename, extension)
+        return "{0}.{1}".format(filename, extension)
 
     def comma_sep_ints(self):
         ints = [str(self.rand_int()) for x in range(10)]
-        return ','.join(ints)
+        return ",".join(ints)
 
     def binary(self):
         word = self.faker.text(512)

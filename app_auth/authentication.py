@@ -1,8 +1,9 @@
-from app_auth.models import Account
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from app_auth.serializers import LoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from app_auth.models import Account
+from app_auth.serializers import LoginSerializer
 
 
 class CustomAuthentication(BaseAuthentication):
@@ -28,4 +29,3 @@ def get_token(user):
     data = {"refresh": str(refresh), "access": str(refresh.access_token)}
 
     return data
-

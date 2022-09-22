@@ -1,6 +1,8 @@
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
-from .serializers import *
+
 from .models import Staff
+from .serializers import *
+
 
 # ------------ Address Section ------------
 class AddressListView(BaseListView):
@@ -190,4 +192,3 @@ class StudentAddressSearchView(BaseSearchView):
     name = "StudentAddress search view"
     model = StudentAddress
     serializer = StudentAddressSerializer
-

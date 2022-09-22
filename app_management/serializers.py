@@ -1,6 +1,7 @@
 from rest_framework.serializers import ValidationError
 
 from schedjuice5.serializers import BaseModelSerializer
+
 from .models import *
 
 
