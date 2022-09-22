@@ -5,10 +5,20 @@ from django.core.exceptions import BadRequest
 from rest_framework.views import APIView, Response, status, Request
 from rest_framework.renderers import BrowsableAPIRenderer
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 from schedjuice5.serializers import FilterParamSerializer
+from schedjuice5.swagger_serializers import FilterParamsSerializer
+
+
+size_param = openapi.Parameter('size', openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
+page_param = openapi.Parameter('page', openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
+sorts_param = openapi.Parameter('sorts', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="Base64 encode")
+fields_param = openapi.Parameter('fields', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="Base64 encode")
 
 
 class BaseView(APIView, CustomPagination):
@@ -82,9 +92,9 @@ class BaseView(APIView, CustomPagination):
 
     # get the "sort" query param
     def get_sort_param(self, request: Request):
-        sorts = request.query_params.get("sort", [])  # get base64 encoded string
+        sorts = request.query_params.get("sorts", [])  # get base64 encoded string
         if sorts:
-            sorts = self.decode_query_param(sorts, "sort")  # decode base64 string
+            sorts = self.decode_query_param(sorts, "sorts")  # decode base64 string
             rmv_sign_sort = [sort.replace("-", "") for sort in sorts]
             if not self.fields_are_valid(rmv_sign_sort):
                 raise BadRequest(
@@ -125,6 +135,7 @@ class BaseListView(BaseView):
     name = "Base list view"
     metadata_class = CustomMetadata
 
+    @swagger_auto_schema(manual_parameters=[size_param, page_param, sorts_param, fields_param])
     def get(self, request: Request):
         self.description = self.model.__doc__
 
@@ -253,6 +264,7 @@ class BaseSearchView(BaseView):
 
         return self.build_filter_params(validated_data)
 
+    @swagger_auto_schema(request_body=FilterParamsSerializer, manual_parameters=[size_param, page_param, sorts_param, fields_param])
     def post(self, request: Request):
 
         filter_params = {}

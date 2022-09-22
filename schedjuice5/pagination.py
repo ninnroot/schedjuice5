@@ -8,6 +8,7 @@ from rest_framework.response import Response
 class CustomPagination(PageNumberPagination):
 
     page_size_query_param = "size"
+    page_size = 10
 
     def get_count_per_page(self):
         return len(list(self.page))

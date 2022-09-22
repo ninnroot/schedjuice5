@@ -160,7 +160,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # REST framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 100,
+    # "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTTokenUserAuthentication",
     ),
@@ -172,7 +172,7 @@ REST_FRAMEWORK = {
 
 # CORS
 
-CORS_ALLOW_ALL_ORIGIN = True
+CORS_ALLOWED_ALL_ORIGINS = True
 
 
 # JWT
