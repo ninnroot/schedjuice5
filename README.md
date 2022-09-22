@@ -78,3 +78,6 @@ https://stackoverflow.com/questions/19128793/per-field-permission-in-django-rest
 ### On group-within-group relationship
 https://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hierarchical-data-in-a-relational-database
 
+### nested serializer circular problem (solved!)
+https://github.com/rsinger86/drf-flex-fields#reference-serializer-as-a-string-lazy-evaluation-
+

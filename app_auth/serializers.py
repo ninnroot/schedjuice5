@@ -9,6 +9,12 @@ class AccountSerializer(BaseModelSerializer):
         model = Account
         fields = "__all__"
 
+    expandable_fields = {
+        "student": ("app_users.serializers.StudentSerializer"),
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "guardian": ("app_users.serializers.GuardianSerializer"),
+    }
+
     def create(self, validated_data):
 
         password = validated_data.pop("password")

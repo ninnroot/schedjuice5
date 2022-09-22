@@ -54,13 +54,16 @@ class BaseView(APIView, CustomPagination):
 
     # querying data
     def get_queryset(
-        self, request: Request, filter_params=None, fields=None, sorts=None
+        self, request: Request, filter_params=None, fields=None, sorts=None, expand=None
     ):
         if filter_params is None:
             filter_params = {}
 
-        if fields is None or fields == []:
-            fields = None
+        if fields is None:
+            fields = []
+
+        if expand is None:
+            expand = []
         # query from the database
         queryset = (
             self.model.objects.filter(**filter_params)
@@ -74,7 +77,11 @@ class BaseView(APIView, CustomPagination):
 
         # serialize the paginated data
         serialized_data = self.get_serializer(
-            paginated_data, many=True, fields=fields, context={"model": self.model}
+            paginated_data,
+            many=True,
+            fields=fields,
+            expand=expand,
+            context={"model": self.model},
         )
 
         return serialized_data
@@ -83,17 +90,17 @@ class BaseView(APIView, CustomPagination):
     def fields_are_valid(self, fields: list) -> bool:
         return set(fields).issubset(self.model.get_filterable_fields(self.model))
 
-    # get the "field" query param
+    # get the "field" parameter form the request's body
     def get_field_filter_param(self, request: Request):
         fields = []
         x = request.query_params.get("fields")
         if x:
             fields = self.decode_query_param(x, "fields")
-            if not self.fields_are_valid(fields):
-                raise BadRequest(
-                    f"{set(fields).difference(self.model.get_filterable_fields(self.model))}"
-                    f" are not present in {self.model.__name__}'s field set"
-                )
+            # if not self.fields_are_valid(fields):
+            #     raise BadRequest(
+            #         f"{set(fields).difference(self.model.get_filterable_fields(self.model))}"
+            #         f" are not present in {self.model.__name__}'s field set"
+            #     )
 
         return fields
 
@@ -109,6 +116,14 @@ class BaseView(APIView, CustomPagination):
                 )
 
         return sorts
+
+    # get the "expand" parameter from the request's body
+    def get_expand_param(self, request: Request):
+        expand = request.query_params.get("expand", [])
+        if expand:
+            expand = self.decode_query_param(expand, "expand")
+
+        return expand
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -152,17 +167,19 @@ class BaseListView(BaseView):
         if request.GET.get("meta"):
             return self.send_metadata(request)
 
-        fields = []
         sorts = []
         try:
-            fields = self.get_field_filter_param(request)
             sorts = self.get_sort_param(request)
+            expand = self.get_expand_param(request)
+            fields = self.get_field_filter_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
-        serialized_data = self.get_queryset(request, fields=fields, sorts=sorts)
+        serialized_data = self.get_queryset(
+            request, sorts=sorts, expand=expand, fields=fields
+        )
 
         # return the serialized queryset in a standardized manner
         return self.send_response(
@@ -172,6 +189,7 @@ class BaseListView(BaseView):
             status=status.HTTP_200_OK,
         )
 
+    # create
     def post(self, request: Request):
 
         serialized_data = self.get_serializer(
@@ -210,17 +228,22 @@ class BaseDetailsView(BaseView):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    # get-one
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
+
+        fields = self.get_field_filter_param(request)
+        expand = self.get_expand_param(request)
 
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.get_serializer(obj)
+        serialized_data = self.get_serializer(obj, expand=expand, fields=fields)
         return self.send_response(
             False, "success", {"data": serialized_data.data}, status=status.HTTP_200_OK
         )
 
+    # update
     def put(self, request: Request, obj_id: int):
         obj = self._get_object(obj_id)
         if obj is None:
@@ -258,7 +281,8 @@ class BaseSearchView(BaseView):
         return validated_data
 
     # building a filter_params dict to be used in querying
-    def build_filter_params(self, filter_params):
+    @staticmethod
+    def build_filter_params(filter_params):
         filter_dict = {}
         for i in filter_params:
             filter_dict[i["field_name"] + "__" + i["operator"]] = (
@@ -279,6 +303,8 @@ class BaseSearchView(BaseView):
         request_body=FilterParamsSerializer,
         manual_parameters=[size_param, page_param, sorts_param, fields_param],
     )
+
+    # search
     def post(self, request: Request):
 
         filter_params = {}
@@ -286,12 +312,15 @@ class BaseSearchView(BaseView):
             fields = self.get_field_filter_param(request)
             filter_params = self.get_filter_params(request)
             sorts = self.get_sort_param(request)
+            expand = self.get_expand_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
-        serialized_data = self.get_queryset(request, filter_params, fields, sorts)
+        serialized_data = self.get_queryset(
+            request, filter_params, fields, sorts, expand
+        )
 
         # return the serialized queryset in a standardized manner
         return self.send_response(
