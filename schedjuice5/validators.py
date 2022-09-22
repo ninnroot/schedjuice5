@@ -29,3 +29,7 @@ englishAndSomeSpecialValidation = RegexValidator(
     regex=r"[a-zA-Z0-9_\-\(\) ]",
     message="Field must match this: '[a-zA-Z0-9_\\-\\(\\) ]'",
 )
+colorCodeValidation = RegexValidator(
+    regex=r"^#[a-zA-Z0-9]{6}$",
+    message="Color code must match this: '#[a-zA-Z0-9]{6}'"
+)
