@@ -1,6 +1,6 @@
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
-
+from .managers import *
 from app_users.models import Staff
 from app_course.models import Course, Event
 from django.db import models
@@ -20,6 +20,8 @@ class Group(BaseModel):
         null=True,
         help_text="The parent group of the current group.",
     )
+
+    objects = GroupManager()
 
 
 class Department(BaseModel):
