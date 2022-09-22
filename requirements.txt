@@ -13,7 +13,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 cryptography==37.0.4
 distlib==0.3.4
-Django==4.0.5
+Django==4.0.7
 django-cors-headers==3.13.0
 django-debug-toolbar==3.5.0
 django-extensions==3.2.0
