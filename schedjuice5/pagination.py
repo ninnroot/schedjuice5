@@ -1,5 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
+
+import math
 
 
 # customizing the PageNumberPagination class to my liking.
@@ -10,8 +11,17 @@ class CustomPagination(PageNumberPagination):
     page_size_query_param = "size"
     page_size = 10
 
+    # overriding the get_page_size()
+    def get_page_size(self, request):
+        if int(self.request.query_params.get(self.page_size_query_param, 0)) == -1:
+            return self.model.objects.count()
+        return super().get_page_size(request)
+
     def get_count_per_page(self):
         return len(list(self.page))
+
+    def get_total_pages(self):
+        return math.ceil(self.page.paginator.count / self.get_page_size(self.request))
 
     def get_paginated_response(self, *args, **kwargs):
         return {
@@ -20,5 +30,6 @@ class CustomPagination(PageNumberPagination):
                 "previous": self.get_previous_link(),
             },
             "count": self.page.paginator.count,
-            "count_per_page": self.get_count_per_page()
+            "count_per_page": self.get_count_per_page(),
+            "total_pages": self.get_total_pages()
         }
