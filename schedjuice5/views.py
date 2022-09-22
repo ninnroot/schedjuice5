@@ -15,10 +15,10 @@ from schedjuice5.serializers import FilterParamSerializer
 from schedjuice5.swagger_serializers import FilterParamsSerializer
 
 
-size_param = openapi.Parameter('size', openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
+size_param = openapi.Parameter('size', openapi.IN_QUERY, type=openapi.TYPE_INTEGER, description="set -1 to get all data")
 page_param = openapi.Parameter('page', openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
-sorts_param = openapi.Parameter('sorts', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="Base64 encode")
-fields_param = openapi.Parameter('fields', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="Base64 encode")
+sorts_param = openapi.Parameter('sorts', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="base64 encode")
+fields_param = openapi.Parameter('fields', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="base64 encode")
 
 
 class BaseView(APIView, CustomPagination):
@@ -252,7 +252,7 @@ class BaseSearchView(BaseView):
     def build_filter_params(self, filter_params):
         filter_dict = {}
         for i in filter_params:
-            filter_dict[i["field_name"] + "__" + i["operator"]] = i["value"]
+            filter_dict[i["field_name"] + "__" + i["operator"]] = i["value"].split(",") if i["operator"] == "in" else i["value"]
 
         return filter_dict
 
