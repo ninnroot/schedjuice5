@@ -211,7 +211,7 @@ class StudentAddress(BaseModel):
     )
     address_type = models.CharField(max_length=128)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     chosen_one_fields = ["is_primary"]
 
