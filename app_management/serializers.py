@@ -10,11 +10,20 @@ class GroupSerializer(BaseModelSerializer):
         model = Group
         fields = "__all__"
 
+    expandable_fields = {
+        "staffgroup_set": ("app_management.serializers.StaffGroupSerializer", {"many": True}),
+        "grouprole_set": ("app_management.serializers.GroupRoleSerializer", {"many": True}),
+    }
+
 
 class DepartmentSerializer(BaseModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
+
+    expandable_fields = {
+        "staffdepartment_set": ("app_management.serializers.StaffDepartmentSerializer", {"many": True}),
+    }
 
 
 class JobSerializer(BaseModelSerializer):
@@ -22,11 +31,23 @@ class JobSerializer(BaseModelSerializer):
         model = Job
         fields = "__all__"
 
+    expandable_fields = {
+        "staffdepartment_set": ("app_management.serializers.StaffDepartmentSerializer", {"many": True}),
+        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
+        "staffevent_set": ("app_management.serializers.StaffEventSerializer", {"many": True}),
+    }
+
 
 class RoleSerializer(BaseModelSerializer):
     class Meta:
         model = Role
         fields = "__all__"
+
+    expandable_fields = {
+        "staffrole_set": ("app_management.serializers.StaffRoleSerializer", {"many": True}),
+        "grouprole_set": ("app_management.serializers.GroupRoleSerializer", {"many": True}),
+        "rolepermission_set": ("app_management.serializers.RolePermissionSerializer", {"many": True}),
+    }
 
 
 class PermissionSerializer(BaseModelSerializer):
@@ -34,11 +55,20 @@ class PermissionSerializer(BaseModelSerializer):
         model = Permission
         fields = "__all__"
 
+    expandable_fields = {
+        "rolepermission_set": ("app_management.serializers.RolePermissionSerializer", {"many": True}),
+    }
+
 
 class StaffGroupSerializer(BaseModelSerializer):
     class Meta:
         model = StaffGroup
         fields = "__all__"
+
+    expandable_fields = {
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "group": ("app_management.serializers.GroupSerializer")
+    }
 
 
 class StaffDepartmentSerializer(BaseModelSerializer):
@@ -46,11 +76,23 @@ class StaffDepartmentSerializer(BaseModelSerializer):
         model = StaffDepartment
         fields = "__all__"
 
+    expandable_fields = {
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "department": ("app_management.serializers.DepartmentSerializer"),
+        "job": ("app_management.serializers.JobSerializer"),
+    }
+
 
 class StaffCourseSerializer(BaseModelSerializer):
     class Meta:
         model = StaffCourse
         fields = "__all__"
+
+    expandable_fields = {
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "job": ("app_management.serializers.JobSerializer"),
+        "course": ("app_course.serializers.CourseSerializer"),
+    }
 
     def validate(self, attrs):
         # check if the Events collide
@@ -62,6 +104,12 @@ class StaffEventSerializer(BaseModelSerializer):
     class Meta:
         model = StaffEvent
         fields = "__all__"
+
+    expandable_fields = {
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "job": ("app_management.serializers.JobSerializer"),
+        "event": ("app_course.serializers.EventSerializer"),
+    }
 
     def validate(self, attrs):
         # TODO: check event status and filter further
@@ -83,14 +131,29 @@ class StaffRoleSerializer(BaseModelSerializer):
         model = StaffRole
         fields = "__all__"
 
+    expandable_fields = {
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "role": ("app_users.serializers.RoleSerializer"),
+    }
+
 
 class GroupRoleSerializer(BaseModelSerializer):
     class Meta:
         model = GroupRole
         fields = "__all__"
 
+    expandable_fields = {
+        "group": ("app_users.serializers.GroupSerializer"),
+        "role": ("app_users.serializers.RoleSerializer"),
+    }
+
 
 class RolePermissionSerializer(BaseModelSerializer):
     class Meta:
         model = RolePermission
         fields = "__all__"
+
+    expandable_fields = {
+        "permission": ("app_users.serializers.PermissionSerializer"),
+        "role": ("app_users.serializers.RoleSerializer"),
+    }

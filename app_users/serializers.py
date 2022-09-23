@@ -65,7 +65,12 @@ class StaffSerializer(BaseModelSerializer):
         "account": ("app_auth.serializers.AccountSerializer"),
         "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
         "staffbankaccount_set": ("app_users.serializers.StaffBankAccountSerializer", {"many": True}),
-        "staffaddress_set": ("app_users.serializers.StaffAddressSerializer", {"many": True})
+        "staffaddress_set": ("app_users.serializers.StaffAddressSerializer", {"many": True}),
+        "staffgroup_set": ("app_management.serializers.StaffGroupSerializer", {"many": True}),
+        "staffdepartment_set": ("app_management.serializers.StaffDepartmentSerializer", {"many": True}),
+        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
+        "staffevent_set": ("app_management.serializers.StaffEventSerializer", {"many": True}),
+        "staffrole_set": ("app_management.serializers.StaffRoleSerializer", {"many": True}),
     }
 
 

@@ -30,7 +30,8 @@ class CourseSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "category": ("app_course.serializers.CategorySerializer"),
-        "event_set": ("app_course.serializers.EventSerializer", {"many": True})
+        "event_set": ("app_course.serializers.EventSerializer", {"many": True}),
+        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
     }
 
 
@@ -42,7 +43,8 @@ class EventSerializer(BaseModelSerializer):
     expandable_fields = {
         "course": ("app_course.serializers.CourseSerializer"),
         "classification": ("app_course.serializers.EventClassificationSerializer"),
-        "eventvenue_set": ("app_course.serializers.EventVenueSerializer", {"many": True})
+        "eventvenue_set": ("app_course.serializers.EventVenueSerializer", {"many": True}),
+        "staffevent_set": ("app_management.serializers.StaffEventSerializer", {"many": True}),
     }
 
 
