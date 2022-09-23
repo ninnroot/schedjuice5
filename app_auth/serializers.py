@@ -1,12 +1,19 @@
-from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
-from app_auth.models import Account
 from rest_framework import serializers
+
+from app_auth.models import Account
+from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 
 
 class AccountSerializer(BaseModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
+
+    expandable_fields = {
+        "student": ("app_users.serializers.StudentSerializer"),
+        "staff": ("app_users.serializers.StaffSerializer"),
+        "guardian": ("app_users.serializers.GuardianSerializer"),
+    }
 
     def create(self, validated_data):
 
@@ -26,4 +33,3 @@ class LoginSerializer(BaseSerializer):
 
 class RequestUpdateEmailSerializer(BaseSerializer):
     email = serializers.EmailField(required=True)
-

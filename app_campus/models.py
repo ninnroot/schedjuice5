@@ -1,9 +1,9 @@
+from django.db import models
+from rest_framework.serializers import ValidationError
+
 from app_utils.choices.country_codes import country_codes
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
-
-from django.db import models
-from rest_framework.serializers import ValidationError
 
 
 class VenueClassification(BaseModel):

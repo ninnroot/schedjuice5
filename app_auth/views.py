@@ -1,20 +1,17 @@
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import smart_str, smart_bytes, DjangoUnicodeDecodeError
-
+from django.urls import reverse
+from django.utils.encoding import DjangoUnicodeDecodeError, smart_bytes, smart_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework import exceptions, status
 from rest_framework.views import Request
-from rest_framework import exceptions
-from rest_framework import status
 
-from schedjuice5.views import BaseListView, BaseView, BaseDetailsView, BaseSearchView
-from app_auth.models import Account
-from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer
-from app_auth.authentication import CustomAuthentication
-from app_auth.authentication import get_token
+from app_auth.authentication import CustomAuthentication, get_token
 from app_auth.models import Account, TempEmail
+from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer
 from app_microsoft.mail import send_mail
+from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView, BaseView
+
 
 # ------------ Account Section ------------
 class AccountListView(BaseListView):
@@ -55,13 +52,13 @@ class RequestUpdateEmailView(BaseView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # user = request.user.account
-        user = Account.objects.get(pk=1) # this is for testing user
+        user = Account.objects.get(pk=1)  # this is for testing user
         print(user.id)
         print(serializer.data.get("email"))
 
         # temporary storing for user's new email
         TempEmail.objects.create(account=user, email=serializer.data.get("email"))
-        
+
         # prepare for activate_url
         uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
         token = default_token_generator.make_token(user)
@@ -70,18 +67,18 @@ class RequestUpdateEmailView(BaseView):
         send_mail(
             "Email Verification",
             activate_url,
-            [serializer.data.get("email")], 
+            [serializer.data.get("email")],
         )
-        
+
         return self.send_response(
             False,
             "success",
             {"details": "Verification email has sent!"},
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
+
 class EmailVerificationView(BaseView):
-    
     def get(self, request, uidb64, token, view):
         try:
             id = urlsafe_base64_decode(uidb64)
@@ -109,7 +106,7 @@ class EmailVerificationView(BaseView):
                 False,
                 "success",
                 {"details": "Email successfully confirmed", "action_url": action_url},
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
 
         except Account.DoesNotExist:
@@ -117,15 +114,14 @@ class EmailVerificationView(BaseView):
 
         except DjangoUnicodeDecodeError:
             return self.send_response(
-                    True,
-                    "bad_request",
-                    {"details": "Token is invalid"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+                True,
+                "bad_request",
+                {"details": "Token is invalid"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class UpdateEmailView(BaseView):
-    
     def get(self, request, uidb64, token):
         try:
             id = urlsafe_base64_decode(uidb64)
@@ -143,15 +139,15 @@ class UpdateEmailView(BaseView):
             print("Token is valid")
             user.email = email
             user.save()
-            
+
             # deleting temp-email after updating user's email
             TempEmail.objects.get(account=user).delete()
 
             return self.send_response(
-                    False,
-                    "success",
-                    {"details": "Email successfully updated"},
-                    status=status.HTTP_200_OK
+                False,
+                "success",
+                {"details": "Email successfully updated"},
+                status=status.HTTP_200_OK,
             )
 
         except Account.DoesNotExist:
@@ -159,8 +155,8 @@ class UpdateEmailView(BaseView):
 
         except DjangoUnicodeDecodeError:
             return self.send_response(
-                    True,
-                    "bad_request",
-                    {"details": "Token is invalid"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+                True,
+                "bad_request",
+                {"details": "Token is invalid"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

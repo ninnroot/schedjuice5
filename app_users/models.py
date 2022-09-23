@@ -1,12 +1,12 @@
 from django.db import models
-from schedjuice5.models import BaseModel
-from app_auth.models import Account
-from schedjuice5.validators import *
-import schedjuice5.config as config
 
-from app_utils.choices.country_codes import country_codes
+import schedjuice5.config as config
+from app_auth.models import Account
 from app_utils.choices.careers import careers
+from app_utils.choices.country_codes import country_codes
 from app_utils.choices.dial_codes import dial_codes
+from schedjuice5.models import BaseModel
+from schedjuice5.validators import *
 
 
 class PhoneNumber(BaseModel):
@@ -211,7 +211,7 @@ class StudentAddress(BaseModel):
     )
     address_type = models.CharField(max_length=128)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     chosen_one_fields = ["is_primary"]
 

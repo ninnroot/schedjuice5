@@ -1,10 +1,16 @@
 from schedjuice5.serializers import BaseModelSerializer
+
 from .models import *
+
 
 class VenueClassificationSerializer(BaseModelSerializer):
     class Meta:
         model = VenueClassification
         fields = "__all__"
+
+    expandable_fields = {
+        "venue_set": ("app_campus.serializers.VenueSerializer", {"many": True})
+    }
 
 
 class CampusSerializer(BaseModelSerializer):
@@ -12,8 +18,18 @@ class CampusSerializer(BaseModelSerializer):
         model = Campus
         fields = "__all__"
 
+    expandable_fields = {
+        "venue_set": ("app_campus.serializers.VenueSerializer", {"many": True})
+    }
+
 
 class VenueSerializer(BaseModelSerializer):
     class Meta:
         model = Venue
         fields = "__all__"
+
+    expandable_fields = {
+        "campus": ("app_campus.serializers.CampusSerializer"),
+        "classification": ("app_campus.serializers.VenueClassificationSerializer"),
+        "eventvenue_set": ("app_course.serializers.EventVenueSerializer", {"many": True})
+    }

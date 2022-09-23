@@ -1,11 +1,12 @@
-import random, logging
+import logging
+import random
 
+from django.db import transaction
 from django.db.models import ForeignKey, ManyToManyField, OneToOneField
+from django.db.utils import IntegrityError
 
 from django_seed.exceptions import SeederException
-from django_seed.guessers import NameGuesser, FieldTypeGuesser
-from django.db.utils import IntegrityError
-from django.db import transaction
+from django_seed.guessers import FieldTypeGuesser, NameGuesser
 
 
 class ModelSeeder(object):
@@ -248,12 +249,12 @@ class Seeder(object):
                     # continue testing on an IntegrityError
                     with transaction.atomic():
                         executed_entity = entity.execute(using, inserted_entities)
-                        
+
                     inserted_entities[klass].append(executed_entity)
                     completed_count += 1
                 except IntegrityError as err:
                     last_error = err
-                
+
                 # Exit if the right number of entities has been inserted
                 if completed_count == number:
                     break
@@ -261,9 +262,13 @@ class Seeder(object):
                 attempts -= 1
 
             if completed_count == 0:
-                raise IntegrityError(f"Error: could not generate any instances of {klass.__name__}\nInternal error: {last_error}")
+                raise IntegrityError(
+                    f"Error: could not generate any instances of {klass.__name__}\nInternal error: {last_error}"
+                )
             elif completed_count != number:
-                print(f"Warning: could only generate {completed_count} out of {number} instances of {klass.__name__}, the rest errored with; {last_error}")
+                print(
+                    f"Warning: could only generate {completed_count} out of {number} instances of {klass.__name__}, the rest errored with; {last_error}"
+                )
 
         return inserted_entities
 

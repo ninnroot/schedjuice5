@@ -1,6 +1,8 @@
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
+
 from .models import *
 from .serializers import *
+
 
 # ------------ Category Section ------------
 class CategoryListView(BaseListView):
@@ -39,7 +41,7 @@ class EventClassificationSearchView(BaseSearchView):
     model = EventClassification
     serializer = EventClassificationSerializer
 
-    
+
 # ------------ Course Section ------------
 class CourseListView(BaseListView):
     name = "Course list view"
@@ -58,7 +60,7 @@ class CourseSearchView(BaseSearchView):
     model = Course
     serializer = CourseSerializer
 
-    
+
 # ------------ Event Section ------------
 class EventListView(BaseListView):
     name = "Event list view"
@@ -77,7 +79,7 @@ class EventSearchView(BaseSearchView):
     model = Event
     serializer = EventSerializer
 
-    
+
 # ------------ EventVenue Section ------------
 class EventVenueListView(BaseListView):
     name = "EventVenue list view"
@@ -96,7 +98,7 @@ class EventVenueSearchView(BaseSearchView):
     model = EventVenue
     serializer = EventVenueSerializer
 
-    
+
 # ------------ Calendar Section ------------
 class CalendarListView(BaseListView):
     name = "Calendar list view"

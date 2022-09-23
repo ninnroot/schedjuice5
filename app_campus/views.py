@@ -1,4 +1,5 @@
-from schedjuice5.views import BaseListView, BaseDetailsView, BaseSearchView
+from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
+
 from .models import *
 from .serializers import *
 
@@ -21,7 +22,7 @@ class VenueClassificationSearchView(BaseSearchView):
     model = VenueClassification
     serializer = VenueClassificationSerializer
 
-    
+
 # ------------ Campus Section ------------
 class CampusListView(BaseListView):
     name = "Campus list view"
@@ -40,7 +41,7 @@ class CampusSearchView(BaseSearchView):
     model = Campus
     serializer = CampusSerializer
 
-    
+
 # ------------ Venue Section ------------
 class VenueListView(BaseListView):
     name = "Venue list view"

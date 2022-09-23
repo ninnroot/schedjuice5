@@ -1,5 +1,6 @@
-from schedjuice5.models import BaseModel
 from django.db import models
+
+from schedjuice5.models import BaseModel
 
 
 class Record(BaseModel):

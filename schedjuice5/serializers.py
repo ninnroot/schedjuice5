@@ -1,22 +1,18 @@
+from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 
 
-class BaseModelSerializer(serializers.ModelSerializer):
+class BaseModelSerializer(FlexFieldsModelSerializer):
     def __init__(self, *args, **kwargs):
-        fields = kwargs.pop("fields", None)
         read_only_fields = kwargs.pop("read_only_fields", None)
         excluded_fields = kwargs.pop("excluded_fields", None)
         super(BaseModelSerializer, self).__init__(*args, **kwargs)
 
-        if fields is not None:
-            fields_to_be_popped = set(
-                self.context["model"].get_filterable_fields(self.context["model"])
-            ).difference(fields)
-            for i in fields_to_be_popped:
-                try:
-                    self.fields.pop(i)
-                except KeyError:
-                    pass
+    def to_ts(self):
+        all_fields = self.get_fields()
+        for i in all_fields:
+            print(all_fields[i].__dict__)
+            print("\n")
 
 
 class BaseSerializer(serializers.Serializer):

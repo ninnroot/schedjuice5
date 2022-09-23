@@ -1,6 +1,8 @@
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
+
 from .models import *
 from .serializers import *
+
 
 # ------------ Group Section ------------
 class GroupListView(BaseListView):
@@ -20,7 +22,7 @@ class GroupSearchView(BaseSearchView):
     model = Group
     serializer = GroupSerializer
 
-    
+
 # ------------ Department Section ------------
 class DepartmentListView(BaseListView):
     name = "Department list view"
@@ -39,7 +41,7 @@ class DepartmentSearchView(BaseSearchView):
     model = Department
     serializer = DepartmentSerializer
 
-    
+
 # ------------ Job Section ------------
 class JobListView(BaseListView):
     name = "Job list view"
@@ -58,7 +60,7 @@ class JobSearchView(BaseSearchView):
     model = Job
     serializer = JobSerializer
 
-    
+
 # ------------ Role Section ------------
 class RoleListView(BaseListView):
     name = "Role list view"
@@ -77,7 +79,7 @@ class RoleSearchView(BaseSearchView):
     model = Role
     serializer = RoleSerializer
 
-    
+
 # ------------ Permission Section ------------
 class PermissionListView(BaseListView):
     name = "Permission list view"
@@ -96,7 +98,7 @@ class PermissionSearchView(BaseSearchView):
     model = Permission
     serializer = PermissionSerializer
 
-    
+
 # ------------ StaffGroup Section ------------
 class StaffGroupListView(BaseListView):
     name = "StaffGroup list view"
@@ -115,7 +117,7 @@ class StaffGroupSearchView(BaseSearchView):
     model = StaffGroup
     serializer = StaffGroupSerializer
 
-    
+
 # ------------ StaffDepartment Section ------------
 class StaffDepartmentListView(BaseListView):
     name = "StaffDepartment list view"
@@ -133,8 +135,8 @@ class StaffDepartmentSearchView(BaseSearchView):
     name = "StaffDepartment search view"
     model = StaffDepartment
     serializer = StaffDepartmentSerializer
-    
-    
+
+
 # ------------ StaffCourse Section ------------
 class StaffCourseListView(BaseListView):
     name = "StaffCourse list view"
@@ -153,7 +155,7 @@ class StaffCourseSearchView(BaseSearchView):
     model = StaffCourse
     serializer = StaffCourseSerializer
 
-    
+
 # ------------ StaffEvent Section ------------
 class StaffEventListView(BaseListView):
     name = "StaffEvent list view"
@@ -172,7 +174,7 @@ class StaffEventSearchView(BaseSearchView):
     model = StaffEvent
     serializer = StaffEventSerializer
 
-    
+
 # ------------ StaffRole Section ------------
 class StaffRoleListView(BaseListView):
     name = "StaffRole list view"
@@ -191,7 +193,7 @@ class StaffRoleSearchView(BaseSearchView):
     model = StaffRole
     serializer = StaffRoleSerializer
 
-    
+
 # ------------ GroupRole Section ------------
 class GroupRoleListView(BaseListView):
     name = "GroupRole list view"
@@ -210,7 +212,7 @@ class GroupRoleSearchView(BaseSearchView):
     model = GroupRole
     serializer = GroupRoleSerializer
 
-    
+
 # ------------ RolePermission Section ------------
 class RolePermissionListView(BaseListView):
     name = "RolePermission list view"

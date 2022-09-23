@@ -1,7 +1,6 @@
-from rest_framework.pagination import PageNumberPagination
-
 import math
 
+from rest_framework.pagination import PageNumberPagination
 
 # customizing the PageNumberPagination class to my liking.
 
@@ -31,5 +30,5 @@ class CustomPagination(PageNumberPagination):
             },
             "count": self.page.paginator.count,
             "count_per_page": self.get_count_per_page(),
-            "total_pages": self.get_total_pages()
+            "total_pages": self.get_total_pages(),
         }

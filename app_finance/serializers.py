@@ -1,5 +1,5 @@
-from schedjuice5.serializers import BaseModelSerializer
 from app_finance.models import Record
+from schedjuice5.serializers import BaseModelSerializer
 
 
 class RecordSerializer(BaseModelSerializer):

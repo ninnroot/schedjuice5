@@ -1,7 +1,9 @@
+import urllib
+
 import decouple
 import msal
 import requests
-import urllib
+
 from .scopes import scopes
 
 TENANT = decouple.config("MS_AUTHORITY")

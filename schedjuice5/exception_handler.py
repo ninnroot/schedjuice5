@@ -1,5 +1,4 @@
-from rest_framework.views import exception_handler
-from rest_framework.views import Response
+from rest_framework.views import Response, exception_handler
 
 
 def custom_handler(exc, ctx):

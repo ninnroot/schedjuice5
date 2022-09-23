@@ -1,5 +1,6 @@
 from rest_framework.schemas.generators import EndpointEnumerator
 from rest_framework.views import Response
+
 from schedjuice5.views import BaseView
 
 
