@@ -8,6 +8,12 @@ class BaseModelSerializer(FlexFieldsModelSerializer):
         excluded_fields = kwargs.pop("excluded_fields", None)
         super(BaseModelSerializer, self).__init__(*args, **kwargs)
 
+    def to_ts(self):
+        all_fields = self.get_fields()
+        for i in all_fields:
+            print(all_fields[i].__dict__)
+            print("\n")
+
 
 class BaseSerializer(serializers.Serializer):
     pass
