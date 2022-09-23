@@ -28,4 +28,8 @@ class VenueSerializer(BaseModelSerializer):
         model = Venue
         fields = "__all__"
 
-    expandable_fields = {"campus": (CampusSerializer)}
+    expandable_fields = {
+        "campus": ("app_campus.serializers.CampusSerializer"),
+        "classification": ("app_campus.serializers.VenueClassificationSerializer"),
+        "eventvenue_set": ("app_course.serializers.EventVenueSerializer", {"many": True})
+    }
