@@ -9,15 +9,6 @@ from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 
-class PhoneNumber(BaseModel):
-    dial_code = models.CharField(max_length=50, choices=dial_codes)
-    number = models.CharField(max_length=20)
-    is_primary = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ("dial_code", "number")
-
-
 class BaseUser(BaseModel):
     username = models.CharField(
         max_length=256,
@@ -30,45 +21,9 @@ class BaseUser(BaseModel):
     gender = models.CharField(max_length=128)
 
     secondary_email = models.EmailField(null=True)
-    phone_number = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE)
 
     class Meta(BaseModel.Meta):
         abstract = True
-
-
-class BankAccount(BaseModel):
-    """
-    A BankAccount of a user. A user may have many BankAccounts, however,
-    a BankAccount can belong to one and only one user.
-    """
-
-    owner_name = models.CharField(max_length=256, validators=[nameValidation])
-    number = models.CharField(max_length=256, validators=[bankAccountNumberValidation])
-    bank_type = models.CharField(max_length=256, choices=config.bank_account_choices)
-
-    class Meta(BaseModel.Meta):
-        pass
-
-
-class Address(BaseModel):
-    """
-    An Address of a user. A user may have many Addresses, but not vice versa.
-    """
-
-    house_number = models.CharField(
-        max_length=16, validators=[englishAndSomeSpecialValidation]
-    )
-    block_number = models.CharField(
-        max_length=16, validators=[englishAndSomeSpecialValidation], null=True
-    )
-    street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
-    township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
-    city = models.CharField(max_length=64)
-    country = models.CharField(max_length=64, choices=country_codes)
-    postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
-
-    class Meta(BaseModel.Meta):
-        pass
 
 
 class Staff(BaseUser):
@@ -125,95 +80,76 @@ class Student(BaseUser):
         pass
 
 
-class StaffBankAccount(BaseModel):
+class PhoneNumber(BaseModel):
+    dial_code = models.CharField(max_length=50, choices=dial_codes)
+    number = models.CharField(max_length=20)
+    is_primary = models.BooleanField(default=False)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=1)
+
+    class Meta:
+        unique_together = ("dial_code", "number")
+
+
+class BankAccount(BaseModel):
     """
-    A bridge table for Staff and BankAccount models.
+    A BankAccount of a user. A user may have many BankAccounts, however,
+    a BankAccount can belong to one and only one user.
     """
 
+    owner_name = models.CharField(max_length=256, validators=[nameValidation])
+    number = models.CharField(max_length=256, validators=[bankAccountNumberValidation])
+    bank_type = models.CharField(max_length=256, choices=config.bank_account_choices)
     save_name = models.CharField(
         max_length=256,
         validators=[englishAndSomeSpecialValidation],
         help_text="The name to save the current BankAccount as.",
+        default="my_bankaccount"
     )
     is_primary = models.BooleanField(
         default=False,
         help_text="A flag for whether current BankAccount is a primary one or not.",
     )
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("staff", "bank_account", "save_name")
+        unique_together = [
+            ["account", "save_name"],
+        ]
 
 
-class StaffAddress(BaseModel):
+class Address(BaseModel):
     """
-    A bridge table for Staff and Address models.
+    An Address of a user. A user may have many Addresses, but not vice versa.
     """
 
+    house_number = models.CharField(
+        max_length=16, validators=[englishAndSomeSpecialValidation]
+    )
+    block_number = models.CharField(
+        max_length=16, validators=[englishAndSomeSpecialValidation], null=True
+    )
+    street_name = models.CharField(max_length=32, validators=[nameWithNumberValidation])
+    township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
+    city = models.CharField(max_length=64)
+    country = models.CharField(max_length=64, choices=country_codes)
+    postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
     save_name = models.CharField(
         max_length=256,
         validators=[englishAndSomeSpecialValidation],
         help_text="The name to save the current Address as.",
+        default="my_address"
     )
     is_primary = models.BooleanField(
         default=False,
         help_text="A flag for whether current Address is a primary one or not.",
     )
-    address_type = models.CharField(max_length=128)
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     chosen_one_fields = ["is_primary"]
 
     class Meta(BaseModel.Meta):
-        unique_together = ("staff", "address", "save_name")
-
-
-class StudentBankAccount(BaseModel):
-    """
-    A bridge table for Student and BankAccount models.
-    """
-
-    save_name = models.CharField(
-        max_length=256,
-        validators=[englishAndSomeSpecialValidation],
-        help_text="The name to save the current BankAccount as.",
-    )
-    is_primary = models.BooleanField(
-        default=False,
-        help_text="A flag for whether current BankAccount is a primary one or not.",
-    )
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    bank_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
-
-    chosen_one_fields = ["is_primary"]
-
-    class Meta(BaseModel.Meta):
-        unique_together = ("student", "bank_account", "save_name")
-
-
-class StudentAddress(BaseModel):
-    """
-    A bridge table for Student and Address models.
-    """
-
-    save_name = models.CharField(
-        max_length=256,
-        validators=[englishAndSomeSpecialValidation],
-        help_text="The name to save the current Address as.",
-    )
-    is_primary = models.BooleanField(
-        default=False,
-        help_text="A flag for whether current Address is a primary one or not.",
-    )
-    address_type = models.CharField(max_length=128)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-
-    chosen_one_fields = ["is_primary"]
-
-    class Meta(BaseModel.Meta):
-        unique_together = ("student", "address", "save_name")
+        unique_together = [
+            ["account", "save_name"],
+        ]

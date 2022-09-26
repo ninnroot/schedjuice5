@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from app_auth import views
 
 urlpatterns = [
-    path("accounts", views.AccountListView.as_view(), name="account-list"),
+    path("accounts/", views.AccountListView.as_view(), name="account-list"),
     path(
         "accounts/<int:obj_id>",
         views.AccountDetailsView.as_view(),

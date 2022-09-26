@@ -22,11 +22,11 @@ class Command(BaseCommand):
         (Guardian, "guardians.csv"),
         (Student, "students.csv"),
         (BankAccount, "bank-accounts.csv"),  # parent
-        (StaffBankAccount, "staff-bank-accounts.csv"),  # child of BankAccount
-        (StudentBankAccount, "student-bank-accounts.csv"),  # child of BankAccount
+        # (StaffBankAccount, "staff-bank-accounts.csv"),  # child of BankAccount
+        # (StudentBankAccount, "student-bank-accounts.csv"),  # child of BankAccount
         (Address, "addresses.csv"),  # parent
-        (StaffAddress, "staff-addresses.csv"),  # child of Address
-        (StudentAddress, "student-addresses.csv"),  # child of Address
+        # (StaffAddress, "staff-addresses.csv"),  # child of Address
+        # (StudentAddress, "student-addresses.csv"),  # child of Address
         # app_campus
         (VenueClassification, "venue-classification.csv"),
         (Campus, "campus.csv"),

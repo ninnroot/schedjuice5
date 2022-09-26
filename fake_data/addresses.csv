@@ -1,21 +1,31 @@
-house_number,block_number,street_name,township,city,country,postal_code
-573,9,Ilene,Foscavir,Saint Paul,United States,55188
-676,1,Ridge Oak,Omeprazole,Karak,Pakistan,65031
-152,4,Declaration,Tinnitus,Alimono,Philippines,7005
-923,3,Thierer,AIDPLUS,Kabala,Sierra Leone,123
-939,1,Lindbergh,healthy accents,Raszowa,Poland,47-232
-247,7,Luster,Biore,Ariguaní,Colombia,152247
-472,3,Springs,Triamterene,Inglewood,United States,90398
-713,1,Crescent Oaks,Anti-Diarrheal,Liudong,China,123
-186,1,Doe Crossing,Miconazole 7,Estância Velha,Brazil,93600-000
-159,10,Sachtjen,Sertraline,Färjestaden,Sweden,386 94
-967,9,Summit,Doxorubicin,Sibaté,Colombia,111971
-273,7,3rd,Fluoxetine,Souto,Portugal,4600-661
-376,10,Mifflin,Neomycin,Ipiales,Colombia,524078
-691,8,Dunning,TERRACOTTA,Guadalupe,Mexico,70533
-408,6,Barby,Eight Hour Cream,Constantia,South Africa,7806
-617,8,Kim,Prenaissance,Paatan,Philippines,9406
-109,5,Norway Maple,Lady Speed Stick,Pecka,Czech Republic,507 82
-943,1,Jenna,Nystatin,Skorogoszcz,Poland,49-345
-782,6,2nd,Lisinopril,Mossel Bay,South Africa,6511
-537,3,Fremont,Fluoxetine,Non Suwan,Thailand,31110
+house_number,block_number,street_name,township,city,country,postal_code,account_id,save_name,is_primary
+573,9,Ilene,Foscavir,Saint Paul,United States,55188,1,address1,True
+676,1,Ridge Oak,Omeprazole,Karak,Pakistan,65031,2,address1,True
+152,4,Declaration,Tinnitus,Alimono,Philippines,7005,3,address1,True
+923,3,Thierer,AIDPLUS,Kabala,Sierra Leone,123,4,address1,True
+939,1,Lindbergh,healthy accents,Raszowa,Poland,47-232,5,address1,True
+247,7,Luster,Biore,Ariguaní,Colombia,152247,6,address1,True
+472,3,Springs,Triamterene,Inglewood,United States,90398,7,address1,True
+713,1,Crescent Oaks,Anti-Diarrheal,Liudong,China,123,8,address1,True
+186,1,Doe Crossing,Miconazole 7,Estância Velha,Brazil,93600-000,9,address1,True
+159,10,Sachtjen,Sertraline,Färjestaden,Sweden,386 94,10,address1,True
+967,9,Summit,Doxorubicin,Sibaté,Colombia,111971,11,address1,True
+273,7,3rd,Fluoxetine,Souto,Portugal,4600-661,12,address1,True
+376,10,Mifflin,Neomycin,Ipiales,Colombia,524078,13,address1,True
+691,8,Dunning,TERRACOTTA,Guadalupe,Mexico,70533,14,address1,True
+408,6,Barby,Eight Hour Cream,Constantia,South Africa,7806,15,address1,True
+617,8,Kim,Prenaissance,Paatan,Philippines,9406,16,address1,True
+109,5,Norway Maple,Lady Speed Stick,Pecka,Czech Republic,507 82,17,address1,True
+943,1,Jenna,Nystatin,Skorogoszcz,Poland,49-345,18,address1,True
+782,6,2nd,Lisinopril,Mossel Bay,South Africa,6511,19,address1,True
+537,3,Fremont,Fluoxetine,Non Suwan,Thailand,31110,20,address1,True
+156,5,Bultman,GENOTROPIN,Wuyanquan,China,0000,21,address1,True
+943,4,Di Loreto,Sotalol Hydrochloride,Nanniu,China,0000,22,address1,True
+122,6,Mesta,Haloperidol,Santa Cruz,Mexico,51462,23,address1,True
+990,10,Mccormick,Treatment Set TS349358,Poroj,Macedonia,1216,24,address1,True
+433,6,Harper,esika,Huangzhuang,China,0000,25,address1,True
+647,8,Eastwood,Donnatal,Phra Phutthabat,Thailand,18120,26,address1,True
+869,4,Bartelt,Cricket,Klutuk,Indonesia,0000,27,address1,True
+282,9,Artisan,Cosmegen,La Virginia,Colombia,662007,28,address1,True
+923,2,Stang,Midazolam Hydrochloride,Suwaluh,Indonesia,0000,29,address1,True
+586,2,Shopko,Naratriptan,Basoko,Democratic Republic of the Congo,0000,30,address1,True
