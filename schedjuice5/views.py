@@ -216,6 +216,9 @@ class BaseDetailsView(BaseView):
         )
 
     # get-one
+    @swagger_auto_schema(
+        manual_parameters=[fields_param, expand_param]
+    )
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
 
