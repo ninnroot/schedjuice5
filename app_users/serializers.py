@@ -8,11 +8,7 @@ class AddressSerializer(BaseModelSerializer):
         model = Address
         fields = "__all__"
 
-    expandable_fields = {
-        "account": (
-            "app_auth.serializers.AccountSerializer",
-        )
-    }
+    expandable_fields = {"account": ("app_auth.serializers.AccountSerializer",)}
 
 
 class PhoneNumberSerializer(BaseModelSerializer):
@@ -20,11 +16,7 @@ class PhoneNumberSerializer(BaseModelSerializer):
         model = PhoneNumber
         fields = "__all__"
 
-    expandable_fields = {
-        "account": (
-            "app_auth.serializers.AccountSerializer",
-        )
-    }
+    expandable_fields = {"account": ("app_auth.serializers.AccountSerializer",)}
 
 
 class BankAccountSerializer(BaseModelSerializer):
@@ -32,11 +24,7 @@ class BankAccountSerializer(BaseModelSerializer):
         model = BankAccount
         fields = "__all__"
 
-    expandable_fields = {
-        "account": (
-            "app_auth.serializers.AccountSerializer",
-        )
-    }
+    expandable_fields = {"account": ("app_auth.serializers.AccountSerializer",)}
 
 
 class StaffSerializer(BaseModelSerializer):
