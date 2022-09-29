@@ -90,6 +90,7 @@ class TestListStudent(TestStudentSetup):
         # self.force_authenticate(user=Account(is_student=True))
         response = self.client.get(self.student_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
     def test_if_fields_is_valid_return_200(self):
         # self.force_authenticate(user=Account(is_student=True))
@@ -97,22 +98,24 @@ class TestListStudent(TestStudentSetup):
             f"{self.student_url}?fields={self.field_params}", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
     def test_if_fields_is_invalid_return_400(self):
         # self.force_authenticate(user=Account(is_student=True))
         response = self.client.get(f"{self.student_url}?fields=test", format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_if_sort_is_valid_return_200(self):
+    def test_if_sorts_is_valid_return_200(self):
         # self.force_authenticate(user=Account(is_student=True))
         response = self.client.get(
-            f"{self.student_url}?sort={self.sort_params}", format="json"
+            f"{self.student_url}?sorts={self.sort_params}", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
-    def test_if_sort_is_invalid_return_400(self):
+    def test_if_sorts_is_invalid_return_400(self):
         # self.force_authenticate(user=Account(is_student=True))
-        response = self.client.get(f"{self.student_url}?sort=test", format="json")
+        response = self.client.get(f"{self.student_url}?sorts=test", format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -133,6 +136,7 @@ class TestRetrieveStudent(TestStudentSetup):
         student = baker.make(Student)
         response = self.client.get(f"{self.student_url}{student.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
 
 @pytest.mark.django_db
@@ -150,6 +154,7 @@ class TestSearchStudent(TestStudentSetup):
             f"{self.student_url}search", self.filter_params, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
     def test_if_filter_params_is_invalid_return_400(self):
         # self.force_authenticate(user=Account(is_student=True))
@@ -164,6 +169,7 @@ class TestSearchStudent(TestStudentSetup):
             f"{self.student_url}search?fields={self.field_params}", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
     def test_if_fields_is_invalid_return_400(self):
         # self.force_authenticate(user=Account(is_student=True))
@@ -172,16 +178,17 @@ class TestSearchStudent(TestStudentSetup):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_if_sort_is_valid_return_200(self):
+    def test_if_sorts_is_valid_return_200(self):
         # self.force_authenticate(user=Account(is_student=True))
         response = self.client.post(
-            f"{self.student_url}search?sort={self.sort_params}", format="json"
+            f"{self.student_url}search?sorts={self.sort_params}", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response.data['data'], [])
 
-    def test_if_sort_is_invalid_return_400(self):
+    def test_if_sorts_is_invalid_return_400(self):
         # self.force_authenticate(user=Account(is_student=True))
         response = self.client.post(
-            f"{self.student_url}search?sort=test", format="json"
+            f"{self.student_url}search?sorts=test", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
