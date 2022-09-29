@@ -29,3 +29,5 @@ house_number,block_number,street_name,township,city,country,postal_code,account_
 282,9,Artisan,Cosmegen,La Virginia,Colombia,662007,28,address1,True
 923,2,Stang,Midazolam Hydrochloride,Suwaluh,Indonesia,0000,29,address1,True
 586,2,Shopko,Naratriptan,Basoko,Democratic Republic of the Congo,0000,30,address1,True
+123,3,Balika,SOK,Ygn,MM,1111,1,address2,False
+456,7,Balika,SOK,Ygn,MM,1111,1,address3,False
