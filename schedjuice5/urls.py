@@ -50,6 +50,7 @@ urlpatterns = [
     path("api/v2/", include("app_course.urls")),
     path("api/v2/", include("app_campus.urls")),
     path("api/v2/", include("app_management.urls")),
+    path("api/v2/", include("app_announcement.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)
 
 if settings.DEBUG:

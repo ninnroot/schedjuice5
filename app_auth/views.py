@@ -136,7 +136,6 @@ class UpdateEmailView(BaseView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            print("Token is valid")
             user.email = email
             user.save()
 

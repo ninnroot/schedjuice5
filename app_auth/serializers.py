@@ -13,6 +13,18 @@ class AccountSerializer(BaseModelSerializer):
         "student": ("app_users.serializers.StudentSerializer"),
         "staff": ("app_users.serializers.StaffSerializer"),
         "guardian": ("app_users.serializers.GuardianSerializer"),
+        "address_set": (
+            "app_users.serializers.AddressSerializer",
+            {"many": True}
+        ),
+        "phonenumber_set": (
+            "app_users.serializers.PhoneNumberSerializer",
+            {"many": True}
+        ),
+        "bankaccount_set": (
+            "app_users.serializers.BankAccountSerializer",
+            {"many": True}
+        ),
     }
 
     def create(self, validated_data):

@@ -2,7 +2,6 @@ import base64
 import json
 
 from django.core.exceptions import BadRequest
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.views import APIView, Request, Response, status
@@ -12,20 +11,8 @@ from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 from schedjuice5.serializers import FilterParamSerializer
 from schedjuice5.swagger_serializers import FilterParamsSerializer
+from schedjuice5.swagger_query_params import *
 
-size_param = openapi.Parameter(
-    "size",
-    openapi.IN_QUERY,
-    type=openapi.TYPE_INTEGER,
-    description="set -1 to get all data",
-)
-page_param = openapi.Parameter("page", openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
-sorts_param = openapi.Parameter(
-    "sorts", openapi.IN_QUERY, type=openapi.TYPE_STRING, description="base64 encode"
-)
-fields_param = openapi.Parameter(
-    "fields", openapi.IN_QUERY, type=openapi.TYPE_STRING, description="base64 encode"
-)
 
 
 class BaseView(APIView, CustomPagination):
@@ -158,7 +145,7 @@ class BaseListView(BaseView):
     metadata_class = CustomMetadata
 
     @swagger_auto_schema(
-        manual_parameters=[size_param, page_param, sorts_param, fields_param]
+        manual_parameters=[size_param, page_param, sorts_param, fields_param, expand_param]
     )
     def get(self, request: Request):
         self.description = self.model.__doc__
@@ -229,6 +216,9 @@ class BaseDetailsView(BaseView):
         )
 
     # get-one
+    @swagger_auto_schema(
+        manual_parameters=[fields_param, expand_param]
+    )
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
 
@@ -301,7 +291,7 @@ class BaseSearchView(BaseView):
 
     @swagger_auto_schema(
         request_body=FilterParamsSerializer,
-        manual_parameters=[size_param, page_param, sorts_param, fields_param],
+        manual_parameters=[size_param, page_param, sorts_param, fields_param, expand_param],
     )
 
     # search

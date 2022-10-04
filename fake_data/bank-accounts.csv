@@ -1,21 +1,33 @@
-owner_name,number,bank_type
-Daniel Zelake,374283794262931,KBZ
-Wake Ottosen,36968393370776,KBZ
-Colman Tubby,3568636459741251,KBZ
-Gael Lefley,4905334246720446,KBZ
-Kirbee Mouan,3569375546359335,AYA
-Pace Handes,3577004924968091,AYA
-Rochell Hurdedge,3585055770760040,AYA
-Bart Delgua,630459441757870502,AYA
-Vinni Rossey,3541259016482467,UAB
-Noam Slocom,3567405995295227,UAB
-6Margarete Dulson,3548174110415243,UAB
-Aguste Middlebrook,6333794643433520,UAB
-Vaughn Dalgetty,30529990279319,UAB
-Glori Severns,5641822041149641223,CB
-Morrie Cudde,50383304543488660,CB
-Wally Braisby,5523441757712958,CB
-Gael Patters,06044010505580401,CB
-Fernando Lissenden,30421373112889,AYA
-Dave Gofford,3570049808108048,KBZ
-Janetta Van Baaren,372467655814276,CB
+owner_name,number,bank_type,account_id,save_name,is_primary
+Daniel Zelake,374283794262931,KBZ,1,bankaccount1,True
+Wake Ottosen,36968393370776,KBZ,2,bankaccount1,True
+Colman Tubby,3568636459741251,KBZ,3,bankaccount1,True
+Gael Lefley,4905334246720446,KBZ,4,bankaccount1,True
+Kirbee Mouan,3569375546359335,AYA,5,bankaccount1,True
+Pace Handes,3577004924968091,AYA,6,bankaccount1,True
+Rochell Hurdedge,3585055770760040,AYA,7,bankaccount1,True
+Bart Delgua,630459441757870502,AYA,8,bankaccount1,True
+Vinni Rossey,3541259016482467,UAB,9,bankaccount1,True
+Noam Slocom,3567405995295227,UAB,10,bankaccount1,True
+6Margarete Dulson,3548174110415243,UAB,11,bankaccount1,True
+Aguste Middlebrook,6333794643433520,UAB,12,bankaccount1,True
+Vaughn Dalgetty,30529990279319,UAB,13,bankaccount1,True
+Glori Severns,5641822041149641223,CB,14,bankaccount1,True
+Morrie Cudde,50383304543488660,CB,15,bankaccount1,True
+Wally Braisby,5523441757712958,CB,16,bankaccount1,True
+Gael Patters,06044010505580401,CB,17,bankaccount1,True
+Fernando Lissenden,30421373112889,AYA,18,bankaccount1,True
+Dave Gofford,3570049808108048,KBZ,19,bankaccount1,True
+Janetta Van Baaren,372467655814276,CB,20,bankaccount1,True
+Haskel Agent,5002355165647954,CB,21,bankaccount1,True
+Enriqueta Wooller,30190133636004,AYA,22,bankaccount1,True
+Roman Hearn,3574460659254805,KBZ,23,bankaccount1,True
+Valina Nabarro,4405461069419742,AYA,24,bankaccount1,True
+Corrine Varvell,3534356845825897,UAB,25,bankaccount1,True
+Meara Lorne,6761459388012720,CB,26,bankaccount1,True
+Leonid Gorges,374622732254551,AYA,27,bankaccount1,True
+Batholomew McKeaveney,30088590042296,CB,28,bankaccount1,True
+Kerby Croft,56022170436619495,AYA,29,bankaccount1,True
+Anjanette Kyneton,3544152460574953,KBZ,30,bankaccount1,True
+Guru,35441524605123456,KBZ,1,bankaccount2,False
+Hein,35441524605789123,KBZ,1,bankaccount3,False
