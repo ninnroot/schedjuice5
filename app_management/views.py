@@ -230,3 +230,9 @@ class RolePermissionSearchView(BaseSearchView):
     name = "RolePermission search view"
     model = RolePermission
     serializer = RolePermissionSerializer
+
+
+class GetNestedTest(BaseListView):
+    name = "test"
+    model = Group
+    serializer = GroupSerializer

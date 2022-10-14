@@ -121,4 +121,5 @@ urlpatterns = [
         views.RolePermissionSearchView.as_view(),
         name="role-permission-search",
     ),
+    path("group-test", views.GetNestedTest.as_view(), name="test"),
 ]
