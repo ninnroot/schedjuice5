@@ -1,3 +1,5 @@
+from rest_framework.views import Response
+
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from .models import *
@@ -236,3 +238,9 @@ class GetNestedTest(BaseListView):
     name = "test"
     model = Group
     serializer = GroupSerializer
+
+    def get(self, request):
+        x = Group.objects.get_nested()
+        for i in x:
+            print(i.path)
+        return Response({"message": "k"})
