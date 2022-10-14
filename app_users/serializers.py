@@ -35,14 +35,6 @@ class StaffSerializer(BaseModelSerializer):
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
         "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
-        "address_set": (
-            "app_users.serializers.AddressSerializer",
-            {"many": True},
-        ),
-        "bankaccount_set": (
-            "app_users.serializers.BankAccountSerializer",
-            {"many": True},
-        ),
         "staffgroup_set": (
             "app_management.serializers.StaffGroupSerializer",
             {"many": True},
@@ -72,16 +64,7 @@ class GuardianSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "account": ("app_auth.serializers.AccountSerializer"),
-        # "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
-        "address_set": (
-            "app_users.serializers.AddressSerializer",
-            {"many": True},
-        ),
-        "bankaccount_set": (
-            "app_users.serializers.BankAccountSerializer",
-            {"many": True},
-        ),
+        "account": ("app_auth.serializers.AccountSerializer")
     }
 
 
@@ -92,13 +75,4 @@ class StudentSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
-        "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
-        "address_set": (
-            "app_users.serializers.AddressSerializer",
-            {"many": True},
-        ),
-        "bankaccount_set": (
-            "app_users.serializers.BankAccountSerializer",
-            {"many": True},
-        ),
     }
