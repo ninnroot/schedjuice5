@@ -16,7 +16,7 @@ class Group(BaseModel):
 
     name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField(default="...")
-    parent_id = models.ForeignKey(
+    parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
         null=True,
@@ -35,7 +35,7 @@ class Department(BaseModel):
 
     name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField(default="...")
-    parent_id = models.ForeignKey(
+    parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
         null=True,
