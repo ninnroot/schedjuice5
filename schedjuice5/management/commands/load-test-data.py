@@ -10,6 +10,7 @@ from app_finance.models import *
 from app_management.models import *
 from app_users.models import *
 from app_utils.models import *
+from app_announcement.models import *
 
 
 class Command(BaseCommand):
@@ -22,11 +23,7 @@ class Command(BaseCommand):
         (Guardian, "guardians.csv"),
         (Student, "students.csv"),
         (BankAccount, "bank-accounts.csv"),  # parent
-        # (StaffBankAccount, "staff-bank-accounts.csv"),  # child of BankAccount
-        # (StudentBankAccount, "student-bank-accounts.csv"),  # child of BankAccount
         (Address, "addresses.csv"),  # parent
-        # (StaffAddress, "staff-addresses.csv"),  # child of Address
-        # (StudentAddress, "student-addresses.csv"),  # child of Address
         # app_campus
         (VenueClassification, "venue-classification.csv"),
         (Campus, "campus.csv"),
@@ -53,6 +50,8 @@ class Command(BaseCommand):
         (StaffRole, "staff-role.csv"),
         (GroupRole, "group-role.csv"),
         (RolePermission, "role-permission.csv"),
+        # app_announcement
+        (Announcement, "announcements.csv"),
     )
 
     def load_data(self, model, filename):
