@@ -11,9 +11,17 @@ class GroupSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "staffgroup_set": ("app_management.serializers.StaffGroupSerializer", {"many": True}),
-        "grouprole_set": ("app_management.serializers.GroupRoleSerializer", {"many": True}),
+        "staffgroup_set": (
+            "app_management.serializers.StaffGroupSerializer",
+            {"many": True},
+        ),
+        "grouprole_set": (
+            "app_management.serializers.GroupRoleSerializer",
+            {"many": True},
+        ),
     }
+
+    # def validate(self, attrs):
 
 
 class DepartmentSerializer(BaseModelSerializer):
@@ -22,7 +30,10 @@ class DepartmentSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "staffdepartment_set": ("app_management.serializers.StaffDepartmentSerializer", {"many": True}),
+        "staffdepartment_set": (
+            "app_management.serializers.StaffDepartmentSerializer",
+            {"many": True},
+        ),
     }
 
 
@@ -32,9 +43,18 @@ class JobSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "staffdepartment_set": ("app_management.serializers.StaffDepartmentSerializer", {"many": True}),
-        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
-        "staffevent_set": ("app_management.serializers.StaffEventSerializer", {"many": True}),
+        "staffdepartment_set": (
+            "app_management.serializers.StaffDepartmentSerializer",
+            {"many": True},
+        ),
+        "staffcourse_set": (
+            "app_management.serializers.StaffCourseSerializer",
+            {"many": True},
+        ),
+        "staffevent_set": (
+            "app_management.serializers.StaffEventSerializer",
+            {"many": True},
+        ),
     }
 
 
@@ -44,9 +64,18 @@ class RoleSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "staffrole_set": ("app_management.serializers.StaffRoleSerializer", {"many": True}),
-        "grouprole_set": ("app_management.serializers.GroupRoleSerializer", {"many": True}),
-        "rolepermission_set": ("app_management.serializers.RolePermissionSerializer", {"many": True}),
+        "staffrole_set": (
+            "app_management.serializers.StaffRoleSerializer",
+            {"many": True},
+        ),
+        "grouprole_set": (
+            "app_management.serializers.GroupRoleSerializer",
+            {"many": True},
+        ),
+        "rolepermission_set": (
+            "app_management.serializers.RolePermissionSerializer",
+            {"many": True},
+        ),
     }
 
 
@@ -56,7 +85,10 @@ class PermissionSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "rolepermission_set": ("app_management.serializers.RolePermissionSerializer", {"many": True}),
+        "rolepermission_set": (
+            "app_management.serializers.RolePermissionSerializer",
+            {"many": True},
+        ),
     }
 
 
@@ -67,7 +99,7 @@ class StaffGroupSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "staff": ("app_users.serializers.StaffSerializer"),
-        "group": ("app_management.serializers.GroupSerializer")
+        "group": ("app_management.serializers.GroupSerializer"),
     }
 
 
