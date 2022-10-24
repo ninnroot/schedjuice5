@@ -243,9 +243,6 @@ class GetNestedTest(BaseListView):
         x = Group.objects.get_nested()
         for i in x:
             if i.id == 20:
-                print(i.name)
-                print(i.parent)
-                print(i.parent.parent)
-                print(i.parent.parent.parent)
+                print(i.parent.parent.parent.parent)
 
         return Response({"message": "k"})

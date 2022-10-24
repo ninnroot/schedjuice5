@@ -47,8 +47,10 @@ class GroupManager(CTEManager, CustomManager):
             .with_cte(cte)
             .annotate(path=cte.col.path, depth=cte.col.depth)
         )
-
-        highest_depth = results.order_by("-depth").first().depth
+        ordered_queryset = results.order_by("-depth")
+        highest_depth = 0
+        if ordered_queryset.first():
+            highest_depth = ordered_queryset.first().depth
         related_str = "parent"
         if highest_depth > 0:
             for i in range(highest_depth):
