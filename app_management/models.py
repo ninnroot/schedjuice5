@@ -23,7 +23,7 @@ class Group(BaseModel):
         help_text="The parent group of the current group.",
     )
 
-    objects = GroupManager()
+    objects = CustomCTEManager()
 
 
 class Department(BaseModel):
@@ -41,6 +41,8 @@ class Department(BaseModel):
         null=True,
         help_text="The parent department of the current department.",
     )
+    
+    objects = CustomCTEManager()
 
 
 class Job(BaseModel):
@@ -87,7 +89,7 @@ class StaffGroup(BaseModel):
 
 class StaffDepartment(BaseModel):
     """
-    A bridge table for Staff and Group models. In each relation, a unique Job can be assigned.
+    A bridge table for Staff and Department models. In each relation, a unique Job can be assigned.
     A StaffDeparment relation may also be under another StaffDepartment, thus forming a hierarchy of Staff
     within individual Departments.
     """
@@ -104,7 +106,7 @@ class StaffDepartment(BaseModel):
         on_delete=models.SET_NULL,
         null=True,
         help_text="The Staff that the current staff is under the authority of.",
-    )
+    ) 
 
     class Meta:
         unique_together = ("staff", "department")

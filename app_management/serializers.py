@@ -5,7 +5,22 @@ from schedjuice5.serializers import BaseModelSerializer
 from .models import *
 
 
-class GroupSerializer(BaseModelSerializer):
+# Base Validate Serailizer for checking cycular hierarcy.
+class ValidateCyclicCTESerializer(BaseModelSerializer):
+    def validate(self, attrs):
+        if self.instance and "parent" in attrs and attrs["parent"] is not None:
+            if attrs["parent"].id in [
+                i.id for i in self.Meta.model.objects.get_nested(root_id=self.instance.id).all()
+            ]:
+                raise ValidationError(
+                    {
+                        "parent": f"Cyclic relationship. {self.Meta.model.__name__} {self.instance.name} cannot be a child of its own child."
+                    }
+                )
+        return attrs
+        
+
+class GroupSerializer(ValidateCyclicCTESerializer):
     class Meta:
         model = Group
         fields = "__all__"
@@ -21,20 +36,8 @@ class GroupSerializer(BaseModelSerializer):
         ),
     }
 
-    def validate(self, attrs):
-        if self.instance and "parent" in attrs and attrs["parent"] is not None:
-            if attrs["parent"].id in [
-                i.id for i in Group.objects.get_nested(root_id=self.instance.id).all()
-            ]:
-                raise ValidationError(
-                    {
-                        "parent": f"Cyclic relationship. Group {self.instance.name} cannot be a child of its own child."
-                    }
-                )
-        return attrs
 
-
-class DepartmentSerializer(BaseModelSerializer):
+class DepartmentSerializer(ValidateCyclicCTESerializer):
     class Meta:
         model = Department
         fields = "__all__"

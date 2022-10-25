@@ -6,7 +6,7 @@ from django_cte import CTEManager, With
 from schedjuice5.managers import CustomManager
 
 
-class GroupManager(CTEManager, CustomManager):
+class CustomCTEManager(CTEManager, CustomManager):
     def get_nested(self, root_id=None):
         x = {}
         if root_id:
