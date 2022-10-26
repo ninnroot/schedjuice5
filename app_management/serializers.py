@@ -5,12 +5,15 @@ from schedjuice5.serializers import BaseModelSerializer
 from .models import *
 
 
-# Base Validate Serailizer for checking cycular hierarcy.
+# Base Validate Serializer for checking circular hierarchy.
 class ValidateCyclicCTESerializer(BaseModelSerializer):
     def validate(self, attrs):
         if self.instance and "parent" in attrs and attrs["parent"] is not None:
             if attrs["parent"].id in [
-                i.id for i in self.Meta.model.objects.get_nested(root_id=self.instance.id).all()
+                i.id
+                for i in self.Meta.model.objects.get_nested(
+                    root_id=self.instance.id
+                ).all()
             ]:
                 raise ValidationError(
                     {
@@ -18,7 +21,7 @@ class ValidateCyclicCTESerializer(BaseModelSerializer):
                     }
                 )
         return attrs
-        
+
 
 class GroupSerializer(ValidateCyclicCTESerializer):
     class Meta:

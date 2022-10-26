@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["127.0.0.1"] + config("ALLOWED_HOSTS", cast=str).split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -205,4 +206,16 @@ INTERNAL_IPS = [
 GRAPH_MODELS = {
     "all_applications": True,
     "group_models": True,
+}
+
+# ASGI
+ASGI_APPLICATION = "schedjuice5.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }

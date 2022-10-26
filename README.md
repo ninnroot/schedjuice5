@@ -43,6 +43,10 @@ docker run -p 5432:5432 -e POSTGRES_PASSWORD=psql_pass -e POSTGRES_DB=psql_db -e
 ```
 python manage.py runserver
 ```
+For websocket endpoints, you also need a redis server.
+```shell
+docker run -p 6379:6379 -d redis
+```
 
 
 # References and additional resources
