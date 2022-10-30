@@ -33,5 +33,4 @@ class TestConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         # Send message to WebSocket
-        print("sat pat ")
         self.channel_layer.send(text_data=json.dumps({"message": "hello world"}))
