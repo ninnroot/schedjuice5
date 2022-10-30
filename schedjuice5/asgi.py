@@ -10,11 +10,12 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 import os
 
 from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
 import app_ws.routing
+from app_ws import consumers
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "schedjuice5.settings")
 

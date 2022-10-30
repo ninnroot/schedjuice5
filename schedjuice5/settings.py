@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # third-party apps
     "rest_framework",
+    "channels",
     "drf_yasg",
     "debug_toolbar",
     "django_extensions",
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     "app_management",
     "app_microsoft",
     "app_announcement",
+    "app_ws",
 ]
 
 

@@ -1,4 +1,8 @@
-from rest_framework.views import Response
+import asyncio
+
+from asgiref.sync import AsyncToSync, async_to_sync
+from channels.layers import get_channel_layer
+from rest_framework.views import Request, Response
 
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
 
@@ -11,6 +15,14 @@ class GroupListView(BaseListView):
     name = "Group list view"
     model = Group
     serializer = GroupSerializer
+
+    def get(self, request: Request):
+        if "bulk" in request.query_params and request.query_params["bulk"]:
+            async_to_sync(get_channel_layer().group_send)(
+                "test_lobby", {"type": "chat.message"}
+            )
+
+        return self.send_response(False, "pending", {})
 
 
 class GroupDetailsView(BaseDetailsView):
