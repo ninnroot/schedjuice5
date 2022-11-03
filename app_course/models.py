@@ -66,6 +66,7 @@ class Event(BaseModel):
     the time and space resources that it has been assigned to.
     """
 
+    name = models.CharField(max_length=100, validators=[englishAndSomeSpecialValidation], default="T.Su Event")
     date = models.DateField(help_text="The date that the event falls onto.")
     time_from = models.TimeField(help_text="Starting time of the event.")
     time_to = models.TimeField(help_text="Ending time of the event.")
