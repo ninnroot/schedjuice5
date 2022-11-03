@@ -22,25 +22,6 @@ class AssignmentSearchView(BaseSearchView):
     serializer = AssignmentSerializer
     
     
-# ------------ CourseAssignment Section ------------
-class CourseAssignmentListView(BaseListView):
-    name = "CourseAssignment list view"
-    model = CourseAssignment
-    serializer = CourseAssignmentSerializer
-
-
-class CourseAssignmentDetailsView(BaseDetailsView):
-    name = "CourseAssignment details view"
-    model = CourseAssignment
-    serializer = CourseAssignmentSerializer
-
-
-class CourseAssignmentSearchView(BaseSearchView):
-    name = "CourseAssignment search view"
-    model = CourseAssignment
-    serializer = CourseAssignmentSerializer
-    
-
 # ------------ Attachment Section ------------
 class AttachmentListView(BaseListView):
     name = "Attachment list view"

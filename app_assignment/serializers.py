@@ -1,8 +1,22 @@
 import base64
 from rest_framework.serializers import ValidationError
-from schedjuice5.serializers import BaseModelSerializer
+from rest_framework import serializers
+from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 
 from .models import *
+
+
+class CriteriaSerailizer(BaseSerializer):
+    name = serializers.CharField(max_length=25, required=True)
+    description = serializers.CharField(max_length=100, required=True)
+    range = serializers.IntegerField()
+    
+
+class GradingCriteriaSerializer(BaseSerializer):
+    fullMark = serializers.IntegerField()
+    passMark = serializers.IntegerField()
+    criteria = CriteriaSerailizer(many=True)
+
 
 class AssignmentSerializer(BaseModelSerializer):
     class Meta:
@@ -50,16 +64,11 @@ class AssignmentSerializer(BaseModelSerializer):
         except:
             raise ValidationError("Instruction must be base64 endcoded!")
         
-        
-class CourseAssignmentSerializer(BaseModelSerializer):
-    class Meta:
-        model = CourseAssignment
-        fields = "__all__"
-        
-    expandable_fields = {
-        "course": ("app_course.serializers.CourseSerializer",),
-        "assignment": ("app_assignment.serializers.AssignmentSerializer",),
-    }
+    def validate_grading_criteria(self, value):
+        serializer = GradingCriteriaSerializer(data=value)
+        if not serializer.is_valid():
+            raise ValidationError("Criteria format is wrong!")
+        return value
         
         
 class AttachmentSerializer(BaseModelSerializer):

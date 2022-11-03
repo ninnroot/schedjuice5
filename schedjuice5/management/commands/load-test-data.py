@@ -55,7 +55,6 @@ class Command(BaseCommand):
         (Announcement, "announcements.csv"),
         # app_assignment
         (Assignment, "assignments.csv"),
-        (CourseAssignment, "course-assignment.csv"),
         (Attachment, "assignment-attachments.csv"),
         (Submission, "submission.csv"),
         (SubmissionAttachment, "submission-attachments.csv"),

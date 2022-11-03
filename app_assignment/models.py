@@ -8,16 +8,12 @@ class Assignment(models.Model):
     instruction = models.TextField()
     start_date = models.DateTimeField()
     due_date = models.DateTimeField()
-    criteria = models.JSONField()
+    grading_criteria = models.JSONField()
     is_published = models.BooleanField(default=False)
     is_first_published = models.BooleanField(default=False)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    
-    
-class CourseAssignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
-    
+        
 
 class Attachment(models.Model):
     attached_file = models.FileField(upload_to="assignments/questions")

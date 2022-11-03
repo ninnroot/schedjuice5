@@ -34,12 +34,4 @@ urlpatterns = [
         views.SubmissionAttachmentDetailsView.as_view(),
         name="attachment-details",
     ),
-    
-    path("course-assignments/", views.CourseAssignmentListView.as_view(), name="course-assignments-list"),
-    path("course-assignments/search", views.CourseAssignmentSearchView.as_view(), name="course-assignments-search"),
-    path(
-        "course-assignments/<int:obj_id>",
-        views.CourseAssignmentDetailsView.as_view(),
-        name="course-assignments-details",
-    ),
 ]
