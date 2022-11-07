@@ -16,6 +16,16 @@ class GradingCriteriaSerializer(BaseSerializer):
     fullMark = serializers.IntegerField()
     passMark = serializers.IntegerField()
     criteria = CriteriaSerailizer(many=True)
+    
+    def validate(self, attrs):
+        if (attrs['passMark'] > attrs['fullMark']):
+            raise ValidationError("FullMark must be greater than PassMark.")
+        
+        for criteria in attrs['criteria']:
+            if not (-1 < criteria['range'] < attrs['fullMark'] + 1):
+                raise ValidationError({"range": f"Range value must be between 0 and {attrs['fullMark']}"})
+            
+        return super().validate(attrs)
 
 
 class AssignmentSerializer(BaseModelSerializer):
@@ -39,7 +49,7 @@ class AssignmentSerializer(BaseModelSerializer):
             allow_attrs = list(filter(lambda attr: attr in valid_attrs_to_update, list(validated_data.keys())))
 
             if len(not_allow_attrs) > 0:
-                raise ValidationError("Only name and instruction fields can be updated after published!")
+                raise ValidationError(f"({', '.join(not_allow_attrs)}) {'attributes are' if len(not_allow_attrs) > 1 else 'attribute is'} not allowed to update after published.")
             else:
                 for attr in allow_attrs:
                     setattr(instance, attr, validated_data.get(attr))
@@ -59,15 +69,15 @@ class AssignmentSerializer(BaseModelSerializer):
         # check for base64encoded string or not
         try:
             if not (base64.b64encode(base64.b64decode(value)).decode() == value):
-                raise ValidationError("Instruction must be base64 endcoded!")
+                raise ValidationError({"instruction": "Instruction must be base64 endcoded!"})
             return value
-        except:
-            raise ValidationError("Instruction must be base64 endcoded!")
+        except Exception as e:
+            raise ValidationError({"instruction": e})
         
     def validate_grading_criteria(self, value):
         serializer = GradingCriteriaSerializer(data=value)
         if not serializer.is_valid():
-            raise ValidationError("Criteria format is wrong!")
+            raise ValidationError(serializer.errors)
         return value
         
         
