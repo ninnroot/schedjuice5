@@ -40,6 +40,7 @@ class Department(BaseModel):
         on_delete=models.SET_NULL,
         null=True,
         help_text="The parent department of the current department.",
+        related_name="sub_departments"
     )
     
     objects = CustomCTEManager()
