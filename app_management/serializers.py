@@ -60,8 +60,6 @@ class NestedDepartmentSerilizer(BaseModelSerializer):
         ),
     }
         
-    
-
 
 class DepartmentSerializer(ValidateCyclicCTESerializer):
     # sub_departments = NestedDepartmentSerilizer(many=True)
