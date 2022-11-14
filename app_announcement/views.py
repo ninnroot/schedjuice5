@@ -10,7 +10,7 @@ class AnnouncementListView(BaseListView):
     model = Announcement
 
 
-class AnnouncementDetailsView(BaseListView):
+class AnnouncementDetailsView(BaseDetailsView):
     name = "Announcement details view"
     serializer = AnnouncementSerializer
     model = Announcement
