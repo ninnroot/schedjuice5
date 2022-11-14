@@ -16,13 +16,13 @@ class GroupListView(BaseListView):
     model = Group
     serializer = GroupSerializer
 
-    def get(self, request: Request):
-        if "bulk" in request.query_params and request.query_params["bulk"]:
-            async_to_sync(get_channel_layer().group_send)(
-                "test_lobby", {"type": "chat.message"}
-            )
+    # def get(self, request: Request):
+    #     if "bulk" in request.query_params and request.query_params["bulk"]:
+    #         async_to_sync(get_channel_layer().group_send)(
+    #             "test_lobby", {"type": "chat.message"}
+    #         )
 
-        return self.send_response(False, "pending", {})
+    #     return self.send_response(False, "pending", {})
 
 
 class GroupDetailsView(BaseDetailsView):
