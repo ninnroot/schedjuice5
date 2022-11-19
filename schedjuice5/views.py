@@ -41,7 +41,7 @@ class BaseView(APIView, CustomPagination):
 
     # querying data
     def get_queryset(
-        self, request: Request, filter_params=None, fields=None, sorts=None, expand=None
+        self, request: Request, filter_params=None, exclude_params={}, fields=None, sorts=None, expand=None
     ):
         if filter_params is None:
             filter_params = {}
@@ -53,7 +53,7 @@ class BaseView(APIView, CustomPagination):
             expand = []
         # query from the database
         queryset = (
-            self.model.objects.filter(**filter_params)
+            self.model.objects.filter(**filter_params).exclude(**exclude_params)
             .prefetch_related(*self.related_fields)
             .all()
             .order_by(*sorts)
@@ -260,7 +260,7 @@ class BaseSearchView(BaseView):
     name = "Base search view"
 
     # making sure the filter_params object is valid
-    def validate_filter_params(self, to_be_validated):
+    def validate_body_params(self, to_be_validated):
         validated_data = []
         for i in to_be_validated:
             x = FilterParamSerializer(data=i, context={"model": self.model})
@@ -272,35 +272,39 @@ class BaseSearchView(BaseView):
 
     # building a filter_params dict to be used in querying
     @staticmethod
-    def build_filter_params(filter_params):
-        filter_dict = {}
-        for i in filter_params:
-            filter_dict[i["field_name"] + "__" + i["operator"]] = (
+    def build_body_params(body_params):
+        params_dict = {}
+        for i in body_params:
+            params_dict[i["field_name"] + "__" + i["operator"]] = (
                 i["value"].split(",") if i["operator"] == "in" else i["value"]
             )
 
-        return filter_dict
+        return params_dict
 
     # get filter_params from the request
     def get_filter_params(self, request: Request):
         filter_params = request.data.get("filter_params", {})
+        validated_filter_params = self.validate_body_params(filter_params)
+        return self.build_body_params(validated_filter_params)
+    
+    # get exclude_params from the request
+    def get_exclude_params(self, request: Request):
+        exclude_params = request.data.get("exclude_params", {})
+        validated_exclude_params = self.validate_body_params(exclude_params)
+        return self.build_body_params(validated_exclude_params)
 
-        validated_data = self.validate_filter_params(filter_params)
-
-        return self.build_filter_params(validated_data)
-
+    # search
     @swagger_auto_schema(
         request_body=FilterParamsSerializer,
         manual_parameters=[size_param, page_param, sorts_param, fields_param, expand_param],
     )
-
-    # search
     def post(self, request: Request):
 
         filter_params = {}
         try:
             fields = self.get_field_filter_param(request)
             filter_params = self.get_filter_params(request)
+            exclude_params = self.get_exclude_params(request)
             sorts = self.get_sort_param(request)
             expand = self.get_expand_param(request)
         except BadRequest as e:
@@ -309,7 +313,7 @@ class BaseSearchView(BaseView):
             )
 
         serialized_data = self.get_queryset(
-            request, filter_params, fields, sorts, expand
+            request, filter_params, exclude_params, fields, sorts, expand
         )
 
         # return the serialized queryset in a standardized manner
