@@ -14,17 +14,17 @@ class BaseSerializer(serializers.Serializer):
 
 
 class FilterParamSerializer(BaseSerializer):
-    field_name = serializers.CharField(max_length=32, required=True)
+    field_name = serializers.CharField(max_length=500, required=True)
     operator = serializers.CharField(max_length=16, default="exact")
-    value = serializers.CharField(max_length=32, required=True)
+    value = serializers.CharField(max_length=500, required=True)
 
     def validate(self, data, *args, **kwargs):
-        if data["field_name"] not in self.context["model"].get_filterable_fields(
-            self.context["model"]
-        ):
-            raise serializers.ValidationError(
-                f"{data['field_name']} is not in the field set of {self.context['model'].__name__}"
-            )
+        # if data["field_name"] not in self.context["model"].get_filterable_fields(
+        #     self.context["model"]
+        # ):
+        #     raise serializers.ValidationError(
+        #         f"{data['field_name']} is not in the field set of {self.context['model'].__name__}"
+        #     )
 
         if data["operator"] not in self.context["model"].valid_operators:
             raise serializers.ValidationError(

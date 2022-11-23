@@ -23,7 +23,7 @@ class ValidateCyclicCTESerializer(BaseModelSerializer):
         return attrs
 
 
-class GroupSerializer(ValidateCyclicCTESerializer):
+class NestedGroupSerializer(BaseModelSerializer):
     class Meta:
         model = Group
         fields = "__all__"
@@ -40,8 +40,27 @@ class GroupSerializer(ValidateCyclicCTESerializer):
     }
 
 
-class NestedDepartmentSerilizer(BaseModelSerializer):
+class GroupSerializer(ValidateCyclicCTESerializer):
+    class Meta:
+        model = Group
+        fields = "__all__"
 
+    expandable_fields = {
+        "staffgroup_set": (
+            "app_management.serializers.StaffGroupSerializer",
+            {"many": True},
+        ),
+        "parent": (
+            "app_management.serializers.NestedGroupSerializer",
+        ),
+        "grouprole_set": (
+            "app_management.serializers.GroupRoleSerializer",
+            {"many": True},
+        ),
+    }
+
+
+class NestedDepartmentSerilizer(BaseModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
@@ -51,9 +70,6 @@ class NestedDepartmentSerilizer(BaseModelSerializer):
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "parent": (
-            "app_management.serializers.NestedDepartmentSerilizer",
-        ),
         "sub_departments": (
             "app_management.serializers.NestedDepartmentSerilizer",
             {"many": True}
@@ -62,7 +78,6 @@ class NestedDepartmentSerilizer(BaseModelSerializer):
         
 
 class DepartmentSerializer(ValidateCyclicCTESerializer):
-    # sub_departments = NestedDepartmentSerilizer(many=True)
     class Meta:
         model = Department
         fields = "__all__"
