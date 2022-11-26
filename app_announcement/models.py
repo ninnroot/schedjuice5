@@ -11,3 +11,8 @@ class Announcement(BaseModel):
     )
     body = models.TextField()
     created_by = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    
+
+class Attachment(BaseModel):
+    attachment_file = models.FileField(upload_to="announcements") 
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
