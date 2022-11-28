@@ -52,7 +52,7 @@ urlpatterns = [
     path("api/v2/", include("app_management.urls")),
     path("api/v2/", include("app_announcement.urls")),
     path("api/v2/ws/", include("app_ws.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     try:
