@@ -8,6 +8,10 @@ class AccountSerializer(BaseModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
+        
+        extra_kwargs = {
+            'password': {"write_only": True},
+        }
 
     expandable_fields = {
         "student": ("app_users.serializers.StudentSerializer"),
