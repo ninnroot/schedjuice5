@@ -14,18 +14,18 @@ class CustomAuthentication(BaseAuthentication):
         if not invalidated_cred.is_valid():
             raise AuthenticationFailed({"data": invalidated_cred.errors})
 
-        account = Account.objects.get(email=request.data["email"])
+        account = Account.objects.filter(email=request.data["email"]).first()
         if not account:
 
             raise AuthenticationFailed("No such account", code="user_not_found")
         if account.check_password(request.data["password"]):
-            return (account, None)
+            return (account, get_token(account))
 
         raise AuthenticationFailed("Invalid credentials")
 
 
 def get_token(user):
     refresh = RefreshToken.for_user(user)
-    data = {"refresh": str(refresh), "access": str(refresh.access_token)}
+    data = {"access": str(refresh.access_token)}
 
     return data
