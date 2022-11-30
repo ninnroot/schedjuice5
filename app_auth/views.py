@@ -10,6 +10,7 @@ from app_auth.authentication import CustomAuthentication, get_token
 from app_auth.models import Account, TempEmail
 from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer
 from app_microsoft.mail import send_mail
+from app_users.serializers import GuardianSerializer, StaffSerializer, StudentSerializer
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView, BaseView
 
 
@@ -37,8 +38,29 @@ class LoginView(BaseView):
     authentication_classes = [CustomAuthentication]
     # permission_classes = [IsAuthenticated]
     def post(self, request: Request):
+
         if request.user.is_authenticated:
-            data = get_token(request.user)
+            x = (
+                Account.objects.filter(pk=request.user.id)
+                .prefetch_related("staff", "guardian", "student")
+                .first()
+            )
+            user_type = ""
+            user = None
+            for i, j in [
+                ("staff", StaffSerializer),
+                ("guardian", GuardianSerializer),
+                ("student", StudentSerializer),
+            ]:
+                user = getattr(x, i, None)
+                if user:
+                    user_type = i
+                    break
+            data = {
+                "user_type": user_type,
+                "user": j(user).data,
+                **get_token(request.user),
+            }
 
             return self.send_response(False, "success", data, status=status.HTTP_200_OK)
 

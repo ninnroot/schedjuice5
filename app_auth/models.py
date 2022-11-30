@@ -24,7 +24,7 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f"<User: {self.id} {self.email}>"
+        return f"<Account: {self.id} {self.email}>"
 
 
 class TempEmail(BaseModel):
