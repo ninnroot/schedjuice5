@@ -16,13 +16,13 @@ class CustomAuthentication(BaseAuthentication):
 
         account = Account.objects.filter(email=request.data["email"]).first()
         if not account:
-
             raise AuthenticationFailed("No such account", code="user_not_found")
+        
         if account.check_password(request.data["password"]):
             return (account, get_token(account))
 
         raise AuthenticationFailed("Invalid credentials")
-
+    
 
 def get_token(user):
     refresh = RefreshToken.for_user(user)

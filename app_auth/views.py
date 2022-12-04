@@ -5,6 +5,7 @@ from django.utils.encoding import DjangoUnicodeDecodeError, smart_bytes, smart_s
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import exceptions, status
 from rest_framework.views import Request
+from rest_framework.permissions import IsAuthenticated
 
 from app_auth.authentication import CustomAuthentication, get_token
 from app_auth.models import Account, TempEmail
@@ -36,9 +37,9 @@ class AccountSearchView(BaseSearchView):
 class LoginView(BaseView):
     name = "The login endpoint"
     authentication_classes = [CustomAuthentication]
-    # permission_classes = [IsAuthenticated]
+    # this line will return True, if Authenticatoin Classes in authentication_classes return True
+    permission_classes = [IsAuthenticated] 
     def post(self, request: Request):
-
         if request.user.is_authenticated:
             x = (
                 Account.objects.filter(pk=request.user.id)
