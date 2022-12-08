@@ -1,7 +1,7 @@
 from django.db import models
 
 from app_course.models import Course, Event
-from app_users.models import Staff
+from app_users.models import Staff, Student
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
@@ -149,6 +149,18 @@ class StaffRole(BaseModel):
 
     class Meta:
         unique_together = ("staff", "role")
+        
+ 
+class StudentCourse(BaseModel):
+    """
+    A bridge table for Student and Course models.
+    """
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("student", "course")
 
 
 class GroupRole(BaseModel):
