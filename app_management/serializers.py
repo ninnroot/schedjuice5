@@ -190,6 +190,17 @@ class StaffCourseSerializer(BaseModelSerializer):
         # check if the Events collide
 
         return super().validate(attrs)
+    
+    
+class StudentCourseSerializer(BaseModelSerializer):
+    class Meta:
+        model = StudentCourse
+        fields = "__all__"
+        
+    expandable_fields = {
+        "student": ("app_users.serializers.StudentSerializer"),
+        "course": ("app_course.serializers.CourseSerializer"),
+    }
 
 
 class StaffEventSerializer(BaseModelSerializer):

@@ -49,6 +49,7 @@ class Command(BaseCommand):
         (StaffEvent, "staff-event.csv"),
         (StaffRole, "staff-role.csv"),
         (GroupRole, "group-role.csv"),
+        (StudentCourse, "students-courses.csv"),
         (RolePermission, "role-permission.csv"),
         # app_announcement
         (Announcement, "announcements.csv"),

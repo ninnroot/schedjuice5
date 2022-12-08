@@ -75,4 +75,5 @@ class StudentSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
+        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True})
     }

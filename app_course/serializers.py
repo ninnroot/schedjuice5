@@ -32,6 +32,7 @@ class CourseSerializer(BaseModelSerializer):
         "category": ("app_course.serializers.CategorySerializer"),
         "event_set": ("app_course.serializers.EventSerializer", {"many": True}),
         "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
+        "staffcourse_set": ("app_management.serializers.StaffCourseSerializer", {"many": True}),
     }
 
 

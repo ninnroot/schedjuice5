@@ -73,6 +73,19 @@ urlpatterns = [
         views.StaffCourseSearchView.as_view(),
         name="staff-course-search",
     ),
+    path(
+        "student-courses/", views.StudentCourseListView.as_view(), name="student-course-list"
+    ),
+    path(
+        "student-courses/<int:obj_id>/",
+        views.StudentCourseDetailsView.as_view(),
+        name="student-course-detail",
+    ),
+    path(
+        "student-courses/search/",
+        views.StudentCourseSearchView.as_view(),
+        name="student-course-search",
+    ),
     path("staff-events/", views.StaffEventListView.as_view(), name="staff-event-list"),
     path(
         "staff-events/<int:obj_id>/",
