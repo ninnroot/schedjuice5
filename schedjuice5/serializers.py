@@ -1,12 +1,16 @@
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 
+from .error_messages_format import error_messages
+
 
 class BaseModelSerializer(FlexFieldsModelSerializer):
     def __init__(self, *args, **kwargs):
         read_only_fields = kwargs.pop("read_only_fields", None)
         excluded_fields = kwargs.pop("excluded_fields", None)
         super(BaseModelSerializer, self).__init__(*args, **kwargs)
+        for field in self.fields: # iterate over the serializer fields
+            self.fields[field].error_messages = error_messages
 
 
 class BaseSerializer(serializers.Serializer):
