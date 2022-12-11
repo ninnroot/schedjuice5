@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "app_microsoft",
     "app_announcement",
     "app_ws",
+    "models_docs",
 ]
 
 
