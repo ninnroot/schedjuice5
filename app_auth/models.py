@@ -29,5 +29,5 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
 
 
 class TempEmail(BaseModel):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="temp_emails")
     email = models.EmailField(unique=True)

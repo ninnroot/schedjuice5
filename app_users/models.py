@@ -84,7 +84,7 @@ class PhoneNumber(BaseModel):
     dial_code = models.CharField(max_length=50, choices=dial_codes)
     number = models.CharField(max_length=20)
     is_primary = models.BooleanField(default=False)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=1)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=1, related_name="phone_numbers")
 
     class Meta:
         unique_together = ("dial_code", "number")
@@ -109,7 +109,7 @@ class BankAccount(BaseModel):
         default=False,
         help_text="A flag for whether current BankAccount is a primary one or not.",
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name="bank_accounts")
 
     chosen_one_fields = ["is_primary"]
 
@@ -145,7 +145,7 @@ class Address(BaseModel):
         default=False,
         help_text="A flag for whether current Address is a primary one or not.",
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name="addresses")
 
     chosen_one_fields = ["is_primary"]
 

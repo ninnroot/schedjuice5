@@ -11,12 +11,16 @@ def get_model_names():
 
 def format_fields():
     models = get_models()
-    models_fields = {}
-    for model in models:
-        models_fields[model.__name__.capitalize()] = []
-        for f in model._meta.get_fields():
+    models_fields = []
+    for m in models:
+        model = {}
+        model["model_name"] = m.__name__.capitalize()
+        model["fields"] = []
+        for f in m._meta.get_fields():
             field = {}
             field["type"] = f.get_internal_type()
             field["name"] = f.name
-            models_fields[model.__name__.capitalize()].append(field)
+            model["fields"].append(field)
+        models_fields.append(model)
+
     return models_fields

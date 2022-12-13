@@ -1,0 +1,42 @@
+<table>
+    <tr>
+    {% for model in models_fields %}
+        <!-- Button trigger modal -->
+        <td>
+            <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#{{model.model_name}}">
+                {{ model.model_name }}
+            </button>
+        </td>
+    
+        <!-- Modal -->
+        <div class="modal fade" id="{{model.model_name}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{model.model_name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-between">
+                <div class="left border-end px-3 py-5">
+                        <ul class="d-flex flex-column gap-2">
+                            {% for field in model.fields %}
+                                <li><span class="text-info">{{field.name}}</span>: <span class="text-warning">{{field.type}}</span></li>
+                            {% endfor %}
+                        </ul>
+                </div>
+                <div class="right align-middle text-center p-3">
+                        <img src="https://www.diagrams.net/assets/img/blog/entity-relationship-diagram-basic-template.png" alt=""
+                            width="700px" height="500px"
+                        >
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+</tr>
+</table>

@@ -65,12 +65,14 @@ class Venue(BaseModel):
         on_delete=models.PROTECT,
         null=True,
         help_text="Type of the Venue.",
+        related_name="venues"
     )
     campus = models.ForeignKey(
         Campus,
         on_delete=models.CASCADE,
         null=True,
         help_text="The Campus that the Venue is located within.",
+        related_name="venues"
     )
 
     class Meta:
