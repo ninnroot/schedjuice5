@@ -17,15 +17,15 @@ class AccountSerializer(BaseModelSerializer):
         "student": ("app_users.serializers.StudentSerializer"),
         "staff": ("app_users.serializers.StaffSerializer"),
         "guardian": ("app_users.serializers.GuardianSerializer"),
-        "address_set": (
+        "addresses": (
             "app_users.serializers.AddressSerializer",
             {"many": True}
         ),
-        "phonenumber_set": (
+        "phone_numbers": (
             "app_users.serializers.PhoneNumberSerializer",
             {"many": True}
         ),
-        "bankaccount_set": (
+        "bank_accounts": (
             "app_users.serializers.BankAccountSerializer",
             {"many": True}
         ),
