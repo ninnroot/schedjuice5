@@ -4,6 +4,7 @@ import schedjuice5.config as config
 from app_auth.models import Account
 from app_utils.choices.careers import careers
 from app_utils.choices.country_codes import country_codes
+from app_utils.choices.regions import regions
 from app_utils.choices.dial_codes import dial_codes
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
@@ -134,6 +135,7 @@ class Address(BaseModel):
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
     country = models.CharField(max_length=64, choices=country_codes)
+    region = models.CharField(max_length=100, choices=regions)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
     save_name = models.CharField(
         max_length=256,
