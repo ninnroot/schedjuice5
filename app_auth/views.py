@@ -6,10 +6,11 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import exceptions, status
 from rest_framework.views import Request
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from app_auth.authentication import CustomAuthentication, get_token
 from app_auth.models import Account, TempEmail
-from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer
+from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer, LoginSerializer
 from app_microsoft.mail import send_mail
 from app_users.serializers import GuardianSerializer, StaffSerializer, StudentSerializer
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView, BaseView
@@ -34,36 +35,10 @@ class AccountSearchView(BaseSearchView):
     serializer = AccountSerializer
 
 
-class LoginView(BaseView):
+class LoginView(TokenObtainPairView):
     name = "The login endpoint"
-    authentication_classes = [CustomAuthentication]
-    # this line will return True, if Authenticatoin Classes in authentication_classes return True
-    permission_classes = [IsAuthenticated] 
-    def post(self, request: Request):
-        if request.user.is_authenticated:
-            x = (
-                Account.objects.filter(pk=request.user.id)
-                .prefetch_related("staff", "guardian", "student")
-                .first()
-            )
-            user_type = ""
-            user = None
-            for i, j in [
-                ("staff", StaffSerializer),
-                ("guardian", GuardianSerializer),
-                ("student", StudentSerializer),
-            ]:
-                user = getattr(x, i, None)
-                if user:
-                    user_type = i
-                    break
-            data = {
-                "user_type": user_type,
-                "user": j(user).data,
-                **get_token(request.user),
-            }
-
-            return self.send_response(False, "success", data, status=status.HTTP_200_OK)
+    # authentication_classes = [CustomAuthentication]
+    serializer_class = LoginSerializer
 
 
 class RequestUpdateEmailView(BaseView):
