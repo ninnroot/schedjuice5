@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "app_announcement",
     "app_ws",
     "models_docs",
+    "app_assignment",
 ]
 
 
