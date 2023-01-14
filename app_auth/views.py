@@ -124,8 +124,8 @@ class UpdateEmailView(BaseView):
         try:
             id = urlsafe_base64_decode(uidb64)
             user = Account.objects.get(pk=id)
+            print(user)
             email = TempEmail.objects.get(account=user).email
-
             if not default_token_generator.check_token(user, token):
                 return self.send_response(
                     True,

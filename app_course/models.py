@@ -31,6 +31,10 @@ class Course(BaseModel):
     One of the fundamental models in the API. Staff can be assigned and Students can be enrolled to a Course.
     A Course may belong to one and only one Category, and a Course can contain many Events.
     """
+    COURSE_TYPE = (
+        ('on_campus', 'On Campus'),
+        ('online', 'Online')
+    )
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
@@ -48,6 +52,7 @@ class Course(BaseModel):
     color = models.CharField(
         max_length=50, default="#FA7070", validators=[colorCodeValidation]
     )
+    course_type = models.CharField(choices=COURSE_TYPE, default='online', max_length=10)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
 
