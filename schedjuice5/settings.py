@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     "app_ws",
     "models_docs",
     "app_assignment",
+    # add this last
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 
