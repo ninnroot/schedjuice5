@@ -11,6 +11,7 @@ from app_management.models import *
 from app_users.models import *
 from app_utils.models import *
 from app_announcement.models import *
+from app_assignment.models import *
 
 
 class Command(BaseCommand):
@@ -49,9 +50,15 @@ class Command(BaseCommand):
         (StaffEvent, "staff-event.csv"),
         (StaffRole, "staff-role.csv"),
         (GroupRole, "group-role.csv"),
+        (StudentCourse, "students-courses.csv"),
         (RolePermission, "role-permission.csv"),
         # app_announcement
         (Announcement, "announcements.csv"),
+        # app_assignment
+        (Assignment, "assignments.csv"),
+        (Attachment, "assignment-attachments.csv"),
+        (Submission, "submission.csv"),
+        (SubmissionAttachment, "submission-attachments.csv"),
     )
 
     def load_data(self, model, filename):

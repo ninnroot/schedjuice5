@@ -9,7 +9,7 @@ class VenueClassificationSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "venue_set": ("app_campus.serializers.VenueSerializer", {"many": True})
+        "venues": ("app_campus.serializers.VenueSerializer", {"many": True})
     }
 
 
@@ -19,7 +19,7 @@ class CampusSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "venue_set": ("app_campus.serializers.VenueSerializer", {"many": True})
+        "venues": ("app_campus.serializers.VenueSerializer", {"many": True})
     }
 
 
@@ -31,5 +31,5 @@ class VenueSerializer(BaseModelSerializer):
     expandable_fields = {
         "campus": ("app_campus.serializers.CampusSerializer"),
         "classification": ("app_campus.serializers.VenueClassificationSerializer"),
-        "eventvenue_set": ("app_course.serializers.EventVenueSerializer", {"many": True})
+        "events_venues": ("app_course.serializers.EventVenueSerializer", {"many": True})
     }

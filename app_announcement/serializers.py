@@ -10,7 +10,7 @@ class AnnouncementSerializer(BaseModelSerializer):
 
     expandable_fields = {
                             "created_by": "app_users.serializers.StaffSerializer",
-                            "attachment_set": ("app_announcement.serializers.AttachmentSerializer", {"many": True})
+                            "attachments": ("app_announcement.serializers.AttachmentSerializer", {"many": True})
                         }
     
     

@@ -4,6 +4,7 @@ import schedjuice5.config as config
 from app_auth.models import Account
 from app_utils.choices.careers import careers
 from app_utils.choices.country_codes import country_codes
+from app_utils.choices.regions import regions
 from app_utils.choices.dial_codes import dial_codes
 from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
@@ -84,7 +85,7 @@ class PhoneNumber(BaseModel):
     dial_code = models.CharField(max_length=50, choices=dial_codes)
     number = models.CharField(max_length=20)
     is_primary = models.BooleanField(default=False)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=1)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=1, related_name="phone_numbers")
 
     class Meta:
         unique_together = ("dial_code", "number")
@@ -109,7 +110,7 @@ class BankAccount(BaseModel):
         default=False,
         help_text="A flag for whether current BankAccount is a primary one or not.",
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name="bank_accounts")
 
     chosen_one_fields = ["is_primary"]
 
@@ -134,6 +135,7 @@ class Address(BaseModel):
     township = models.CharField(max_length=32, validators=[nameWithNumberValidation])
     city = models.CharField(max_length=64)
     country = models.CharField(max_length=64, choices=country_codes)
+    region = models.CharField(max_length=100, choices=regions)
     postal_code = models.CharField(max_length=16, validators=[strictNumberValidation])
     save_name = models.CharField(
         max_length=256,
@@ -145,7 +147,7 @@ class Address(BaseModel):
         default=False,
         help_text="A flag for whether current Address is a primary one or not.",
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name="addresses")
 
     chosen_one_fields = ["is_primary"]
 

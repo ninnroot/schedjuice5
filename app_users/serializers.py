@@ -35,23 +35,23 @@ class StaffSerializer(BaseModelSerializer):
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
         "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
-        "staffgroup_set": (
+        "staffs_groups": (
             "app_management.serializers.StaffGroupSerializer",
             {"many": True},
         ),
-        "staffdepartment_set": (
+        "staffs_depts": (
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "staffcourse_set": (
+        "staffs_courses": (
             "app_management.serializers.StaffCourseSerializer",
             {"many": True},
         ),
-        "staffevent_set": (
+        "staffs_events": (
             "app_management.serializers.StaffEventSerializer",
             {"many": True},
         ),
-        "staffrole_set": (
+        "staffs_roles": (
             "app_management.serializers.StaffRoleSerializer",
             {"many": True},
         ),
@@ -75,4 +75,5 @@ class StudentSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
+        "staffs_courses": ("app_management.serializers.StaffCourseSerializer", {"many": True})
     }

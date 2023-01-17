@@ -168,6 +168,25 @@ class StaffCourseSearchView(BaseSearchView):
     name = "StaffCourse search view"
     model = StaffCourse
     serializer = StaffCourseSerializer
+    
+    
+# ------------ StudentCourse Section ------------
+class StudentCourseListView(BaseListView):
+    name = "StudentCourse list view"
+    model = StudentCourse
+    serializer = StudentCourseSerializer
+
+
+class StudentCourseDetailsView(BaseDetailsView):
+    name = "StudentCourse details view"
+    model = StudentCourse
+    serializer = StudentCourseSerializer
+
+
+class StudentCourseSearchView(BaseSearchView):
+    name = "StudentCourse search view"
+    model = StudentCourse
+    serializer = StudentCourseSerializer
 
 
 # ------------ StaffEvent Section ------------

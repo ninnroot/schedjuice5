@@ -31,6 +31,10 @@ class Course(BaseModel):
     One of the fundamental models in the API. Staff can be assigned and Students can be enrolled to a Course.
     A Course may belong to one and only one Category, and a Course can contain many Events.
     """
+    COURSE_TYPE = (
+        ('on_campus', 'On Campus'),
+        ('online', 'Online')
+    )
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
@@ -48,8 +52,9 @@ class Course(BaseModel):
     color = models.CharField(
         max_length=50, default="#FA7070", validators=[colorCodeValidation]
     )
+    course_type = models.CharField(choices=COURSE_TYPE, default='online', max_length=10)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
 
     def save(self, *args, **kwargs):
         if self.start_date >= self.end_date:
@@ -71,11 +76,12 @@ class Event(BaseModel):
     time_from = models.TimeField(help_text="Starting time of the event.")
     time_to = models.TimeField(help_text="Ending time of the event.")
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="events")
     classification = models.ForeignKey(
         EventClassification,
         on_delete=models.PROTECT,
         help_text="The type of the event.",
+        related_name="events"
     )
 
     def save(self, *args, **kwargs):
@@ -93,8 +99,8 @@ class EventVenue(BaseModel):
     The bridge table for the Event and Venue models.
     """
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="events_venues")
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="events_venues")
 
 
 class Calendar(BaseModel):
