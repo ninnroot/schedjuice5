@@ -16,7 +16,7 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
         error_messages={"blank": {"default": "This field is required."}},
     )
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True)
 
     groups = None
     user_permissions = None
