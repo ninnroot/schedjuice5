@@ -4,7 +4,7 @@ from .models import *
 
 
 class AddressSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Address
         fields = "__all__"
 
@@ -12,7 +12,7 @@ class AddressSerializer(BaseModelSerializer):
 
 
 class PhoneNumberSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = PhoneNumber
         fields = "__all__"
 
@@ -20,7 +20,7 @@ class PhoneNumberSerializer(BaseModelSerializer):
 
 
 class BankAccountSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = BankAccount
         fields = "__all__"
 
@@ -28,7 +28,7 @@ class BankAccountSerializer(BaseModelSerializer):
 
 
 class StaffSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Staff
         fields = "__all__"
 
@@ -59,21 +59,22 @@ class StaffSerializer(BaseModelSerializer):
 
 
 class GuardianSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Guardian
         fields = "__all__"
 
-    expandable_fields = {
-        "account": ("app_auth.serializers.AccountSerializer")
-    }
+    expandable_fields = {"account": ("app_auth.serializers.AccountSerializer")}
 
 
 class StudentSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Student
         fields = "__all__"
 
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
-        "staffs_courses": ("app_management.serializers.StaffCourseSerializer", {"many": True})
+        "staffs_courses": (
+            "app_management.serializers.StaffCourseSerializer",
+            {"many": True},
+        ),
     }

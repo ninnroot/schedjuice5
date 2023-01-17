@@ -6,29 +6,26 @@ from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 
 
 class AccountSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Account
         fields = "__all__"
-        
+
         extra_kwargs = {
-            'password': {"write_only": True},
+            "password": {"write_only": True},
         }
 
     expandable_fields = {
         "student": ("app_users.serializers.StudentSerializer"),
         "staff": ("app_users.serializers.StaffSerializer"),
         "guardian": ("app_users.serializers.GuardianSerializer"),
-        "addresses": (
-            "app_users.serializers.AddressSerializer",
-            {"many": True}
-        ),
+        "addresses": ("app_users.serializers.AddressSerializer", {"many": True}),
         "phone_numbers": (
             "app_users.serializers.PhoneNumberSerializer",
-            {"many": True}
+            {"many": True},
         ),
         "bank_accounts": (
             "app_users.serializers.BankAccountSerializer",
-            {"many": True}
+            {"many": True},
         ),
     }
 
