@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     "app_ws",
     "models_docs",
     "app_assignment",
+    # add this last
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 
@@ -223,3 +225,25 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# LOGGING = {
+#     "version": 1,
+#     "filters": {
+#         "require_debug_true": {
+#             "()": "django.utils.log.RequireDebugTrue",
+#         }
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "filters": ["require_debug_true"],
+#             "class": "logging.StreamHandler",
+#         }
+#     },
+#     "loggers": {
+#         "django.db.backends": {
+#             "level": "DEBUG",
+#             "handlers": ["console"],
+#         }
+#     },
+# }

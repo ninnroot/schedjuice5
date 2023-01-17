@@ -24,7 +24,7 @@ class ValidateCyclicCTESerializer(BaseModelSerializer):
 
 
 class NestedGroupSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Group
         fields = "__all__"
 
@@ -41,7 +41,7 @@ class NestedGroupSerializer(BaseModelSerializer):
 
 
 class GroupSerializer(ValidateCyclicCTESerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Group
         fields = "__all__"
 
@@ -50,12 +50,10 @@ class GroupSerializer(ValidateCyclicCTESerializer):
             "app_management.serializers.StaffGroupSerializer",
             {"many": True},
         ),
-        "parent": (
-            "app_management.serializers.NestedGroupSerializer",
-        ),
+        "parent": ("app_management.serializers.NestedGroupSerializer",),
         "sub_groups": (
             "app_management.serializers.NestedGroupSerializer",
-            {"many": True}
+            {"many": True},
         ),
         "groups_roles": (
             "app_management.serializers.GroupRoleSerializer",
@@ -65,27 +63,25 @@ class GroupSerializer(ValidateCyclicCTESerializer):
 
 
 class NestedDepartmentSerilizer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Department
         fields = "__all__"
-        
+
     expandable_fields = {
         "staffs_departments": (
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "parent": (
-            "app_management.serializers.NestedDepartmentSerilizer",
-        ),
+        "parent": ("app_management.serializers.NestedDepartmentSerilizer",),
         "sub_departments": (
             "app_management.serializers.NestedDepartmentSerilizer",
-            {"many": True}
+            {"many": True},
         ),
     }
-        
+
 
 class DepartmentSerializer(ValidateCyclicCTESerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Department
         fields = "__all__"
 
@@ -94,18 +90,16 @@ class DepartmentSerializer(ValidateCyclicCTESerializer):
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "parent": (
-            "app_management.serializers.NestedDepartmentSerilizer",
-        ),
+        "parent": ("app_management.serializers.NestedDepartmentSerilizer",),
         "sub_departments": (
             "app_management.serializers.NestedDepartmentSerilizer",
-            {"many": True}
+            {"many": True},
         ),
     }
 
 
 class JobSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Job
         fields = "__all__"
 
@@ -126,7 +120,7 @@ class JobSerializer(BaseModelSerializer):
 
 
 class RoleSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Role
         fields = "__all__"
 
@@ -147,7 +141,7 @@ class RoleSerializer(BaseModelSerializer):
 
 
 class PermissionSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = Permission
         fields = "__all__"
 
@@ -160,7 +154,7 @@ class PermissionSerializer(BaseModelSerializer):
 
 
 class StaffGroupSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = StaffGroup
         fields = "__all__"
 
@@ -171,7 +165,7 @@ class StaffGroupSerializer(BaseModelSerializer):
 
 
 class StaffDepartmentSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = StaffDepartment
         fields = "__all__"
 
@@ -183,7 +177,7 @@ class StaffDepartmentSerializer(BaseModelSerializer):
 
 
 class StaffCourseSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = StaffCourse
         fields = "__all__"
 
@@ -197,13 +191,13 @@ class StaffCourseSerializer(BaseModelSerializer):
         # check if the Events collide
 
         return super().validate(attrs)
-    
-    
+
+
 class StudentCourseSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = StudentCourse
         fields = "__all__"
-        
+
     expandable_fields = {
         "student": ("app_users.serializers.StudentSerializer"),
         "course": ("app_course.serializers.CourseSerializer"),
@@ -211,7 +205,8 @@ class StudentCourseSerializer(BaseModelSerializer):
 
 
 class StaffEventSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
+
         model = StaffEvent
         fields = "__all__"
 
@@ -237,7 +232,7 @@ class StaffEventSerializer(BaseModelSerializer):
 
 
 class StaffRoleSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = StaffRole
         fields = "__all__"
 
@@ -248,7 +243,7 @@ class StaffRoleSerializer(BaseModelSerializer):
 
 
 class GroupRoleSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = GroupRole
         fields = "__all__"
 
@@ -259,7 +254,7 @@ class GroupRoleSerializer(BaseModelSerializer):
 
 
 class RolePermissionSerializer(BaseModelSerializer):
-    class Meta:
+    class Meta(BaseModelSerializer.Meta):
         model = RolePermission
         fields = "__all__"
 
