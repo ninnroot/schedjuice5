@@ -43,6 +43,9 @@ class AssignmentSerializer(BaseModelSerializer):
         # these are the attrs we can update after published.
         valid_attrs_to_update = ['name', 'instruction', 'is_published']
         
+        if self.validated_data.get("is_published"):
+            self.instance.is_first_published = True
+        
         if instance.is_first_published and instance.is_published:
             # filtering not_allow_attrs and allow_attrs from request data.
             not_allow_attrs = list(filter(lambda attr: attr not in valid_attrs_to_update, list(validated_data.keys())))
@@ -59,11 +62,12 @@ class AssignmentSerializer(BaseModelSerializer):
         
         return super().update(instance, validated_data)
     
-    def save(self, **kwargs):
+    def create(self, validated_data):
         # if the assignment is published, is_first_published attr should be also True.
-        if self.validated_data.get("is_published"):
-            self.instance.is_first_published = True
-        return super().save(**kwargs)
+        if validated_data.get("is_published"):
+            validated_data["is_first_published"] = True
+            return Assignment.objects.create(**validated_data)
+        return super().create(validated_data)
         
     def validate_instruction(self, value):
         # check for base64encoded string or not
