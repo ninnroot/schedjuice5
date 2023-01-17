@@ -4,13 +4,28 @@ from rest_framework import serializers
 from .error_messages_format import error_messages
 
 
+class BaseListSerializer(serializers.ListSerializer):
+    def validate(self, attrs):
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        objs = [self.context["view"].model(**i) for i in validated_data]
+        return self.context["view"].model.objects.bulk_create(objs)
+
+
 class BaseModelSerializer(FlexFieldsModelSerializer):
     def __init__(self, *args, **kwargs):
         read_only_fields = kwargs.pop("read_only_fields", None)
         excluded_fields = kwargs.pop("excluded_fields", None)
-        super(BaseModelSerializer, self).__init__(*args, **kwargs)
-        for field in self.fields: # iterate over the serializer fields
+        super().__init__(*args, **kwargs)
+        for field in self.fields:  # iterate over the serializer fields
             self.fields[field].error_messages = error_messages
+
+    class Meta:
+        list_serializer_class = BaseListSerializer
+
+    def validate(self, attrs):
+        return super().validate(attrs)
 
 
 class BaseSerializer(serializers.Serializer):

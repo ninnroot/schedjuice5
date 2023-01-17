@@ -10,9 +10,8 @@ from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
 from schedjuice5.serializers import FilterParamSerializer
-from schedjuice5.swagger_serializers import FilterParamsSerializer
 from schedjuice5.swagger_query_params import *
-
+from schedjuice5.swagger_serializers import FilterParamsSerializer
 
 
 class BaseView(APIView, CustomPagination):
@@ -41,7 +40,13 @@ class BaseView(APIView, CustomPagination):
 
     # querying data
     def get_queryset(
-        self, request: Request, filter_params=None, exclude_params={}, fields=None, sorts=None, expand=None
+        self,
+        request: Request,
+        filter_params=None,
+        exclude_params={},
+        fields=None,
+        sorts=None,
+        expand=None,
     ):
         if filter_params is None:
             filter_params = {}
@@ -53,7 +58,8 @@ class BaseView(APIView, CustomPagination):
             expand = []
         # query from the database
         queryset = (
-            self.model.objects.filter(**filter_params).exclude(**exclude_params)
+            self.model.objects.filter(**filter_params)
+            .exclude(**exclude_params)
             .prefetch_related(*self.related_fields)
             .all()
             .order_by(*sorts)
@@ -114,10 +120,10 @@ class BaseView(APIView, CustomPagination):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
-        kwargs.setdefault("context", self.get_serializer_context())
+        kwargs["context"] = self.get_serializer_context()
         return serializer_class(*args, **kwargs)
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, *args, **kwargs):
         return self.serializer
 
     def get_serializer_context(self):
@@ -145,7 +151,13 @@ class BaseListView(BaseView):
     metadata_class = CustomMetadata
 
     @swagger_auto_schema(
-        manual_parameters=[size_param, page_param, sorts_param, fields_param, expand_param]
+        manual_parameters=[
+            size_param,
+            page_param,
+            sorts_param,
+            fields_param,
+            expand_param,
+        ]
     )
     def get(self, request: Request):
         self.description = self.model.__doc__
@@ -178,6 +190,38 @@ class BaseListView(BaseView):
 
     # create
     def post(self, request: Request):
+        if request.query_params.get("bulk", None):
+            objs = request.data.get("objects", None)
+
+            if objs is None:
+                return self.send_response(
+                    True, "Missing 'objects' parameter in request body.", {}
+                )
+            serialized_data = self.get_serializer(
+                data=request.data["objects"], many=True
+            )
+            # for i in serialized_data:
+            #     if i.is_valid():
+            #         res_list.append(i.data)
+            #     else:
+            #         all_valid = False
+            #         res_list.append(i.errors)
+
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return self.send_response(
+                    False,
+                    "bulk-created",
+                    {"data": serialized_data.data},
+                    status=status.HTTP_201_CREATED,
+                )
+
+            return self.send_response(
+                True,
+                "creation failed because of some errors. 0 objects were created.",
+                {"details": serialized_data.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         serialized_data = self.get_serializer(
             data=request.data,
@@ -216,9 +260,7 @@ class BaseDetailsView(BaseView):
         )
 
     # get-one
-    @swagger_auto_schema(
-        manual_parameters=[fields_param, expand_param]
-    )
+    @swagger_auto_schema(manual_parameters=[fields_param, expand_param])
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
 
@@ -286,7 +328,7 @@ class BaseSearchView(BaseView):
         filter_params = request.data.get("filter_params", {})
         validated_filter_params = self.validate_body_params(filter_params)
         return self.build_body_params(validated_filter_params)
-    
+
     # get exclude_params from the request
     def get_exclude_params(self, request: Request):
         exclude_params = request.data.get("exclude_params", {})
@@ -296,7 +338,13 @@ class BaseSearchView(BaseView):
     # search
     @swagger_auto_schema(
         request_body=FilterParamsSerializer,
-        manual_parameters=[size_param, page_param, sorts_param, fields_param, expand_param],
+        manual_parameters=[
+            size_param,
+            page_param,
+            sorts_param,
+            fields_param,
+            expand_param,
+        ],
     )
     def post(self, request: Request):
 

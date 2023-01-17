@@ -21,7 +21,7 @@ class Group(BaseModel):
         on_delete=models.SET_NULL,
         null=True,
         help_text="The parent group of the current group.",
-        related_name="sub_groups"
+        related_name="sub_groups",
     )
 
     objects = CustomCTEManager()
@@ -41,9 +41,9 @@ class Department(BaseModel):
         on_delete=models.SET_NULL,
         null=True,
         help_text="The parent department of the current department.",
-        related_name="sub_departments"
+        related_name="sub_departments",
     )
-    
+
     objects = CustomCTEManager()
 
 
@@ -82,8 +82,12 @@ class StaffGroup(BaseModel):
     A bridge table for Staff and Group models.
     """
 
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="staffs_groups")
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="staffs_groups")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="staffs_groups"
+    )
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="staffs_groups"
+    )
 
     class Meta:
         unique_together = ("staff", "group")
@@ -96,21 +100,25 @@ class StaffDepartment(BaseModel):
     within individual Departments.
     """
 
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="staffs_depts")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="staffs_depts")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="staffs_depts"
+    )
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, related_name="staffs_depts"
+    )
     job = models.ForeignKey(
         Job,
         on_delete=models.PROTECT,
         help_text="The job that the Staff does in this particular relation.",
-        related_name="staffs_depts"
+        related_name="staffs_departments",
     )
     is_under = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
         null=True,
         help_text="The Staff that the current staff is under the authority of.",
-        related_name="sub_staffs_depts"
-    ) 
+        related_name="sub_staffs_departments",
+    )
 
     class Meta:
         unique_together = ("staff", "department")
@@ -121,9 +129,15 @@ class StaffCourse(BaseModel):
     A bridge table for Staff and Course models. In each relation, a unique Job can be assigned.
     """
 
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="staffs_courses")
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="staffs_courses")
-    job = models.ForeignKey(Job, on_delete=models.PROTECT, related_name="staffs_courses")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="staffs_courses"
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="staffs_courses"
+    )
+    job = models.ForeignKey(
+        Job, on_delete=models.PROTECT, related_name="staffs_courses"
+    )
 
     class Meta:
         unique_together = ("staff", "course")
@@ -134,8 +148,12 @@ class StaffEvent(BaseModel):
     A bridge table for Staff and Event models. In each relation, a unique Job can be assigned.
     """
 
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="staffs_events")
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="staffs_events")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="staffs_events"
+    )
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="staffs_events"
+    )
     job = models.ForeignKey(Job, on_delete=models.PROTECT, related_name="staffs_events")
 
     class Meta:
@@ -147,20 +165,28 @@ class StaffRole(BaseModel):
     A bridge table for Staff and Role models.
     """
 
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="staffs_roles")
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="staffs_roles")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="staffs_roles"
+    )
+    role = models.ForeignKey(
+        Role, on_delete=models.CASCADE, related_name="staffs_roles"
+    )
 
     class Meta:
         unique_together = ("staff", "role")
-        
- 
+
+
 class StudentCourse(BaseModel):
     """
     A bridge table for Student and Course models.
     """
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="students_courses")
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="students_courses")
+    student = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name="students_courses"
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="students_courses"
+    )
 
     class Meta:
         unique_together = ("student", "course")
@@ -171,8 +197,12 @@ class GroupRole(BaseModel):
     A bridge table for Group and Role models.
     """
 
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="groups_roles")
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="groups_roles")
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="groups_roles"
+    )
+    role = models.ForeignKey(
+        Role, on_delete=models.CASCADE, related_name="groups_roles"
+    )
 
     class Meta:
         unique_together = ("group", "role")
@@ -183,8 +213,12 @@ class RolePermission(BaseModel):
     A bridge table for Role and Permission models.
     """
 
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="roles_permissions")
-    permission = models.ForeignKey(Permission, on_delete=models.CASCADE, related_name="roles_permissions")
+    role = models.ForeignKey(
+        Role, on_delete=models.CASCADE, related_name="roles_permissions"
+    )
+    permission = models.ForeignKey(
+        Permission, on_delete=models.CASCADE, related_name="roles_permissions"
+    )
 
     class Meta:
         unique_together = ("role", "permission")
