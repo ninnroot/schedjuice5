@@ -75,8 +75,6 @@ class RequestUpdateEmailView(BaseView):
         serializer.is_valid(raise_exception=True)
         # user = request.user.account
         user = Account.objects.get(pk=1)  # this is for testing user
-        print(user.id)
-        print(serializer.data.get("email"))
 
         # temporary storing for user's new email
         TempEmail.objects.create(account=user, email=serializer.data.get("email"))
