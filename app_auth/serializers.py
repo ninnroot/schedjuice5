@@ -40,6 +40,14 @@ class AccountSerializer(BaseModelSerializer):
 
         return user
 
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+
+        if password:
+            instance.set_password(password)
+            instance.save()
+        return super().update(instance, validated_data)
+
 
 class LoginSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -49,8 +57,6 @@ class LoginSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        print(data)
-        print(self.user)
         if hasattr(self.user, "student"):
             data["user_type"] = "student"
             data["student_id"] = self.user.student.id
