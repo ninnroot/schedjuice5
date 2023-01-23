@@ -23,6 +23,11 @@ class BaseView(APIView, CustomPagination):
     model = None
     serializer = None
 
+    # attributes for changing the behaviour of the serializer
+    sorts = []
+    expand = []
+    fields = []
+
     # customizing the response format
     renderer_classes = [CustomRenderer, BrowsableAPIRenderer]
 
@@ -168,16 +173,16 @@ class BaseListView(BaseView):
 
         sorts = []
         try:
-            sorts = self.get_sort_param(request)
-            expand = self.get_expand_param(request)
-            fields = self.get_field_filter_param(request)
+            self.sorts = self.get_sort_param(request)
+            self.expand = self.get_expand_param(request)
+            self.fields = self.get_field_filter_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
         serialized_data = self.get_queryset(
-            request, sorts=sorts, expand=expand, fields=fields
+            request, sorts=self.sorts, expand=self.expand, fields=self.fields
         )
 
         # return the serialized queryset in a standardized manner
@@ -264,23 +269,31 @@ class BaseDetailsView(BaseView):
     def get(self, request: Request, obj_id: int):
         self.description = self.model.__doc__
 
-        fields = self.get_field_filter_param(request)
-        expand = self.get_expand_param(request)
+        self.fields = self.get_field_filter_param(request)
+        self.expand = self.get_expand_param(request)
 
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.get_serializer(obj, expand=expand, fields=fields)
+        serialized_data = self.get_serializer(
+            obj, expand=self.expand, fields=self.fields
+        )
         return self.send_response(
             False, "success", {"data": serialized_data.data}, status=status.HTTP_200_OK
         )
 
     # update
     def put(self, request: Request, obj_id: int):
+
+        self.fields = self.get_field_filter_param(request)
+        self.expand = self.get_expand_param(request)
+
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.get_serializer(obj, data=request.data, partial=True)
+        serialized_data = self.get_serializer(
+            obj, data=request.data, partial=True, expand=self.expand, fields=self.fields
+        )
         serialized_data.is_valid(raise_exception=True)
         serialized_data.save()
         return self.send_response(
@@ -288,10 +301,11 @@ class BaseDetailsView(BaseView):
         )
 
     def delete(self, request: Request, obj_id: int):
+        self.fields = self.get_field_filter_param(request)
         obj = self._get_object(obj_id)
         if obj is None:
             return self._send_not_found(obj_id)
-        serialized_data = self.get_serializer(obj)
+        serialized_data = self.get_serializer(obj, fields=self.fields)
         obj.delete()
         return self.send_response(
             False, "deleted", {"data": serialized_data.data}, status=status.HTTP_200_OK
@@ -350,18 +364,18 @@ class BaseSearchView(BaseView):
 
         filter_params = {}
         try:
-            fields = self.get_field_filter_param(request)
+            self.fields = self.get_field_filter_param(request)
             filter_params = self.get_filter_params(request)
             exclude_params = self.get_exclude_params(request)
-            sorts = self.get_sort_param(request)
-            expand = self.get_expand_param(request)
+            self.sorts = self.get_sort_param(request)
+            self.expand = self.get_expand_param(request)
         except BadRequest as e:
             return self.send_response(
                 True, "bad_request", {"details": str(e)}, status=400
             )
 
         serialized_data = self.get_queryset(
-            request, filter_params, exclude_params, fields, sorts, expand
+            request, filter_params, exclude_params, self.fields, self.sorts, self.expand
         )
 
         # return the serialized queryset in a standardized manner

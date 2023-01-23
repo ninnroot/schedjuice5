@@ -72,7 +72,14 @@ class LoginSerializer(TokenObtainPairSerializer):
             data["guardian_id"] = self.user.guardian.id
             data["account_id"] = self.user.id
             data["user"] = GuardianSerializer(self.user.guardian).data
-
+        else:
+            raise serializers.ValidationError(
+                {
+                    "non_field_errors": [
+                        "This account has no association with any type of user."
+                    ]
+                }
+            )
         return data
 
 
