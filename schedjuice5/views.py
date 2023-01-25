@@ -6,6 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.views import APIView, Request, Response, status
 
+from app_management import permissions
 from schedjuice5.metadata import CustomMetadata
 from schedjuice5.pagination import CustomPagination
 from schedjuice5.renderer import CustomRenderer
@@ -19,7 +20,7 @@ class BaseView(APIView, CustomPagination):
     description = ""
 
     authentication_classes = []
-    permission_classes = []
+    permission_classes = [permissions.Admin]
     model = None
     serializer = None
 
@@ -165,6 +166,7 @@ class BaseListView(BaseView):
         ]
     )
     def get(self, request: Request):
+
         self.description = self.model.__doc__
 
         # if meta query_param is present, return metadata of the current endpoint
@@ -267,6 +269,7 @@ class BaseDetailsView(BaseView):
     # get-one
     @swagger_auto_schema(manual_parameters=[fields_param, expand_param])
     def get(self, request: Request, obj_id: int):
+        self.check_object_permissions(request, self._get_object(obj_id))
         self.description = self.model.__doc__
 
         self.fields = self.get_field_filter_param(request)

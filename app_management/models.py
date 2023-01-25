@@ -65,6 +65,7 @@ class Role(BaseModel):
     """
 
     name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
+    description = models.CharField(max_length=512, default=None, null=True)
 
 
 class Permission(BaseModel):

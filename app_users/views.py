@@ -1,3 +1,4 @@
+from app_management import permissions
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from .models import Staff

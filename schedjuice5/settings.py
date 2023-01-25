@@ -80,6 +80,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "schedjuice5.middlewares.QueryLoggerMiddleware",
 ]
 
 ROOT_URLCONF = "schedjuice5.urls"

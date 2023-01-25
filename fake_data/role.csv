@@ -1,11 +1,12 @@
-name
-role1
-role2
-role3
-role4
-role5
-role6
-role7
-role8
-role9
-role10
+name,description
+role1,
+role2,
+role3,
+role4,
+role5,
+role6,
+role7,
+role8,
+role9,
+role10,
+coordinator,coordinator role or something
