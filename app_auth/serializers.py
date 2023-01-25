@@ -35,6 +35,8 @@ class AccountSerializer(BaseModelSerializer):
         password = validated_data.pop("password")
         user = super().create(validated_data)
         user.set_password(password)
+        user.is_active = True
+        user.is_staff = True
 
         user.save()
 
