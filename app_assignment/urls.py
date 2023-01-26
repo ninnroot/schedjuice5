@@ -11,12 +11,12 @@ urlpatterns = [
         name="assignment-details",
     ),
     
-    path("asgnt-attachments/", views.AttachmentListView.as_view(), name="attachment-list"),
-    path("asgnt-attachments/search", views.AttachmentSearchView.as_view(), name="attachment-search"),
+    path("asgnt-attachments/", views.AttachmentListView.as_view(), name="asgnt-attachment-list"),
+    path("asgnt-attachments/search", views.AttachmentSearchView.as_view(), name="asgnt-attachment-search"),
     path(
         "asgnt-attachments/<int:obj_id>",
         views.AttachmentDetailsView.as_view(),
-        name="attachment-details",
+        name="asgnt-attachment-details",
     ),
     
     path("submissions/", views.SubmissionListView.as_view(), name="submissions-list"),

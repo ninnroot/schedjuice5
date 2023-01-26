@@ -36,7 +36,7 @@ class AssignmentSerializer(BaseModelSerializer):
     expandable_fields = {
         "staff": ("app_users.serializers.StaffSerializer",),
         "submission_set": ("app_assignment.serializers.SubmissionSerializer", {"many": True},),
-        "attachment_set": ("app_assignment.serializers.AttachmentSerializer", {"many": True},),
+        "attachment_set": ("app_assignment.serializers.AssignmentAttachmentSerializer", {"many": True},),
     }
     
     def update(self, instance, validated_data):
@@ -83,9 +83,9 @@ class AssignmentSerializer(BaseModelSerializer):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
         return value
-        
-        
-class AttachmentSerializer(BaseModelSerializer):
+
+    
+class AssignmentAttachmentSerializer(BaseModelSerializer):
     class Meta:
         model = Attachment
         fields = "__all__"
