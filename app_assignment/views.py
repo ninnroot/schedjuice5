@@ -26,19 +26,19 @@ class AssignmentSearchView(BaseSearchView):
 class AttachmentListView(BaseListView):
     name = "Attachment list view"
     model = Attachment
-    serializer = AttachmentSerializer
+    serializer = AssignmentAttachmentSerializer
 
 
 class AttachmentDetailsView(BaseDetailsView):
     name = "Attachment details view"
     model = Attachment
-    serializer = AttachmentSerializer
+    serializer = AssignmentAttachmentSerializer
 
 
 class AttachmentSearchView(BaseSearchView):
     name = "Attachment search view"
     model = Attachment
-    serializer = AttachmentSerializer
+    serializer = AssignmentAttachmentSerializer
     
     
 # ------------ Submission Section ------------
