@@ -1,7 +1,9 @@
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
+
 from app_management import permissions
 from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
 
-from .models import Staff
 from .serializers import *
 
 
@@ -67,6 +69,8 @@ class StaffListView(BaseListView):
     name = "Staff list view"
     model = Staff
     serializer = StaffSerializer
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsAuthenticated, permissions.Admin, permissions.Director]
 
 
 class StaffDetailsView(BaseDetailsView):

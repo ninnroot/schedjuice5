@@ -34,6 +34,18 @@ class BaseView(APIView, CustomPagination):
 
     related_fields = []
 
+    def _send_not_found(self, obj_id: int):
+        return self.send_response(
+            True,
+            "not_found",
+            {"details": f"{str(self.model)} with id {obj_id} does not exist."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    def _get_object(self, obj_id: int):
+        obj = self.model.objects.filter(id=obj_id).first()
+        return obj
+
     # sending metadata
     def send_metadata(self, request: Request):
         if not hasattr(self, "metadata_class"):
@@ -253,18 +265,6 @@ class BaseListView(BaseView):
 class BaseDetailsView(BaseView):
     name = "Base details view"
     metadata_class = CustomMetadata
-
-    def _get_object(self, obj_id: int):
-        obj = self.model.objects.filter(id=obj_id).first()
-        return obj
-
-    def _send_not_found(self, obj_id: int):
-        return self.send_response(
-            True,
-            "not_found",
-            {"details": f"{str(self.model)} with id {obj_id} does not exist."},
-            status=status.HTTP_404_NOT_FOUND,
-        )
 
     # get-one
     @swagger_auto_schema(manual_parameters=[fields_param, expand_param])

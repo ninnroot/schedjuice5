@@ -16,9 +16,11 @@ class CustomPagination(PageNumberPagination):
             return self.model.objects.count()
         return super().get_page_size(request)
 
+    #
     def get_count_per_page(self):
         return len(list(self.page))
 
+    #
     def get_total_pages(self):
         return math.ceil(self.page.paginator.count / self.get_page_size(self.request))
 

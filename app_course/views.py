@@ -66,6 +66,11 @@ class EventListView(BaseListView):
     name = "Event list view"
     model = Event
     serializer = EventSerializer
+    related_fields = [
+        "staffs_events__staff",
+        "staffs_events__event",
+        "staffs_events__job",
+    ]
 
 
 class EventDetailsView(BaseDetailsView):

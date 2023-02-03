@@ -17,6 +17,18 @@ class CustomBasePermission(permissions.BasePermission):
 
 class Admin(CustomBasePermission):
     def has_permission(self, request, view):
+        print(request.user)
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == "DELETE" and obj.id == request.user.id:
+            return False
+        return True
+
+
+class Director(CustomBasePermission):
+    def has_permission(self, request, view):
+        print(request.user)
         return True
 
     def has_object_permission(self, request, view, obj):

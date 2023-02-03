@@ -34,7 +34,6 @@ class StaffSerializer(BaseModelSerializer):
 
     expandable_fields = {
         "account": ("app_auth.serializers.AccountSerializer"),
-        "phone_number": ("app_users.serializers.PhoneNumberSerializer"),
         "staffs_groups": (
             "app_management.serializers.StaffGroupSerializer",
             {"many": True},
