@@ -150,32 +150,37 @@ class AvailabilityView(BaseView):
             course_events = (
                 Event.objects.filter(course__id=course.id).order_by("date").all()
             )
-            start_date, end_date = course_events.first().date, course_events.last().date
-            start_time = course_events.order_by("time_from").first().time_from
-            end_time = course_events.order_by("time_to").last().time_to
-
-            event_subset = (
-                Event.objects.exclude(id__in=[i.id for i in course_events])
-                .filter(date__gte=start_date, date__lte=end_date)
-                .exclude(Q(time_from__gte=end_time) | Q(time_to__lte=start_time))
-                .all()
-            )
-            events_grouped_by_date = {}
-
-            for i in event_subset:
-                if i.date not in events_grouped_by_date:
-                    events_grouped_by_date[i.date] = [i]
-                else:
-
-                    events_grouped_by_date[i.date].append(i)
-
             colliding_events = [i for i in course_events]
-            for i in course_events:
-                if i.date not in events_grouped_by_date:
-                    continue
-                for j in events_grouped_by_date[i.date]:
-                    if not (i.time_from >= j.time_to or i.time_to <= j.time_from):
-                        colliding_events.append(j)
+
+            if len(course_events) != 0:
+                start_date, end_date = (
+                    course_events.first().date,
+                    course_events.last().date,
+                )
+                start_time = course_events.order_by("time_from").first().time_from
+                end_time = course_events.order_by("time_to").last().time_to
+
+                event_subset = (
+                    Event.objects.exclude(id__in=[i.id for i in course_events])
+                    .filter(date__gte=start_date, date__lte=end_date)
+                    .exclude(Q(time_from__gte=end_time) | Q(time_to__lte=start_time))
+                    .all()
+                )
+                events_grouped_by_date = {}
+
+                for i in event_subset:
+                    if i.date not in events_grouped_by_date:
+                        events_grouped_by_date[i.date] = [i]
+                    else:
+
+                        events_grouped_by_date[i.date].append(i)
+
+                for i in course_events:
+                    if i.date not in events_grouped_by_date:
+                        continue
+                    for j in events_grouped_by_date[i.date]:
+                        if not (i.time_from >= j.time_to or i.time_to <= j.time_from):
+                            colliding_events.append(j)
 
             free_staffs = (
                 Staff.objects.exclude(
