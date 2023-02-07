@@ -69,8 +69,8 @@ class StaffListView(BaseListView):
     name = "Staff list view"
     model = Staff
     serializer = StaffSerializer
-    authentication_classes = [JWTStatelessUserAuthentication]
-    permission_classes = [IsAuthenticated, permissions.Admin, permissions.Director]
+    # authentication_classes = [JWTStatelessUserAuthentication]
+    # permission_classes = [IsAuthenticated, permissions.Admin, permissions.Director]
 
 
 class StaffDetailsView(BaseDetailsView):
