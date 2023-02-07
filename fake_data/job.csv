@@ -1,7 +1,7 @@
-name,credit_per_session
-job1,8
-job2,7
-job3,10
+name,credit_per_session,code
+main teacher,8,academic-main_teacher
+assistant teacher,7,academic-assistant_teacher
+coordinator,10,academic-coordinator
 job4,8
 job5,4
 job6,1

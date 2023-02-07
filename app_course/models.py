@@ -17,24 +17,13 @@ class Category(BaseModel):
     description = models.TextField(default="...")
 
 
-class EventClassification(BaseModel):
-    """
-    Represents a type of Event.
-    """
-
-    name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
-    description = models.TextField(default="...")
-
-
 class Course(BaseModel):
     """
     One of the fundamental models in the API. Staff can be assigned and Students can be enrolled to a Course.
     A Course may belong to one and only one Category, and a Course can contain many Events.
     """
-    COURSE_TYPE = (
-        ('on_campus', 'On Campus'),
-        ('online', 'Online')
-    )
+
+    COURSE_TYPE = (("on_campus", "On Campus"), ("online", "Online"))
 
     name = models.CharField(
         max_length=256, validators=[englishAndSomeSpecialValidation], unique=True
@@ -52,9 +41,11 @@ class Course(BaseModel):
     color = models.CharField(
         max_length=50, default="#FA7070", validators=[colorCodeValidation]
     )
-    course_type = models.CharField(choices=COURSE_TYPE, default='online', max_length=10)
+    course_type = models.CharField(choices=COURSE_TYPE, default="online", max_length=10)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="courses"
+    )
 
     def save(self, *args, **kwargs):
         if self.start_date >= self.end_date:
@@ -71,18 +62,24 @@ class Event(BaseModel):
     the time and space resources that it has been assigned to.
     """
 
-    name = models.CharField(max_length=100, validators=[englishAndSomeSpecialValidation], default="T.Su Event")
+    event_types = [
+        ("lecture",) * 2,
+        ("holiday",) * 2,
+        ("exam",) * 2,
+        ("other",) * 2,
+    ]
+
+    name = models.CharField(
+        max_length=100,
+        validators=[englishAndSomeSpecialValidation],
+        default="T.Su Event",
+    )
     date = models.DateField(help_text="The date that the event falls onto.")
     time_from = models.TimeField(help_text="Starting time of the event.")
     time_to = models.TimeField(help_text="Ending time of the event.")
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="events")
-    classification = models.ForeignKey(
-        EventClassification,
-        on_delete=models.PROTECT,
-        help_text="The type of the event.",
-        related_name="events"
-    )
+    classification = models.CharField(max_length=128, choices=event_types)
 
     def save(self, *args, **kwargs):
         if self.time_to <= self.time_from:
@@ -99,8 +96,12 @@ class EventVenue(BaseModel):
     The bridge table for the Event and Venue models.
     """
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="events_venues")
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="events_venues")
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="events_venues"
+    )
+    venue = models.ForeignKey(
+        Venue, on_delete=models.CASCADE, related_name="events_venues"
+    )
 
 
 class Calendar(BaseModel):

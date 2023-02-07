@@ -13,14 +13,6 @@ class CategorySerializer(BaseModelSerializer):
     }
 
 
-class EventClassificationSerializer(BaseModelSerializer):
-    class Meta(BaseModelSerializer.Meta):
-        model = EventClassification
-        fields = "__all__"
-
-    expandable_fields = {}
-
-
 class CourseSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Course

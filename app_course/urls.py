@@ -12,21 +12,6 @@ urlpatterns = [
     path(
         "categories/search/", views.CategorySearchView.as_view(), name="category_search"
     ),
-    path(
-        "eventclassifications/",
-        views.EventClassificationListView.as_view(),
-        name="eventclassification_list",
-    ),
-    path(
-        "eventclassifications/<int:obj_id>/",
-        views.EventClassificationDetailsView.as_view(),
-        name="eventclassification_details",
-    ),
-    path(
-        "eventclassifications/search/",
-        views.EventClassificationSearchView.as_view(),
-        name="eventclassification_search",
-    ),
     path("courses/", views.CourseListView.as_view(), name="course_list"),
     path(
         "courses/<int:obj_id>/",

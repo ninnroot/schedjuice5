@@ -2,6 +2,8 @@ import csv
 
 from django.core.management import BaseCommand, call_command
 
+from app_announcement.models import *
+from app_assignment.models import *
 from app_auth.models import *
 from app_campus.models import *
 from app_course.models import *
@@ -10,8 +12,6 @@ from app_finance.models import *
 from app_management.models import *
 from app_users.models import *
 from app_utils.models import *
-from app_announcement.models import *
-from app_assignment.models import *
 
 
 class Command(BaseCommand):
@@ -31,7 +31,6 @@ class Command(BaseCommand):
         (Venue, "venue.csv"),
         # app_course
         (Category, "category.csv"),
-        (EventClassification, "event-classification.csv"),
         (Course, "course.csv"),
         (Event, "event.csv"),
         (EventVenue, "event-venue.csv"),

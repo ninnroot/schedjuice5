@@ -23,25 +23,6 @@ class CategorySearchView(BaseSearchView):
     serializer = CategorySerializer
 
 
-# ------------ EventClassification Section ------------
-class EventClassificationListView(BaseListView):
-    name = "EventClassification list view"
-    model = EventClassification
-    serializer = EventClassificationSerializer
-
-
-class EventClassificationDetailsView(BaseDetailsView):
-    name = "EventClassification details view"
-    model = EventClassification
-    serializer = EventClassificationSerializer
-
-
-class EventClassificationSearchView(BaseSearchView):
-    name = "EventClassification search view"
-    model = EventClassification
-    serializer = EventClassificationSerializer
-
-
 # ------------ Course Section ------------
 class CourseListView(BaseListView):
     name = "Course list view"

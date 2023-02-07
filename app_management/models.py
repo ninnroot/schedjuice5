@@ -54,6 +54,11 @@ class Job(BaseModel):
 
     name = models.CharField(max_length=256, validators=[nameValidation], unique=True)
     description = models.TextField(default="...")
+    code = models.CharField(
+        max_length=256,
+        help_text="Some 'system jobs' are hard-coded in the frontend and are referenced by this code.",
+        unique=True,
+    )
     credit_per_session = models.PositiveIntegerField(
         help_text="The monetary value the job generates for the assigned Staff per assigned Event."
     )
