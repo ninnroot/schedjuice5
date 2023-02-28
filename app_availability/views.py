@@ -64,6 +64,27 @@ class AvailabilityView(BaseView):
                     ]
                 )
 
+            # temporary fix :)
+            if request.query_params.get("give-me-all"):
+                all_events = Event.objects.all().order_by(*self.sorts)
+                serialized_data = self.get_serializer(
+                    self.paginate_queryset(all_events, request),
+                    many=True,
+                    expand=self.expand,
+                    fields=self.fields,
+                )
+                for i in serialized_data.data:
+                    if i["id"] in not_free:
+                        i["is_free"] = False
+                    else:
+                        i["is_free"] = True
+
+                return self.send_response(
+                    False,
+                    "all_good",
+                    {**self.get_paginated_response(), "data": serialized_data.data},
+                )
+
             # 'free_events' set is just the compliment of the 'not_free' set.
             free_events = (
                 Event.objects.exclude(id__in=not_free).all().order_by(*self.sorts)
@@ -75,6 +96,7 @@ class AvailabilityView(BaseView):
                 expand=self.expand,
                 fields=self.fields,
             )
+
             return self.send_response(
                 False,
                 "all_good",

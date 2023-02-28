@@ -1,7 +1,9 @@
 from typing import Collection, TypedDict
 
 from rest_framework import permissions
-from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
+
+from app_auth.models import Account
+from app_users.models import Guardian, Staff, Student
 
 
 class Message(TypedDict):
@@ -15,23 +17,39 @@ class CustomBasePermission(permissions.BasePermission):
         self.message["details"] = message
 
 
-class Admin(CustomBasePermission):
+class ReadOnly(CustomBasePermission):
     def has_permission(self, request, view):
-        print(request.user)
-        return True
+        return request.method in permissions.SAFE_METHODS
+
+
+class IsAdmin(CustomBasePermission):
+    def has_permission(self, request, view):
+        if hasattr(request.user, "staff"):
+            if "admin" in request.user.staff.roles:
+                return True
+
+        return False
 
     def has_object_permission(self, request, view, obj):
-        if request.method == "DELETE" and obj.id == request.user.id:
-            return False
+        if hasattr(request.user, "staff"):
+            if "admin" in request.user.staff.roles:
+                return True
+        return False
+
+
+def belongs_to(user_id: int, model, obj_id):
+    x = None
+    if model is Staff:
+        x = model.objects.filter(account_id=user_id).first().id
+    if x == obj_id:
         return True
+    return False
 
 
-class Director(CustomBasePermission):
-    def has_permission(self, request, view):
-        print(request.user)
-        return True
-
+class IsRelated(CustomBasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method == "DELETE" and obj.id == request.user.id:
-            return False
-        return True
+
+        if belongs_to(request.user.id, view.model, obj.id):
+            return True
+        self.set_message("nigger you can't read.")
+        return False

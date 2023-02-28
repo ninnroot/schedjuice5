@@ -5,6 +5,7 @@ from django.core.exceptions import BadRequest
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.views import APIView, Request, Response, status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from app_management import permissions
 from schedjuice5.metadata import CustomMetadata
@@ -20,7 +21,7 @@ class BaseView(APIView, CustomPagination):
     description = ""
 
     authentication_classes = []
-    permission_classes = [permissions.Admin]
+    permission_classes = []
     model = None
     serializer = None
 
@@ -167,6 +168,7 @@ class BaseListView(BaseView):
 
     name = "Base list view"
     metadata_class = CustomMetadata
+    authentication_classes = [JWTAuthentication]
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -269,15 +271,15 @@ class BaseDetailsView(BaseView):
     # get-one
     @swagger_auto_schema(manual_parameters=[fields_param, expand_param])
     def get(self, request: Request, obj_id: int):
+        obj = self._get_object(obj_id)
+        if obj is None:
+            return self._send_not_found(obj_id)
         self.check_object_permissions(request, self._get_object(obj_id))
         self.description = self.model.__doc__
 
         self.fields = self.get_field_filter_param(request)
         self.expand = self.get_expand_param(request)
 
-        obj = self._get_object(obj_id)
-        if obj is None:
-            return self._send_not_found(obj_id)
         serialized_data = self.get_serializer(
             obj, expand=self.expand, fields=self.fields
         )
