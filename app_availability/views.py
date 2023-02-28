@@ -65,8 +65,20 @@ class AvailabilityView(BaseView):
                 )
 
             # temporary fix :)
-            if request.query_params.get("give-me-all"):
-                all_events = Event.objects.all().order_by(*self.sorts)
+            course_id = request.query_params.get("course")
+            if course_id:
+                course = Course.objects.filter(pk=course_id).first()
+                if not course:
+                    return self.send_response(
+                        True,
+                        "not_found",
+                        {"details": f"Course with id {obj_id} does not exist."},
+                    )
+                all_events = (
+                    Event.objects.filter(course_id=course_id)
+                    .all()
+                    .order_by(*self.sorts)
+                )
                 serialized_data = self.get_serializer(
                     self.paginate_queryset(all_events, request),
                     many=True,
