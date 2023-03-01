@@ -86,3 +86,5 @@ https://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hie
 ### nested serializer circular problem (solved!)
 https://github.com/rsinger86/drf-flex-fields#reference-serializer-as-a-string-lazy-evaluation-
 
+## Connecting to S3
+https://simpleisbetterthancomplex.com/tutorial/2017/08/01/how-to-setup-amazon-s3-in-a-django-project.html
