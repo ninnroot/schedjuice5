@@ -168,7 +168,7 @@ class BaseListView(BaseView):
 
     name = "Base list view"
     metadata_class = CustomMetadata
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
 
     @swagger_auto_schema(
         manual_parameters=[

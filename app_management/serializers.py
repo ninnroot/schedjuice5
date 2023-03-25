@@ -218,15 +218,16 @@ class StaffEventSerializer(BaseModelSerializer):
 
     def validate(self, attrs):
         # TODO: check event status and filter further
-        same_day_events = StaffEvent.objects.filter(
-            date=attrs.event.date, staff=attrs.staff
-        ).all()
-        for i in same_day_events:
-            if not (
-                (attrs.time_from >= i.time_to and attrs.time_to >= i.time_to)
-                or (attrs.time_from <= i.time_from and attrs.time_to <= i.time_to)
-            ):
-                raise ValidationError(f"Event colliding with event ({i}).")
+        # print(attrs)
+        # same_day_events = StaffEvent.objects.filter(
+        #     date=attrs.date, staff=attrs.staff
+        # ).all()
+        # for i in same_day_events:
+        #     if not (
+        #         (attrs.time_from >= i.time_to and attrs.time_to >= i.time_to)
+        #         or (attrs.time_from <= i.time_from and attrs.time_to <= i.time_to)
+        #     ):
+        #         raise ValidationError(f"Event colliding with event ({i}).")
 
         return super().validate(attrs)
 

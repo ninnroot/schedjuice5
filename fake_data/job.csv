@@ -2,3 +2,24 @@ name,credit_per_session,code,is_deletable
 main teacher,8,academic-main_teacher,False
 assistant teacher,7,academic-assistant_teacher,False
 coordinator,10,academic-coordinator,False
+fakejob1,230,fakyjoby1,True
+fakejob2,230,fakyjoby2,True
+fakejob3,230,fakyjoby3,True
+fakejob4,230,fakyjoby4,True
+fakejob5,230,fakyjoby5,True
+fakejob6,230,fakyjoby6,True
+fakejob7,230,fakyjoby7,True
+fakejob8,230,fakyjoby8,True
+fakejob9,230,fakyjoby9,True
+fakejob10,230,fakyjoby10,True
+fakejob11,230,fakyjoby11,True
+fakejob12,230,fakyjoby12,True
+fakejob13,230,fakyjoby13,True
+fakejob14,230,fakyjoby14,True
+fakejob15,230,fakyjoby15,True
+fakejob16,230,fakyjoby16,True
+fakejob17,230,fakyjoby17,True
+fakejob18,230,fakyjoby18,True
+fakejob19,230,fakyjoby19,True
+fakejob20,230,fakyjoby20,True
+fakejob21,230,fakyjoby21,True
