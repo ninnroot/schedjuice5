@@ -219,7 +219,7 @@ class StaffEventSerializer(BaseModelSerializer):
     def validate(self, attrs):
         # TODO: check event status and filter further
         same_day_events = StaffEvent.objects.filter(
-            date=attrs.date, staff=attrs.staff
+            date=attrs.event.date, staff=attrs.staff
         ).all()
         for i in same_day_events:
             if not (
