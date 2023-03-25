@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework.exceptions import ValidationError
 
 from app_course.models import Course, Event
 from app_users.models import Staff, Student
@@ -62,6 +63,14 @@ class Job(BaseModel):
     credit_per_session = models.PositiveIntegerField(
         help_text="The monetary value the job generates for the assigned Staff per assigned Event."
     )
+    is_deletable = models.BooleanField(
+        default=True, help_text="Some jobs are used by the system and is non-deletable."
+    )
+
+    def delete(self, using=None, keep_parents=False):
+        if not self.is_deletable:
+            raise ValidationError({"is_deletable": "This job cannot be deleted"})
+        return super().delete(using, keep_parents)
 
 
 class Role(BaseModel):

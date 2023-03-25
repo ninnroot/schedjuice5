@@ -1,31 +1,4 @@
-name,credit_per_session,code
-main teacher,8,academic-main_teacher
-assistant teacher,7,academic-assistant_teacher
-coordinator,10,academic-coordinator
-job4,8,fake-job1
-job5,4,fake-job2
-job6,1,fake-job3
-job7,4,fake-job4
-job8,7,fake-job5
-job9,2,fake-job6
-job10,5,fake-job7
-job11,5,fake-job8
-job12,5,fake-job9
-job13,5,fake-job10
-job14,5,fake-job11
-job15,5,fake-job12
-job16,5,fake-job13
-job17,5,fake-job14
-job18,5,fake-job15
-job19,5,fake-job16
-job20,5,fake-job17
-job21,5,fake-job18
-job22,5,fake-job19
-job23,5,fake-job20
-job24,5,fake-job21
-job25,5,fake-job22
-job26,5,fake-job23
-job27,5,fake-job24
-job28,5,fake-job25
-job29,5,fake-job26
-job30,5,fake-job27
+name,credit_per_session,code,is_deletable
+main teacher,8,academic-main_teacher,False
+assistant teacher,7,academic-assistant_teacher,False
+coordinator,10,academic-coordinator,False
