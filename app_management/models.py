@@ -1,9 +1,9 @@
 from django.db import models
 from rest_framework.exceptions import ValidationError
+from utilitas.models import BaseModel
 
 from app_course.models import Course, Event
 from app_users.models import Staff, Student
-from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 from .managers import *

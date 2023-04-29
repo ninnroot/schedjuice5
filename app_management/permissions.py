@@ -51,5 +51,5 @@ class IsRelated(CustomBasePermission):
 
         if belongs_to(request.user.id, view.model, obj.id):
             return True
-        self.set_message("nigger you can't read.")
+        self.set_message("you can't read.")
         return False

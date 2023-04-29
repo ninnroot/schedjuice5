@@ -1,6 +1,7 @@
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.db import models
+from utilitas.models import BaseModel
 
 import schedjuice5.config as config
 from app_auth.models import Account
@@ -8,7 +9,6 @@ from app_utils.choices.careers import careers
 from app_utils.choices.country_codes import country_codes
 from app_utils.choices.dial_codes import dial_codes
 from app_utils.choices.regions import regions
-from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 

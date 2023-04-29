@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from utilitas.serializers import BaseModelSerializer, BaseSerializer
 
 from app_auth.models import Account
 from app_users.serializers import GuardianSerializer, StaffSerializer, StudentSerializer
-from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
 
 
 class AccountSerializer(BaseModelSerializer):

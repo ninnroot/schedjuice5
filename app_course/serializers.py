@@ -1,4 +1,4 @@
-from schedjuice5.serializers import BaseModelSerializer
+from utilitas.serializers import BaseModelSerializer
 
 from .models import *
 

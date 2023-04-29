@@ -1,4 +1,4 @@
-from schedjuice5.views import BaseView
+from utilitas.views import BaseView
 
 from .choices.careers import careers
 from .choices.country_codes import country_codes
@@ -47,7 +47,6 @@ class PostalCodeView(BaseView):
         }
 
     def get(self, request, postal_code=None):
-        print(postal_code)
         if postal_code is not None:
             for row in self.choices:
                 if row[3] == postal_code:

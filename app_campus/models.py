@@ -1,8 +1,8 @@
 from django.db import models
 from rest_framework.serializers import ValidationError
+from utilitas.models import BaseModel
 
 from app_utils.choices.country_codes import country_codes
-from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 
@@ -65,14 +65,14 @@ class Venue(BaseModel):
         on_delete=models.PROTECT,
         null=True,
         help_text="Type of the Venue.",
-        related_name="venues"
+        related_name="venues",
     )
     campus = models.ForeignKey(
         Campus,
         on_delete=models.CASCADE,
         null=True,
         help_text="The Campus that the Venue is located within.",
-        related_name="venues"
+        related_name="venues",
     )
 
     class Meta:

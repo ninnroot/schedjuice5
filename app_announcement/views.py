@@ -1,7 +1,8 @@
-from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
+from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from .models import *
 from .serializers import *
+
 
 # ------------- Announcement ------------- #
 class AnnouncementListView(BaseListView):
@@ -20,8 +21,8 @@ class AnnouncementSearchView(BaseSearchView):
     name = "Announcement search view"
     serializer = AnnouncementSerializer
     model = Announcement
-    
-    
+
+
 # -------------- Attachment --------------- #
 class AttachmentListView(BaseListView):
     name = "Attachment list view"

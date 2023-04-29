@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from app_management import permissions
-from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from .serializers import *
 

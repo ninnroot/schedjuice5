@@ -1,7 +1,7 @@
 from django.db import models
+from utilitas.models import BaseModel
 
 from app_users.models import Staff
-from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 

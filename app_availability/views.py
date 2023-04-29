@@ -1,12 +1,12 @@
 from django.core.exceptions import BadRequest
 from django.db.models import Q
 from rest_framework.views import Request
+from utilitas.views import BaseView
 
 from app_course.models import Course, Event
 from app_course.serializers import CourseSerializer, EventSerializer
 from app_users.models import Staff
 from app_users.serializers import StaffSerializer
-from schedjuice5.views import BaseView
 
 
 class AvailabilityView(BaseView):

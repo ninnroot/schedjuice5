@@ -4,16 +4,20 @@ from django.urls import reverse
 from django.utils.encoding import DjangoUnicodeDecodeError, smart_bytes, smart_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import exceptions, status
-from rest_framework.views import Request
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import Request
 from rest_framework_simplejwt.views import TokenObtainPairView
+from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView, BaseView
 
 from app_auth.authentication import CustomAuthentication, get_token
 from app_auth.models import Account, TempEmail
-from app_auth.serializers import AccountSerializer, RequestUpdateEmailSerializer, LoginSerializer
+from app_auth.serializers import (
+    AccountSerializer,
+    LoginSerializer,
+    RequestUpdateEmailSerializer,
+)
 from app_microsoft.mail import send_mail
 from app_users.serializers import GuardianSerializer, StaffSerializer, StudentSerializer
-from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView, BaseView
 
 
 # ------------ Account Section ------------
@@ -37,7 +41,6 @@ class AccountSearchView(BaseSearchView):
 
 class LoginView(TokenObtainPairView):
     name = "The login endpoint"
-    # authentication_classes = [CustomAuthentication]
     serializer_class = LoginSerializer
 
 

@@ -1,6 +1,5 @@
 from rest_framework.serializers import ValidationError
-
-from schedjuice5.serializers import BaseModelSerializer, BaseSerializer
+from utilitas.serializers import BaseModelSerializer, BaseSerializer
 
 from .models import *
 
@@ -62,7 +61,7 @@ class GroupSerializer(ValidateCyclicCTESerializer):
     }
 
 
-class NestedDepartmentSerilizer(BaseModelSerializer):
+class NestedDepartmentSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Department
         fields = "__all__"
@@ -72,9 +71,9 @@ class NestedDepartmentSerilizer(BaseModelSerializer):
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "parent": ("app_management.serializers.NestedDepartmentSerilizer",),
+        "parent": ("app_management.serializers.NestedDepartmentSerializer",),
         "sub_departments": (
-            "app_management.serializers.NestedDepartmentSerilizer",
+            "app_management.serializers.NestedDepartmentSerializer",
             {"many": True},
         ),
     }
@@ -90,9 +89,9 @@ class DepartmentSerializer(ValidateCyclicCTESerializer):
             "app_management.serializers.StaffDepartmentSerializer",
             {"many": True},
         ),
-        "parent": ("app_management.serializers.NestedDepartmentSerilizer",),
+        "parent": ("app_management.serializers.NestedDepartmentSerializer",),
         "sub_departments": (
-            "app_management.serializers.NestedDepartmentSerilizer",
+            "app_management.serializers.NestedDepartmentSerializer",
             {"many": True},
         ),
     }

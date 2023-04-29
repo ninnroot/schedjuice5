@@ -1,8 +1,8 @@
 from django.db import models
 from rest_framework.serializers import ValidationError
+from utilitas.models import BaseModel
 
 from app_campus.models import Venue
-from schedjuice5.models import BaseModel
 from schedjuice5.validators import *
 
 

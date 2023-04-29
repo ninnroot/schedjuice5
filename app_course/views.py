@@ -1,4 +1,4 @@
-from schedjuice5.views import BaseDetailsView, BaseListView, BaseSearchView
+from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from .models import *
 from .serializers import *
