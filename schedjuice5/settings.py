@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "debug_toolbar",
     "django_extensions",
+    "storages",
     # my apps
     "django_seed",
     "schedjuice5",
@@ -153,13 +154,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(os.getcwd(), "static")
+AWS_ACCESS_KEY_ID = config("S3KEY")
+AWS_SECRET_ACCESS_KEY = config("S3SECRET")
+AWS_STORAGE_BUCKET_NAME = "schedjuice5"
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+AWS_LOCATION = config("AWS_LOCATION")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, f"schedjuice5/{AWS_LOCATION}"),
+]
+STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "schedjuice5.storage_backends.MediaStorage"
 
 # Media files
-
+AWS_MEDIA_LOCATION = config("AWS_MEDIA_LOCATION")
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(os.getcwd(), "media")
+MEDIA_ROOT = os.path.join(os.getcwd(), AWS_MEDIA_LOCATION)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

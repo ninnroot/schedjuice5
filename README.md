@@ -88,3 +88,6 @@ https://github.com/rsinger86/drf-flex-fields#reference-serializer-as-a-string-la
 
 ## Connecting to S3
 https://simpleisbetterthancomplex.com/tutorial/2017/08/01/how-to-setup-amazon-s3-in-a-django-project.html
+
+## Hosting on Railway
+https://dev.to/osahenru/using-railway-app-to-deploy-your-django-project-3ah1
