@@ -263,3 +263,5 @@ CHANNEL_LAYERS = {
 #         }
 #     },
 # }
+
+SWAGGER_SETTINGS = {"USE_SESSION_AUTH": not DEBUG}
