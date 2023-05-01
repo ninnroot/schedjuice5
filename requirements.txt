@@ -27,6 +27,7 @@ django-utilitas==1.3.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.0
 drf-flex-fields==1.0.0
+drf-writable-nested==0.7.0
 drf-yasg==1.21.5
 Faker==13.15.1
 filelock==3.9.0
