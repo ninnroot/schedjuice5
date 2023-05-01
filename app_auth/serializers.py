@@ -1,12 +1,24 @@
+from drf_writable_nested.serializers import NestedCreateMixin
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from utilitas.serializers import BaseModelSerializer, BaseSerializer
 
 from app_auth.models import Account
-from app_users.serializers import GuardianSerializer, StaffSerializer, StudentSerializer
+from app_users.serializers import (
+    AddressSerializer,
+    BankAccountSerializer,
+    GuardianSerializer,
+    PhoneNumberSerializer,
+    StaffSerializer,
+    StudentSerializer,
+)
 
 
-class AccountSerializer(BaseModelSerializer):
+class AccountSerializer(BaseModelSerializer, NestedCreateMixin):
+    phone_numbers = PhoneNumberSerializer(many=True, required=False)
+    bank_accounts = BankAccountSerializer(many=True, required=False)
+    addresses = AddressSerializer(many=True, required=False)
+
     class Meta(BaseModelSerializer.Meta):
         model = Account
         fields = "__all__"

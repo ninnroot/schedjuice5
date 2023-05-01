@@ -111,7 +111,7 @@ class PhoneNumber(BaseModel):
     number = models.CharField(max_length=20)
     is_primary = models.BooleanField(default=False)
     account = models.ForeignKey(
-        Account, on_delete=models.CASCADE, default=1, related_name="phone_numbers"
+        Account, on_delete=models.CASCADE, related_name="phone_numbers"
     )
 
     class Meta:
