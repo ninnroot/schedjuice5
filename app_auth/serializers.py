@@ -16,10 +16,6 @@ from app_users.serializers import (
 
 
 class AccountSerializer(BaseModelSerializer):
-    phone_numbers = PhoneNumberSerializer(many=True, required=False)
-    bank_accounts = BankAccountSerializer(many=True, required=False)
-    addresses = AddressSerializer(many=True, required=False)
-
     class Meta(BaseModelSerializer.Meta):
         model = Account
         fields = "__all__"
@@ -44,7 +40,6 @@ class AccountSerializer(BaseModelSerializer):
     }
 
     def create(self, validated_data):
-
         password = validated_data.pop("password")
         user = super().create(validated_data)
         user.set_password(password)
@@ -52,9 +47,6 @@ class AccountSerializer(BaseModelSerializer):
         user.is_staff = True
 
         user.save()
-        for i in validated_data.phone_numbers:
-            x = PhoneNumber.objects.create(**i, account_id=user.id)
-            x.save()
 
         return user
 
