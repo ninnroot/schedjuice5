@@ -53,6 +53,7 @@ urlpatterns = [
     path("api/v2/", include("app_announcement.urls")),
     path("api/v2/", include("app_assignment.urls")),
     path("api/v2/", include("app_availability.urls")),
+    path("api/v2/", include("app_microsoft.urls")),
     path("api/v2/ws/", include("app_ws.urls")),
     path("api/v2/docs/", include("models_docs.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
