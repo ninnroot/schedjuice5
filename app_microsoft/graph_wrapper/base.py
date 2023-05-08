@@ -9,8 +9,7 @@ CLIENT_ID = decouple.config("APP_ID")
 KEY = decouple.config("KEY")
 THUMBPRINT = decouple.config("THUMBPRINT")
 CLIENT_SECRET = decouple.config("CLIENT_SECRET")
-URL = "https://graph.microsoft.com/v1.0/"
-BETA_URL = "https://graph.microsoft.com/beta/"
+
 SCOPES = [
     "User.ReadWrite.All",
     "Directory.ReadWrite.All",
@@ -55,6 +54,9 @@ class BaseMSRequest:
     Basically, I am building my own wrapper.
     """
 
+    URL = "https://graph.microsoft.com/v1.0/"
+    BETA_URL = "https://graph.microsoft.com/beta/"
+
     headers = {}
 
     @staticmethod
@@ -74,3 +76,9 @@ class BaseMSRequest:
 
     def __init__(self):
         self.get_token()
+
+    def get(self, *args, **kwargs):
+        return requests.get(*args, **kwargs, headers=self.headers)
+
+    def post(self, *args, **kwargs):
+        return requests.post(*args, **kwargs, headers=self.headers)

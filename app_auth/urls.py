@@ -13,17 +13,4 @@ urlpatterns = [
     path("accounts/search", views.AccountSearchView.as_view(), name="account-search"),
     path("login", views.LoginView.as_view(), name="login"),
     path("ms-login", views.MSLoginView.as_view(), name="ms-login"),
-    path(
-        "email/request", views.RequestUpdateEmailView.as_view(), name="request-update"
-    ),
-    path(
-        "email/verify/<uidb64>/<token>/<view>",
-        views.EmailVerificationView.as_view(),
-        name="verify-email",
-    ),
-    path(
-        "email/update/<uidb64>/<token>",
-        views.UpdateEmailView.as_view(),
-        name="update-email",
-    ),
 ]
