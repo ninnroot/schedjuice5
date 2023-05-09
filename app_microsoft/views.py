@@ -15,14 +15,18 @@ class TestView(BaseView):
 
     def post(self, request: Request):
         ms_user = MSUser()
-        respond = ms_user.create(
+        res = ms_user.create(
             request.data["display_name"],
             request.data["principal_name"],
             request.data["password"],
         )
+        user_id = res.json()["id"]
+        email = res.json()["userPrincipalName"]
+        ms_user.enable_mail(user_id, email)
+        res = ms_user.assign_license(user_id, "staff")
+        print(res.json())
         return self.send_response(
-            respond.status_code not in range(199, 300),
+            False,
             "err...idk ",
-            respond.json(),
-            status=respond.status_code,
+            res.json(),
         )

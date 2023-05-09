@@ -82,3 +82,6 @@ class BaseMSRequest:
 
     def post(self, *args, **kwargs):
         return requests.post(*args, **kwargs, headers=self.headers)
+
+    def patch(self, *args, **kwargs):
+        return requests.patch(*args, **kwargs, headers=self.headers)

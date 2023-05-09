@@ -5,6 +5,11 @@ import requests
 
 from app_microsoft.graph_wrapper.base import BaseMSRequest
 
+LICENSES = {
+    "staff": "94763226-9b3c-4e75-a931-5c89701abe66",
+    "student": "314c4481-f395-4525-be8b-2ec4bb1e9d91",
+}
+
 
 class MSUser(BaseMSRequest):
     def _generate_password(self):
@@ -18,7 +23,6 @@ class MSUser(BaseMSRequest):
         return password
 
     def get(self, user_id: str):
-        print(self._generate_password())
         return super().get(f"{self.URL}users/{user_id}")
 
     def create(self, display_name: str, principal_name: str, password: str):
@@ -33,3 +37,16 @@ class MSUser(BaseMSRequest):
             },
         }
         return self.post(f"{self.URL}users", json.dumps(user_payload))
+
+    def enable_mail(self, user_id: str, email: str):
+        payload = {"mail": email, "usageLocation": "SG"}
+        return self.patch(f"{self.URL}users/{user_id}", json.dumps(payload))
+
+    def assign_license(self, user_id: str, license_type: str):
+        payload = {
+            "addLicenses": [{"skuId": LICENSES[license_type]}],
+            "removeLicenses": [],
+        }
+        return self.post(
+            f"{self.URL}users/{user_id}/assignLicense", json.dumps(payload)
+        )
