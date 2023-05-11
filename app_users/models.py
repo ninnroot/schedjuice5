@@ -68,6 +68,10 @@ class Staff(BaseUser):
             raise ValidationError({"roles": e.message})
         return super().save(*args, **kwargs)
 
+    def delete(self, using=None, keep_parents=False):
+        self.account.delete()
+        return super().delete(using, keep_parents)
+
 
 class Guardian(BaseUser):
     """

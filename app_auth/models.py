@@ -1,8 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from rest_framework.exceptions import ValidationError
 from utilitas.models import BaseModel
 
 from app_auth.managers import CustomUserManager
+from app_microsoft.graph_wrapper.user import MSUser
 
 
 class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
@@ -27,6 +29,14 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
 
     def __str__(self):
         return f"<Account: {self.id} {self.email}>"
+
+    def delete(self, using=None, keep_parents=False):
+        ms_user = MSUser()
+        res = ms_user.delete(self.ms_id)
+        if res.status_code not in range(199, 300):
+            raise ValidationError({"MS_ERROR": res.json()})
+
+        return super().delete(using, keep_parents)
 
 
 class TempEmail(BaseModel):
