@@ -35,7 +35,7 @@ class CreateAccountFlow:
         return user_id
 
 
-class CreateStaffFlow:
+class CreateUserFlow:
     def __init__(self, ms_id: str, user_type: str, new_name: str):
         self.ms_id = ms_id
         if user_type not in {"staff", "student"}:

@@ -1,7 +1,7 @@
 from rest_framework.exceptions import ValidationError
 from utilitas.serializers import BaseModelSerializer
 
-from app_microsoft.flows import CreateStaffFlow
+from app_microsoft.flows import CreateUserFlow
 from app_microsoft.graph_wrapper.user import MSUser
 
 from .models import *
@@ -61,7 +61,7 @@ class StaffSerializer(BaseModelSerializer):
     }
 
     def create(self, validated_data):
-        flow = CreateStaffFlow(
+        flow = CreateUserFlow(
             validated_data["account"].ms_id, "staff", validated_data["name"]
         )
         flow.start()
@@ -88,3 +88,10 @@ class StudentSerializer(BaseModelSerializer):
             {"many": True},
         ),
     }
+
+    def create(self, validated_data):
+        flow = CreateUserFlow(
+            validated_data["account"].ms_id, "student", validated_data["name"]
+        )
+        flow.start()
+        return super().create(validated_data)

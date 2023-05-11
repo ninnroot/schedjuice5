@@ -101,13 +101,16 @@ class Student(BaseUser):
         upload_to=config.student_formal,
     )
     guardian_type = models.CharField(
-        max_length=128,
-        choices=config.guardian_type_choices,
+        max_length=128, choices=config.guardian_type_choices, null=True
     )
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     class Meta(BaseUser.Meta):
         pass
+
+    def delete(self, using=None, keep_parents=False):
+        self.account.delete()
+        return super().delete(using, keep_parents)
 
 
 class PhoneNumber(BaseModel):
