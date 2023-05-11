@@ -9,6 +9,7 @@ CLIENT_ID = decouple.config("APP_ID")
 KEY = decouple.config("KEY")
 THUMBPRINT = decouple.config("THUMBPRINT")
 CLIENT_SECRET = decouple.config("CLIENT_SECRET")
+STAFFY_ID = "f4f28526-7323-4ef3-8b68-978c3851bc4e"
 
 SCOPES = [
     "User.ReadWrite.All",
@@ -85,3 +86,6 @@ class BaseMSRequest:
 
     def patch(self, *args, **kwargs):
         return requests.patch(*args, **kwargs, headers=self.headers)
+
+    def delete(self, *args, **kwargs):
+        return requests.delete(*args, **kwargs, headers=self.headers)

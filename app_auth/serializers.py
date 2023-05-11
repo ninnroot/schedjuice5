@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from utilitas.serializers import BaseModelSerializer, BaseSerializer
 
 from app_auth.models import Account
+from app_microsoft.flows import CreateAccountFlow
 from app_users.serializers import (
     AddressSerializer,
     BankAccountSerializer,
@@ -22,9 +23,7 @@ class AccountSerializer(BaseModelSerializer):
         model = Account
         fields = "__all__"
 
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
+        extra_kwargs = {"password": {"write_only": True}, "ms_id": {"required": False}}
 
     expandable_fields = {
         "student": ("app_users.serializers.StudentSerializer"),
@@ -43,16 +42,26 @@ class AccountSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password")
+        # start the flow to create MS user.
+        # if successful, a uuid will get returned.
+        # if fails, it'll raise a ValidationError and Django will handle it gracefully. No need to think about it here.
+        flow = CreateAccountFlow(validated_data["email"], password)
+        user_id = flow.start()
+
+        # add the uuid to user data. This will later be used to link the MS user and local user.
+        validated_data["ms_id"] = user_id
+
+        # then, create a user in the local db.
         user = super().create(validated_data)
         user.set_password(password)
         user.is_active = True
         user.is_staff = True
-
         user.save()
 
         return user
 
     def update(self, instance, validated_data):
+        # TODO: update password in MS
         password = validated_data.pop("password", None)
 
         if password:
@@ -76,8 +85,6 @@ class LoginSerializer(TokenObtainPairSerializer):
                 "Content-Type": "application/json",
             },
         )
-        print(res.json())
-        print(self.get_token(Account.objects.get(id=40)))
         data = super().validate(attrs)
         if hasattr(self.user, "student"):
             data["user_type"] = "student"

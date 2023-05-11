@@ -1,6 +1,8 @@
-import sys
-
+from rest_framework.exceptions import ValidationError
 from utilitas.serializers import BaseModelSerializer
+
+from app_microsoft.flows import CreateStaffFlow
+from app_microsoft.graph_wrapper.user import MSUser
 
 from .models import *
 
@@ -57,6 +59,13 @@ class StaffSerializer(BaseModelSerializer):
             {"many": True},
         ),
     }
+
+    def create(self, validated_data):
+        flow = CreateStaffFlow(
+            validated_data["account"].ms_id, "staff", validated_data["name"]
+        )
+        flow.start()
+        return super().create(validated_data)
 
 
 class GuardianSerializer(BaseModelSerializer):

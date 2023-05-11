@@ -17,7 +17,7 @@ class Account(AbstractBaseUser, BaseModel, PermissionsMixin):
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-    # ms_id = models.CharField(max_length=128)
+    ms_id = models.CharField(max_length=128)
 
     groups = None
     user_permissions = None
