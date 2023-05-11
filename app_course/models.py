@@ -46,6 +46,8 @@ class Course(BaseModel):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="courses"
     )
+    ms_id = models.CharField(max_length=128)
+    channel_id = models.CharField(max_length=128)
 
     def save(self, *args, **kwargs):
         if self.start_date >= self.end_date:

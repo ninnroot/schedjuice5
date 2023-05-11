@@ -35,7 +35,7 @@ class MSGroup(BaseMSRequest):
     def add_channel(self, group_id: str, channel_name: str, is_favourite=True):
         return self.post(
             f"{self.URL}teams/{group_id}/channels",
-            self.make_channel(channel_name, is_favourite),
+            json.dumps(self.make_channel(channel_name, is_favourite)),
         )
 
     def add_member(self, user_id: str, group_id: str, role: str):
@@ -49,7 +49,9 @@ class MSGroup(BaseMSRequest):
                 + user_id
             }
 
-        return self.post(f"{self.URL}groups/{group_id}/{role}/$ref", payload)
+        return self.post(
+            f"{self.URL}groups/{group_id}/{role}/$ref", json.dumps(payload)
+        )
 
     def remove_member(self, group_id: str, user_id: str, role: str):
         return super(MSGroup, self).delete(

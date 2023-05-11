@@ -10,7 +10,7 @@ nameWithNumberValidation = RegexValidator(
 )
 usernameValidation = RegexValidator(
     regex=r"[a-zA-Z0-9_]{8,32}",
-    message="Username must match this: '[a-zA-Z0-9_]{8,32}'",
+    message="Username/code must match this: '[a-zA-Z0-9_]{8,32}'",
 )
 phoneNumberValidation = RegexValidator(
     regex=r"(\+)?[0-9 ]{8,20}",
@@ -30,6 +30,5 @@ englishAndSomeSpecialValidation = RegexValidator(
     message="Field must match this: '[a-zA-Z0-9_\\-\\(\\) ]'",
 )
 colorCodeValidation = RegexValidator(
-    regex=r"^#[a-zA-Z0-9]{6}$",
-    message="Color code must match this: '#[a-zA-Z0-9]{6}'"
+    regex=r"^#[a-zA-Z0-9]{6}$", message="Color code must match this: '#[a-zA-Z0-9]{6}'"
 )

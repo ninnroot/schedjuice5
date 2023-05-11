@@ -37,7 +37,7 @@ class StaffSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "account": ("app_auth.serializers.AccountSerializer"),
+        "account": "app_auth.serializers.AccountSerializer",
         "staffs_groups": (
             "app_management.serializers.StaffGroupSerializer",
             {"many": True},
@@ -73,7 +73,7 @@ class GuardianSerializer(BaseModelSerializer):
         model = Guardian
         fields = "__all__"
 
-    expandable_fields = {"account": ("app_auth.serializers.AccountSerializer")}
+    expandable_fields = {"account": "app_auth.serializers.AccountSerializer"}
 
 
 class StudentSerializer(BaseModelSerializer):
@@ -82,7 +82,7 @@ class StudentSerializer(BaseModelSerializer):
         fields = "__all__"
 
     expandable_fields = {
-        "account": ("app_auth.serializers.AccountSerializer"),
+        "account": "app_auth.serializers.AccountSerializer",
         "staffs_courses": (
             "app_management.serializers.StaffCourseSerializer",
             {"many": True},

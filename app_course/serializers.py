@@ -1,5 +1,7 @@
 from utilitas.serializers import BaseModelSerializer
 
+from app_microsoft.flows import CreateTeamFlow
+
 from .models import *
 
 
@@ -17,6 +19,7 @@ class CourseSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Course
         fields = "__all__"
+        extra_kwargs = {"channel_id": {"required": False}, "ms_id": {"required": False}}
 
     expandable_fields = {
         "category": ("app_course.serializers.CategorySerializer"),
@@ -30,6 +33,16 @@ class CourseSerializer(BaseModelSerializer):
             {"many": True},
         ),
     }
+
+    def create(self, validated_data):
+        # start the team creation flow
+        flow = CreateTeamFlow(validated_data["name"])
+        x = flow.start()
+        # populate with returned data
+        validated_data["channel_id"] = x["channel_id"]
+        validated_data["ms_id"] = x["group_id"]
+
+        return super().create(validated_data)
 
 
 class EventSerializer(BaseModelSerializer):

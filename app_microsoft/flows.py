@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 
+from app_microsoft.graph_wrapper.group import MSGroup
 from app_microsoft.graph_wrapper.user import MSUser
 
 
@@ -55,3 +56,27 @@ class CreateUserFlow:
         res = self.ms_user.update_name(self.ms_id, self.new_name)
         if res.status_code not in range(199, 300):
             raise ValidationError({"MS_ERROR": res.json(), "step": "name update"})
+
+
+class CreateTeamFlow:
+    def __init__(self, name: str):
+        self.name = name
+        self.ms_group = MSGroup()
+
+    def start(self):
+        res = self.ms_group.create(self.name)
+        if res.status_code not in range(199, 300):
+            raise ValidationError({"MS_ERROR": res.json(), "step": "creating group"})
+
+        # after successful creation, we need to get the group_id uuid from the response's headers.
+        # why tf is it in the headers? No idea. It's how Graph API works.
+        group_id = res.headers["Content-Location"].split("'")[1::2][0]
+
+        res = self.ms_group.add_channel(group_id, "Announcements")
+        if res.status_code not in range(199, 300):
+            # if this fails, to maintain data consistency, need to delete previously created group
+            self.ms_group.delete(group_id)
+            raise ValidationError({"MS_ERROR": res.json(), "step": "creating channel"})
+        channel_id = res.json()["id"]
+
+        return {"group_id": group_id, "channel_id": channel_id}
