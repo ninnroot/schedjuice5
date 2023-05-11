@@ -3,6 +3,7 @@ from rest_framework.serializers import ValidationError
 from utilitas.models import BaseModel
 
 from app_campus.models import Venue
+from app_microsoft.graph_wrapper.group import MSGroup
 from schedjuice5.validators import *
 
 
@@ -55,6 +56,14 @@ class Course(BaseModel):
                 "start_date cannot be greater than or equal to end_date."
             )
         return super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        ms_group = MSGroup()
+        res = ms_group.delete(self.ms_id)
+        if res.status_code not in range(199, 300):
+            raise ValidationError({"MS_ERROR": res.json()})
+
+        return super().delete(using, keep_parents)
 
 
 class Event(BaseModel):

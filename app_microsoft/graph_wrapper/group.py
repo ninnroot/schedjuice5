@@ -59,4 +59,4 @@ class MSGroup(BaseMSRequest):
         )
 
     def delete(self, group_id: str):
-        return super(MSGroup, self).delete(f"{self.URL}groups/{group_id}")
+        return super().delete(f"{self.URL}groups/{group_id}")
