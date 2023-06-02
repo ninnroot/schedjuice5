@@ -117,7 +117,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         return data
 
 
-def getUserFromMSToken(ms_access: str):
+def get_user_from_MS_token(ms_access: str):
     res = requests.get(
         "https://graph.microsoft.com/v1.0/" + "me",
         headers={
@@ -128,9 +128,13 @@ def getUserFromMSToken(ms_access: str):
     if res.status_code not in range(199, 300):
         raise ValidationError({"error_type": "MS ERROR", "details": {**res.json()}})
     user_id = res.json()["id"]
-    # user = Account.objects.filter(ms_id=user_id).first()
-    # if not user:
-    raise ValidationError({"error_type": "nigga error"})
+    user = Account.objects.filter(ms_id=user_id).first()
+    if not user:
+        raise ValidationError(
+            {"error_type": "MS ERROR", "details": "No such user exists in this tenant."}
+        )
+
+    return user
 
 
 class MSLoginSerializer(BaseSerializer):
@@ -138,7 +142,7 @@ class MSLoginSerializer(BaseSerializer):
 
     def validate(self, attrs):
         # we get a user instance by making a request to MS Graph API
-        user = getUserFromMSToken(attrs["token"])
+        user = get_user_from_MS_token(attrs["token"])
         access_token = RefreshToken.for_user(user).access_token
         data = super().validate(attrs)
         if hasattr(user, "student"):
