@@ -69,7 +69,7 @@ class CreateTeamFlow:
             raise ValidationError({"MS_ERROR": res.json(), "step": "creating group"})
 
         # after successful creation, we need to get the group_id uuid from the response's headers.
-        # why tf is it in the headers? No idea. It's how Graph API works.
+        # why tf is it in the headers? No idea. It's how the Graph API works.
         group_id = res.headers["Content-Location"].split("'")[1::2][0]
 
         res = self.ms_group.add_channel(group_id, "Announcements")

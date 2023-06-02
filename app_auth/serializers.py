@@ -42,14 +42,19 @@ class AccountSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password")
-        # start the flow to create MS user.
-        # if successful, a uuid will get returned.
-        # if fails, it'll raise a ValidationError and Django will handle it gracefully. No need to think about it here.
-        flow = CreateAccountFlow(validated_data["email"], password)
-        user_id = flow.start()
 
-        # add the uuid to user data. This will later be used to link the MS user and local user.
-        validated_data["ms_id"] = user_id
+        # skip the ms_account creation if that flag is set to True.
+        if not self.context.get("skip_ms_creation"):
+            # start the flow to create MS user.
+            # if successful, a uuid will get returned.
+            # if fails, it'll raise a ValidationError and Django will handle it gracefully. No need to think about it here.
+            flow = CreateAccountFlow(validated_data["email"], password)
+            user_id = flow.start()
+
+            # add the uuid to user data. This will later be used to link the MS user and local user.
+            validated_data["ms_id"] = user_id
+        else:
+            print("Skipping MS creation because of the flag.")
 
         # then, create a user in the local db.
         user = super().create(validated_data)
@@ -136,29 +141,30 @@ class MSLoginSerializer(BaseSerializer):
         user = getUserFromMSToken(attrs["token"])
         access_token = RefreshToken.for_user(user).access_token
         data = super().validate(attrs)
-        # if hasattr(self.user, "student"):
-        #     data["user_type"] = "student"
-        #     data["student_id"] = self.user.student.id
-        #     data["account_id"] = self.user.id
-        #     data["user"] = StudentSerializer(self.user.student).data
-        # elif hasattr(self.user, "staff"):
-        #     data["user_type"] = "staff"
-        #     data["staff_id"] = self.user.staff.id
-        #     data["account_id"] = self.user.id
-        #     data["user"] = StaffSerializer(self.user.staff).data
+        if hasattr(user, "student"):
+            data["user_type"] = "student"
+            data["student_id"] = user.student.id
+            data["account_id"] = user.id
+            data["user"] = StudentSerializer(user.student).data
+        elif hasattr(user, "staff"):
+            data["user_type"] = "staff"
+            data["staff_id"] = user.staff.id
+            data["account_id"] = user.id
+            data["user"] = StaffSerializer(user.staff).data
+        # guardian is currently not supported yet
         # elif hasattr(self.user, "guardian"):
         #     data["user_type"] = "guardian"
         #     data["guardian_id"] = self.user.guardian.id
         #     data["account_id"] = self.user.id
         #     data["user"] = GuardianSerializer(self.user.guardian).data
-        # else:
-        #     raise serializers.ValidationError(
-        #         {
-        #             "non_field_errors": [
-        #                 "This account has no association with any type of user."
-        #             ]
-        #         }
-        #     )
+        else:
+            raise serializers.ValidationError(
+                {
+                    "non_field_errors": [
+                        "This account has no association with any type of user."
+                    ]
+                }
+            )
         return data
 
 

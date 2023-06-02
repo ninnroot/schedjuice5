@@ -61,10 +61,13 @@ class StaffSerializer(BaseModelSerializer):
     }
 
     def create(self, validated_data):
-        flow = CreateUserFlow(
-            validated_data["account"].ms_id, "staff", validated_data["name"]
-        )
-        flow.start()
+        if not self.context.get("skip_ms_creation"):
+            flow = CreateUserFlow(
+                validated_data["account"].ms_id, "staff", validated_data["name"]
+            )
+            flow.start()
+        else:
+            print("Skipping MS creation because of the flag.")
         return super().create(validated_data)
 
 
@@ -90,8 +93,12 @@ class StudentSerializer(BaseModelSerializer):
     }
 
     def create(self, validated_data):
-        flow = CreateUserFlow(
-            validated_data["account"].ms_id, "student", validated_data["name"]
-        )
-        flow.start()
+        if not self.context.get("skip_ms_creation"):
+            flow = CreateUserFlow(
+                validated_data["account"].ms_id, "student", validated_data["name"]
+            )
+            flow.start()
+
+        else:
+            print("Skipping MS creation because of the flag.")
         return super().create(validated_data)

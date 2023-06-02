@@ -14,9 +14,7 @@ from schedjuice5.validators import *
 
 class BaseUser(BaseModel):
     username = models.CharField(
-        max_length=256,
-        unique=True,
-        validators=[usernameValidation],
+        max_length=256, validators=[usernameValidation], null=True, blank=True
     )
     name = models.CharField(max_length=256, validators=[nameValidation])
     about = models.TextField(default="tell us something about yourself ...")
