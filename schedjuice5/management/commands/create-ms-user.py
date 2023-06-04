@@ -5,6 +5,8 @@ from django.core.management import BaseCommand, CommandError, call_command
 from app_auth.models import Account
 from app_auth.serializers import AccountSerializer
 from app_auth.views import AccountListView
+from app_management.serializers import JobSerializer
+from app_management.views import JobListView
 from app_users.serializers import StaffSerializer, StudentSerializer
 from app_users.views import StaffListView, StudentListView
 
@@ -12,7 +14,7 @@ from app_users.views import StaffListView, StudentListView
 class Command(BaseCommand):
 
     # the 'view' arg is a bit hacky. But, oh well, will refactor later
-    def load_data(self, csv_file_loc: str, serializer, view):
+    def load_user_data(self, csv_file_loc: str, serializer, view):
         with open(csv_file_loc) as f:
             reader = csv.DictReader(f, delimiter=",")
 
@@ -61,21 +63,35 @@ class Command(BaseCommand):
             else:
                 raise CommandError(f"Validation error. {users.errors}")
 
+    def load_data(self, csv_loc: str, serializer, view):
+        with open(csv_loc) as f:
+            reader = csv.DictReader(f, delimiter=",")
+            lst = [i for i in reader]
+            unvalidated_data = serializer(data=lst, many=True, context={"view": view})
+
+            if unvalidated_data.is_valid():
+                unvalidated_data.save()
+                self.stdout.write(self.style.SUCCESS(f"loaded data from {csv_loc}"))
+            else:
+                raise CommandError(f"Validation error. {unvalidated_data.errors}")
+
     def handle(self, *args, **options):
         call_command("flush", "--verbosity=1")
-        self.load_data(
-            "./schedjuice5/old_data/staff.csv", StaffSerializer, StaffListView
+        self.load_user_data(
+            "./schedjuice5/new_data/staff.csv", StaffSerializer, StaffListView
         )
         self.stdout.write(
             self.style.SUCCESS(f"Staff data successfully imported."), ending="\n\n"
         )
 
-        self.load_data(
-            "./schedjuice5/old_data/student.csv", StudentSerializer, StudentListView
+        self.load_user_data(
+            "./schedjuice5/new_data/student.csv", StudentSerializer, StudentListView
         )
         self.stdout.write(
             self.style.SUCCESS(f"Student data successfully imported."), ending="\n\n"
         )
+
+        self.load_data("./schedjuice5/new_data/job.csv", JobSerializer, JobListView)
 
         self.stdout.write(
             self.style.SUCCESS(f"Data importing completed."), ending="\n\n"

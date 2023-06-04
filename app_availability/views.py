@@ -29,7 +29,7 @@ class AvailabilityView(BaseView):
             try:
                 self.sorts = self.get_sort_param(request)
                 self.expand = self.get_expand_param(request)
-                self.fields = self.get_field_filter_param(request)
+                self.fields = self.get_fields_param(request)
             except BadRequest as e:
                 return self.send_response(
                     True, "bad_request", {"details": str(e)}, status=400
@@ -129,7 +129,7 @@ class AvailabilityView(BaseView):
             try:
                 self.sorts = self.get_sort_param(request)
                 self.expand = self.get_expand_param(request)
-                self.fields = self.get_field_filter_param(request)
+                self.fields = self.get_fields_param(request)
             except BadRequest as e:
                 return self.send_response(
                     True, "bad_request", {"details": str(e)}, status=400
@@ -175,7 +175,7 @@ class AvailabilityView(BaseView):
             try:
                 self.sorts = self.get_sort_param(request)
                 self.expand = self.get_expand_param(request)
-                self.fields = self.get_field_filter_param(request)
+                self.fields = self.get_fields_param(request)
             except BadRequest as e:
                 return self.send_response(
                     True, "bad_request", {"details": str(e)}, status=400
@@ -221,6 +221,7 @@ class AvailabilityView(BaseView):
                     staffs_events__event__id__in=[i.id for i in colliding_events]
                 )
                 .prefetch_related("staffs_events__event")
+                .prefetch_related(*self.translate_expand_params(self.expand))
                 .all()
             )
             serialized_data = self.get_serializer(
