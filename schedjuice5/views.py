@@ -6,6 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.views import APIView, Request, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from utilitas.views import BaseSearchView
 
 from app_management import permissions
 from schedjuice5.metadata import CustomMetadata
@@ -317,76 +318,76 @@ class BaseDetailsView(BaseView):
         )
 
 
-class BaseSearchView(BaseView):
-    name = "Base search view"
-
-    # making sure the filter_params object is valid
-    def validate_body_params(self, to_be_validated):
-        validated_data = []
-        for i in to_be_validated:
-            x = FilterParamSerializer(data=i, context={"model": self.model})
-            if not x.is_valid(raise_exception=True):
-                raise BadRequest(x.errors)
-            validated_data.append(x.data)
-
-        return validated_data
-
-    # building a filter_params dict to be used in querying
-    @staticmethod
-    def build_body_params(body_params):
-        params_dict = {}
-        for i in body_params:
-            params_dict[i["field_name"] + "__" + i["operator"]] = (
-                i["value"].split(",") if i["operator"] == "in" else i["value"]
-            )
-
-        return params_dict
-
-    # get filter_params from the request
-    def get_filter_params(self, request: Request):
-        filter_params = request.data.get("filter_params", {})
-        validated_filter_params = self.validate_body_params(filter_params)
-        return self.build_body_params(validated_filter_params)
-
-    # get exclude_params from the request
-    def get_exclude_params(self, request: Request):
-        exclude_params = request.data.get("exclude_params", {})
-        validated_exclude_params = self.validate_body_params(exclude_params)
-        return self.build_body_params(validated_exclude_params)
-
-    # search
-    @swagger_auto_schema(
-        request_body=FilterParamsSerializer,
-        manual_parameters=[
-            size_param,
-            page_param,
-            sorts_param,
-            fields_param,
-            expand_param,
-        ],
-    )
-    def post(self, request: Request):
-
-        filter_params = {}
-        try:
-            self.fields = self.get_field_filter_param(request)
-            filter_params = self.get_filter_params(request)
-            exclude_params = self.get_exclude_params(request)
-            self.sorts = self.get_sort_param(request)
-            self.expand = self.get_expand_param(request)
-        except BadRequest as e:
-            return self.send_response(
-                True, "bad_request", {"details": str(e)}, status=400
-            )
-
-        serialized_data = self.get_queryset(
-            request, filter_params, exclude_params, self.fields, self.sorts, self.expand
-        )
-
-        # return the serialized queryset in a standardized manner
-        return self.send_response(
-            False,
-            "success",
-            {**self.get_paginated_response(), "data": serialized_data.data},
-            status=status.HTTP_200_OK,
-        )
+# class BaseSearchView(BaseView):
+#     name = "Base search view"
+#
+#     # making sure the filter_params object is valid
+#     def validate_body_params(self, to_be_validated):
+#         validated_data = []
+#         for i in to_be_validated:
+#             x = FilterParamSerializer(data=i, context={"model": self.model})
+#             if not x.is_valid(raise_exception=True):
+#                 raise BadRequest(x.errors)
+#             validated_data.append(x.data)
+#
+#         return validated_data
+#
+#     # building a filter_params dict to be used in querying
+#     @staticmethod
+#     def build_body_params(body_params):
+#         params_dict = {}
+#         for i in body_params:
+#             params_dict[i["field_name"] + "__" + i["operator"]] = (
+#                 i["value"].split(",") if i["operator"] == "in" else i["value"]
+#             )
+#
+#         return params_dict
+#
+#     # get filter_params from the request
+#     def get_filter_params(self, request: Request):
+#         filter_params = request.data.get("filter_params", {})
+#         validated_filter_params = self.validate_body_params(filter_params)
+#         return self.build_body_params(validated_filter_params)
+#
+#     # get exclude_params from the request
+#     def get_exclude_params(self, request: Request):
+#         exclude_params = request.data.get("exclude_params", {})
+#         validated_exclude_params = self.validate_body_params(exclude_params)
+#         return self.build_body_params(validated_exclude_params)
+#
+#     # search
+#     @swagger_auto_schema(
+#         request_body=FilterParamsSerializer,
+#         manual_parameters=[
+#             size_param,
+#             page_param,
+#             sorts_param,
+#             fields_param,
+#             expand_param,
+#         ],
+#     )
+#     def post(self, request: Request):
+#
+#         filter_params = {}
+#         try:
+#             self.fields = self.get_field_filter_param(request)
+#             filter_params = self.get_filter_params(request)
+#             exclude_params = self.get_exclude_params(request)
+#             self.sorts = self.get_sort_param(request)
+#             self.expand = self.get_expand_param(request)
+#         except BadRequest as e:
+#             return self.send_response(
+#                 True, "bad_request", {"details": str(e)}, status=400
+#             )
+#
+#         serialized_data = self.get_queryset(
+#             request, filter_params, exclude_params, self.fields, self.sorts, self.expand
+#         )
+#
+#         # return the serialized queryset in a standardized manner
+#         return self.send_response(
+#             False,
+#             "success",
+#             {**self.get_paginated_response(), "data": serialized_data.data},
+#             status=status.HTTP_200_OK,
+#         )

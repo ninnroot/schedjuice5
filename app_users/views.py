@@ -1,3 +1,6 @@
+import functools
+
+from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView
@@ -159,3 +162,44 @@ class StudentSearchView(BaseSearchView):
     name = "Student search view"
     model = Student
     serializer = StudentSerializer
+
+    @staticmethod
+    def my_or(lst):
+        return functools.reduce(lambda a, b: a | b, lst, True)
+
+    def post(self, request):
+        if request.query_params.get("bulk_search"):
+            if not (request.data.get("emails")):
+                raise exceptions.ValidationError(
+                    {"non_field_errors": "There should be a key name 'emails'"}
+                )
+
+            logical_str = ""
+            for i in request.data.get("emails"):
+                # ahh...this is like preventing SQL injection? idk
+                i = i.replace("'", "")
+                logical_str += f" OR lower(a.email) LIKE '%%{i}%%'"
+            logical_str = logical_str[4 : len(logical_str) + 1]
+            raw_data = Student.objects.raw(
+                f"""
+                select s.name, s.id, a.email as account__email, a.id as account_id from app_users_student s left join app_auth_account a on a.id = s.account_id WHERE {logical_str}  
+                """
+            )
+            final_data = Student.objects.filter(
+                id__in=[i.id for i in raw_data]
+            ).prefetch_related("account")
+
+            return self.send_response(
+                False,
+                "ok",
+                {
+                    "data": StudentSerializer(
+                        final_data,
+                        many=True,
+                        fields=["id", "name", "account.email"],
+                        expand=["account"],
+                    ).data
+                },
+            )
+
+        return super().post(request)

@@ -1,5 +1,5 @@
 from rest_framework.exceptions import ValidationError
-from utilitas.serializers import BaseModelSerializer
+from utilitas.serializers import BaseModelSerializer, BaseSerializer
 
 from app_microsoft.flows import CreateUserFlow
 from app_microsoft.graph_wrapper.user import MSUser
