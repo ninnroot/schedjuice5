@@ -6,6 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from utilitas.views import BaseDetailsView, BaseListView, BaseSearchView
 
 from app_management import permissions
+from app_management.models import Course, StudentCourse
 
 from .serializers import *
 
@@ -171,7 +172,22 @@ class StudentSearchView(BaseSearchView):
         if request.query_params.get("bulk_search"):
             if not (request.data.get("emails")):
                 raise exceptions.ValidationError(
-                    {"non_field_errors": "There should be a key name 'emails'"}
+                    {"non_field_errors": "'emails' is a required field."}
+                )
+            if not (request.data.get("course_id")):
+                raise exceptions.ValidationError(
+                    {"course_id": "'course_id' is a required field."}
+                )
+
+            try:
+                int(request.data.get("course_id"))
+            except ValueError as e:
+                raise exceptions.ValidationError({"course_id": str(e)})
+            course_id = int(request.data.get("course_id"))
+            course = Course.objects.filter(id=course_id).first()
+            if course is None:
+                raise exceptions.NotFound(
+                    {"course_id": "Course with the given id does not exist."}
                 )
 
             logical_str = ""
@@ -185,9 +201,16 @@ class StudentSearchView(BaseSearchView):
                 select s.name, s.id, a.email as account__email, a.id as account_id from app_users_student s left join app_auth_account a on a.id = s.account_id WHERE {logical_str}  
                 """
             )
-            final_data = Student.objects.filter(
-                id__in=[i.id for i in raw_data]
-            ).prefetch_related("account")
+            existing_students = (
+                StudentCourse.objects.filter(course_id=course_id)
+                .prefetch_related("student")
+                .all()
+            )
+            final_data = (
+                Student.objects.filter(id__in=[i.id for i in raw_data])
+                .exclude(id__in=[i.id for i in existing_students])
+                .prefetch_related("account")
+            )
 
             return self.send_response(
                 False,
