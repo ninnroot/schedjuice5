@@ -208,7 +208,7 @@ class StudentSearchView(BaseSearchView):
             )
             final_data = (
                 Student.objects.filter(id__in=[i.id for i in raw_data])
-                .exclude(id__in=[i.id for i in existing_students])
+                .exclude(id__in=[i.student.id for i in existing_students])
                 .prefetch_related("account")
             )
 
